@@ -1,8 +1,8 @@
-name: CI
+name: Wait4it CI
 
 on:
   push:
-    tags: 
+    tags:
       - v*
 
 jobs:
@@ -12,15 +12,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Run a one-line script
-      run: echo Starting ...
     - name: Build docker image
       run: docker build . --file Dockerfile --tag wait4it
     - name: Logging into docker hub
-      run: docker login hub.docker.com -u ph4r5h4d -p ${{ secrets.dockerhubpwd }}
+      run: echo "${{ secrets.dockerhubpwd }}" | docker login --username ph4r5h4d --password-stdin
     - name: Tag and push
       run: |
-        IMAGE=hub.docker.com/ph4r5h4d/wait4it
+        IMAGE=ph4r5h4d/wait4it
         
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
