@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"wait4it/checkMySQL"
 	"wait4it/checkTcp"
 )
@@ -18,7 +17,6 @@ func (c checkContext) getStructByCheckType() interface{} {
 }
 
 func buildIpCheckStruct(c checkContext) checkTcp.IP {
-	fmt.Println("here")
 	return checkTcp.IP{
 		Addr: c.Host,
 		Port: c.Port,
