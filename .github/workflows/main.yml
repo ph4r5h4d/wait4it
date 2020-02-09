@@ -1,6 +1,9 @@
-name: CI
+name: Wait4it CI
 
-on: [push]
+on:
+  push:
+    tags:
+      - v*
 
 jobs:
   build:
