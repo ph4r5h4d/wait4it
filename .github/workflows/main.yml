@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    tags: 
+      - v*
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run a one-line script
+      run: echo Starting ...
+    - name: Build docker image
+      run: docker build . --file Dockerfile --tag wait4it
+    - name: Logging into docker hub
+      run: docker login hub.docker.com -u ph4r5h4d -p ${{ secrets.dockerhubpwd }}
+    - name: Tag and push
+      run: |
+        IMAGE=hub.docker.com/ph4r5h4d/wait4it
+        
+        # Strip git ref prefix from version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        # Strip "v" prefix from tag name
+        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+        
+        echo $IMAGE
+        echo $VERSION
+        
+        docker tag wait4it $IMAGE:$VERSION
+        docker tag wait4it $IMAGE:latest
+        
+        docker push $IMAGE:$VERSION
+        docker push $IMAGE:latest
+
