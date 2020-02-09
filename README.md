@@ -28,6 +28,12 @@ Check a MySQL instance
 ./wait4it -h=127.0.0.1 -p=3306 -t=60 -u=root -P=secret -n=app 
 ```
 
+### Docker
+You can run this `wait4it` inside docker container and it's possible to run this container as init container inside
+K8s and Openshift.  
+You can use the following image in Docker Hub:  
+`docker pull ph4r5h4d/wait4it:latest`
+
 ## Notes
 #### Exit codes
 * 0: connection established successfully
