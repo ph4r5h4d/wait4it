@@ -1,4 +1,4 @@
-package tcpcheck
+package checkTcp
 
 const (
 	minPort = 1
