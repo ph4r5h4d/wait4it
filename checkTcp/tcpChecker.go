@@ -1,4 +1,4 @@
-package tcpcheck
+package checkTcp
 
 import (
 	"errors"
