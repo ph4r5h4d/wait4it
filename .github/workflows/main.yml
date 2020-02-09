@@ -12,7 +12,7 @@ jobs:
     - name: Build docker image
       run: docker build . --file Dockerfile --tag wait4it
     - name: Logging into docker hub
-      run: echo "${{ secrets.dockerhubpwd }}" | docker login hub.docker.com --username ph4r5h4d --password-stdin
+      run: echo "${{ secrets.dockerhubpwd }}" | docker login --username ph4r5h4d --password-stdin
     - name: Tag and push
       run: |
         IMAGE=ph4r5h4d/wait4it
