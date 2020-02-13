@@ -15,5 +15,5 @@ func wStdOut(r bool) {
 }
 
 func wStdErr(a ...interface{}){
-	_, _ = fmt.Fprint(os.Stderr, a)
+	_, _ = fmt.Fprint(os.Stderr, a...)
 }
