@@ -1,4 +1,4 @@
-package checkMySQL
+package MySQLChecker
 
 type MySQLConnection struct {
 	Host string
