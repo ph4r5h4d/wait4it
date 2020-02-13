@@ -9,7 +9,7 @@ func (m MySQLConnection) BuildConnectionString() string {
 
 	if len(m.Password) == 0 {
 		dsl = dsl + m.Username
-	}else{
+	} else {
 		dsl = dsl + m.Username + ":" + m.Password
 	}
 
@@ -21,4 +21,3 @@ func (m MySQLConnection) BuildConnectionString() string {
 
 	return dsl
 }
-
