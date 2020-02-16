@@ -7,9 +7,14 @@ type CheckContext struct {
 	Username     string
 	Password     string
 	DatabaseName string
+	DBConf       DatabaseSpecificConf
 }
 
 type ConfigurationContext struct {
 	CheckType string
 	Timeout   int
+}
+
+type DatabaseSpecificConf struct {
+	SSLMode string
 }
