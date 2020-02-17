@@ -1,12 +1,12 @@
 # wait4it
 A simple go application to test whether a port is ready to accept a connection, and also you can check whether your 
-MySQL server is ready or not.
+MySQL or PostgresQL server is ready or not.
 It also supports **timeout** so it can wait for a particular time and then fail.
 
 ## Supported Modules
 * TCP port
 * MySQL
-* PostgresSQL
+* PostgresQL
 
 ## Install
 You can download the latest release, or you can build it yourself.
@@ -32,7 +32,7 @@ Check a MySQL instance
 ```bash
 ./wait4it -h=127.0.0.1 -p=3306 -t=60 -u=root -P=secret -n=app 
 ```
-Check a PostgresSQL instance
+Check a PostgresQL instance
 ```bash
 ./wait4it -type=postgres -h=127.0.0.1 -p=5432 -t=60 -u=postgres -P=secret -ssl=disable
 ```
@@ -56,7 +56,7 @@ Check a MySQL instance
 docker run ph4r5h4d/wait4it -h=127.0.0.1 -p=3306 -t=60 -u=root -P=secret -n=app 
 ```
 
-Check a PostgresSQL instance
+Check a PostgresQL instance
 ```bash
 docker run ph4r5h4d/wait4it -type=postgres -h=127.0.0.1 -p=5432 -t=60 -u=postgres -P=secret -ssl=disable
 ```
