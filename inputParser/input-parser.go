@@ -14,6 +14,8 @@ func GetInput() model.CheckContext {
 	password := flag.String("P", "", "Password of the service")
 	databaseName := flag.String("n", "", "Name of the database")
 	sslMode := flag.String("ssl", "disable", "Enable or Disable ssl mode (for some database or services)")
+	httpCode := flag.Int("status-code", 200, "Status code to be expected from http call")
+	httpText := flag.String("http-text", "", "Text to check inside http response")
 	flag.Parse()
 
 	c := model.CheckContext{
@@ -28,6 +30,10 @@ func GetInput() model.CheckContext {
 		DatabaseName: *databaseName,
 		DBConf: model.DatabaseSpecificConf{
 			SSLMode: *sslMode,
+		},
+		HttpConf: model.HttpSpecificConf{
+			StatusCode: *httpCode,
+			Text:       *httpText,
 		},
 	}
 	return c
