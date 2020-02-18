@@ -2,8 +2,8 @@
  
 ![LICENSE](https://img.shields.io/github/workflow/status/ph4r5h4d/wait4it/Wait4it&#32;CI?style=for-the-badge) [![Docker Pull](https://img.shields.io/docker/pulls/ph4r5h4d/wait4it?style=for-the-badge)](https://hub.docker.com/r/ph4r5h4d/wait4it)  ![GO Version](https://img.shields.io/github/go-mod/go-version/ph4r5h4d/wait4it?style=for-the-badge) ![TAG](https://img.shields.io/github/v/tag/ph4r5h4d/wait4it?style=for-the-badge) ![LICENSE](https://img.shields.io/github/license/ph4r5h4d/wait4it?style=for-the-badge)
   
-A simple go application to test whether a port is ready to accept a connection, or check 
-MySQL or PostgresQL server is ready or not, Also you can do http call and check the response code and text in response.  
+A simple go application to test whether a port is ready to accept a connection or check 
+MySQL or PostgreSQL server is ready or not, Also you can do Http call and check the response code and text in response.  
 It also supports **timeout** so it can wait for a particular time and then fail.
 
 ## Supported Modules
@@ -25,7 +25,7 @@ The following command-line flags are supported
 * u (username for the services that needs username)
 * P (password for the services that needs password)
 * n (currently this param is used to identify database name for MySQL)  
-* ssl (whether to enable or disable ssl-mode for postgres)  
+* ssl (whether to enable or disable ssl-mode for Postgres)  
 * http-status (for Http check, which status code to expect)  
 * http-text (for Http check, find substring inside the response)  
 
@@ -86,7 +86,7 @@ docker run ph4r5h4d/wait4it -type=http -h=https://farshad.nematdoust.com -t=60 -
 
 #### Http check
 * for the Http check if you do not define status code it will check for 200 status code
-* if `http-text` is not defined then wait4it will just check the status code
+* if `http-text` is not defined then wait4it will check the status code
 
 #### Postgres check
 * if `ssl` is not defined then it's `disable` by default
