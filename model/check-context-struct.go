@@ -8,6 +8,7 @@ type CheckContext struct {
 	Password     string
 	DatabaseName string
 	DBConf       DatabaseSpecificConf
+	HttpConf     HttpSpecificConf
 }
 
 type ConfigurationContext struct {
@@ -17,4 +18,8 @@ type ConfigurationContext struct {
 
 type DatabaseSpecificConf struct {
 	SSLMode string
+}
+type HttpSpecificConf struct {
+	StatusCode int
+	Text       string
 }
