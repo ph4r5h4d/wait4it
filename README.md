@@ -96,8 +96,9 @@ docker run ph4r5h4d/wait4it -type=http -h=https://farshad.nematdoust.com -t=60 -
 
 ## Notes
 #### Configuration
-* note that environment variables have higher priority than command line arguments. This means if you define both `W4IT_TYPE` and `-type`, the application take 
-value of environment variable into account.
+* note that environment variables have higher priority than command-line arguments. 
+This means if you define both `W4IT_TYPE` and `-type`, the application takes the value of the environment variable into account.
+
 #### Exit codes
 * 0: connection established successfully
 * 1: timed out
