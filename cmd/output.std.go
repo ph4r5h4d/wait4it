@@ -10,7 +10,7 @@ func wStdOut(r bool) {
 		_, _ = fmt.Fprint(os.Stdout, "succeed")
 		os.Exit(0)
 	} else {
-		fmt.Fprint(os.Stdout, ".")
+		_, _ = fmt.Fprint(os.Stdout, ".")
 	}
 }
 

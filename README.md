@@ -16,18 +16,34 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
 To build just run `go build -o wait4it`
 
-## Command Line Args
+## Configuration
+### Environment variables
+The following environment variables are supported:
+
+* `W4IT_TYPE` (check type [http, tcp, mysql, postgres])
+* `W4IT_TIMEOUT` (timeout in seconds)
+* `W4IT_HOST` (the host to check)
+* `W4IT_PORT` (port to check on the host)
+* `W4IT_USERNAME` (username for the services that needs username)
+* `W4IT_PASSWORD` (password for the services that needs password)
+* `W4IT_DBNAME` (database name for MySQL or PostgreSQL)
+* `W4IT_SSL_MODE` (whether to enable or disable ssl-mode for Postgres [disable, enable])
+* `W4IT_HTTP_STATUS_CODE` (for Http check, which status code to expect)
+* `W4IT_HTTP_TEXT` (for Http check, find substring inside the response)
+
+### Command Line Args
 The following command-line flags are supported
 
-* h (host to check, default is 127.0.0.1)
-* p (port to check on the host) 
-* t (timeout in seconds, time to wait before considering the operation as failed. default is 30)
-* u (username for the services that needs username)
-* P (password for the services that needs password)
-* n (currently this param is used to identify database name for MySQL)  
-* ssl (whether to enable or disable ssl-mode for Postgres)  
-* http-status (for Http check, which status code to expect)  
-* http-text (for Http check, find substring inside the response)  
+* `-type` (check type [http, tcp, mysql, postgres])
+* `-h` (the host to check, default is 127.0.0.1)
+* `-p` (port to check on the host) 
+* `-t` (timeout in seconds, time to wait before considering the operation as failed. default is 30)
+* `-u` (username for the services that needs username)
+* `-P` (password for the services that needs password)
+* `-n` (database name for MySQL or PostgreSQL)  
+* `-ssl` (whether to enable or disable ssl-mode for Postgres [disable, enable])  
+* `-http-status` (for Http check, which status code to expect)  
+* `-http-text` (for Http check, find substring inside the response)  
 
 ### Sample
 Check a TCP port  
@@ -79,6 +95,9 @@ docker run ph4r5h4d/wait4it -type=http -h=https://farshad.nematdoust.com -t=60 -
 ```
 
 ## Notes
+#### Configuration
+* note that environment variables have higher priority than command line arguments. This means if you define both `W4IT_TYPE` and `-type`, the application take 
+value of environment variable into account.
 #### Exit codes
 * 0: connection established successfully
 * 1: timed out
