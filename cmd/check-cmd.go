@@ -37,6 +37,7 @@ func RunCheck(c model.CheckContext) {
 	fmt.Print("failed")
 	os.Exit(1)
 }
+
 func findCheckModule(ct string) (interface{}, error) {
 	m, ok := cm[ct]
 	if !ok {
