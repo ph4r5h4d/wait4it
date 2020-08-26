@@ -62,7 +62,7 @@ Check a PostgresQL instance
 
 Check HTTP response and text
 ```bash
--type=http -h=https://farshad.nematdoust.com -t=60 -status-code=200 -http-text="Software Engineer" 
+./wait4it -type=http -h=https://farshad.nematdoust.com -t=60 -status-code=200 -http-text="Software Engineer" 
 ```
 
 ### Docker
