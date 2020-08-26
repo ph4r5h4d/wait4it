@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"wait4it/MongoDbChecker"
 	"wait4it/MySQLChecker"
 	"wait4it/PostgreSQLChecker"
 	"wait4it/TcpChecker"
@@ -12,4 +13,5 @@ var cm = map[string]interface{}{
 	"mysql":    &MySQLChecker.MySQLConnection{},
 	"postgres": &PostgreSQLChecker.PostgresSQLConnection{},
 	"http":     &httpChecker.HttpCheck{},
+	"mongo":    &MongoDbChecker.MongoDbConnection{},
 }

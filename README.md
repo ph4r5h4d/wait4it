@@ -62,7 +62,12 @@ Check a PostgresQL instance
 
 Check HTTP response and text
 ```bash
--type=http -h=https://farshad.nematdoust.com -t=60 -status-code=200 -http-text="Software Engineer" 
+./wait4it -type=http -h=https://farshad.nematdoust.com -t=60 -status-code=200 -http-text="Software Engineer" 
+```
+
+Check a MongoDB instance
+```bash
+./wait4it -type=mongo -p=32768 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
 ```
 
 ### Docker
@@ -94,6 +99,10 @@ Check HTTP response and text
 docker run ph4r5h4d/wait4it -type=http -h=https://farshad.nematdoust.com -t=60 -status-code=200 -http-text="Software Engineer" 
 ```
 
+Check a MongoDB instance
+```bash
+docker run ph4r5h4d/wait4it -type=mongo -p=32768 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
+```
 ## Notes
 #### Configuration
 * note that environment variables have higher priority than command-line arguments. 
@@ -110,3 +119,6 @@ This means if you define both `W4IT_TYPE` and `-type`, the application takes the
 
 #### Postgres check
 * if `ssl` is not defined then it's `disable` by default
+
+#### MongoDB check
+* for the moment only username/password authentication mechanism is supported.
