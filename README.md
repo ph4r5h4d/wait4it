@@ -4,7 +4,7 @@
   
 A simple go application to test whether a port is ready to accept a connection or check 
 MySQL, PostgreSQL, MongoDB or Redis server is ready or not, Also you can do Http call and check 
-the response code and text in response. 
+the response code and text in response.  
 It also supports **timeout** so it can wait for a particular time and then fail.
 
 ## Supported Modules
