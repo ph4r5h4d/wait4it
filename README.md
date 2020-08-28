@@ -3,7 +3,8 @@
 ![LICENSE](https://img.shields.io/github/workflow/status/ph4r5h4d/wait4it/Wait4it&#32;CI?style=for-the-badge) [![Docker Pull](https://img.shields.io/docker/pulls/ph4r5h4d/wait4it?style=for-the-badge)](https://hub.docker.com/r/ph4r5h4d/wait4it)  ![GO Version](https://img.shields.io/github/go-mod/go-version/ph4r5h4d/wait4it?style=for-the-badge) ![TAG](https://img.shields.io/github/v/tag/ph4r5h4d/wait4it?style=for-the-badge) ![LICENSE](https://img.shields.io/github/license/ph4r5h4d/wait4it?style=for-the-badge)
   
 A simple go application to test whether a port is ready to accept a connection or check 
-MySQL or PostgreSQL server is ready or not, Also you can do Http call and check the response code and text in response.  
+MySQL, PostgreSQL, MongoDB or Redis server is ready or not, Also you can do Http call and check 
+the response code and text in response. 
 It also supports **timeout** so it can wait for a particular time and then fail.
 
 ## Supported Modules
