@@ -12,6 +12,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * PostgresQL
 * Http
 * MongoDB
+* Redis
 
 ## Install
 You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
@@ -68,7 +69,15 @@ Check HTTP response and text
 
 Check a MongoDB instance
 ```bash
-./wait4it -type=mongo -p=32768 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
+./wait4it -type=mongo -p=27017 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
+```
+
+Check a Redis instance
+```bash
+./wait4it -type=mongo -p=6379 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
+
+# if your redis is not password protected
+./wait4it -type=mongo -p=6379 -t=60  -u=mongoadmin -h=127.0.0.1
 ```
 
 ### Docker
@@ -104,6 +113,14 @@ Check a MongoDB instance
 ```bash
 docker run ph4r5h4d/wait4it -type=mongo -p=32768 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
 ```
+
+Check a Redis instance
+```bash
+docker run ph4r5h4d/wait4it -type=mongo -p=6379 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
+
+# if your redis is not password protected
+docker run ph4r5h4d/wait4it -type=mongo -p=6379 -t=60  -u=mongoadmin -h=127.0.0.1
+```
 ## Notes
 #### Configuration
 * note that environment variables have higher priority than command-line arguments. 
@@ -123,3 +140,6 @@ This means if you define both `W4IT_TYPE` and `-type`, the application takes the
 
 #### MongoDB check
 * for the moment only username/password authentication mechanism is supported.
+
+#### Redis check
+* Currently, single redis instance is supported. (no support for redis cluster or sentinel)
