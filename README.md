@@ -68,7 +68,7 @@ Check HTTP response and text
 
 Check a MongoDB instance
 ```bash
-./wait4it -type=mongo -p=32768 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
+./wait4it -type=mongo -p=27017 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
 ```
 
 ### Docker
