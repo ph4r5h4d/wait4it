@@ -15,6 +15,7 @@ func Parse(ctx *model.CheckContext) *model.CheckContext {
 	ctx.Password = os.Getenv("W4IT_PASSWORD")
 	ctx.DatabaseName = os.Getenv("W4IT_DBNAME")
 	ctx.DBConf.SSLMode = os.Getenv("W4IT_SSL_MODE")
+	ctx.DBConf.ClusterMode = os.Getenv("W4IT_CLUSTER_MODE")
 	ctx.HttpConf.StatusCode, _ = strconv.Atoi(os.Getenv("W4IT_HTTP_STATUS_CODE"))
 	ctx.HttpConf.Text = os.Getenv("W4IT_HTTP_TEXT")
 	return ctx

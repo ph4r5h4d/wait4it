@@ -17,7 +17,8 @@ type ConfigurationContext struct {
 }
 
 type DatabaseSpecificConf struct {
-	SSLMode string
+	SSLMode     string
+	ClusterMode string
 }
 type HttpSpecificConf struct {
 	StatusCode int
