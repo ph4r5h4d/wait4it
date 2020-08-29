@@ -14,7 +14,7 @@ func Parse(ctx *model.CheckContext) *model.CheckContext {
 	password := flag.String("P", "", "Password of the service")
 	databaseName := flag.String("n", "", "Name of the database")
 	sslMode := flag.String("ssl", "disable", "Enable or Disable ssl mode (for some database or services)")
-	clusterMode := flag.String("cluster", "disable", "Enable or Disable cluster mode (for some database or services)")
+	operationMode := flag.String("operation-mode", "standalone", "choose operation mode (for some database or services)")
 	statusCode := flag.Int("status-code", 200, "Status code to be expected from http call")
 	text := flag.String("http-text", "", "Text to check inside http response")
 
@@ -52,8 +52,8 @@ func Parse(ctx *model.CheckContext) *model.CheckContext {
 		ctx.DBConf.SSLMode = *sslMode
 	}
 
-	if ctx.DBConf.ClusterMode == "" {
-		ctx.DBConf.ClusterMode = *clusterMode
+	if ctx.DBConf.OperationMode == "" {
+		ctx.DBConf.OperationMode = *operationMode
 	}
 
 	if ctx.HttpConf.StatusCode == 0 {

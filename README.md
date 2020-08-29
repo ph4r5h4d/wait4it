@@ -31,7 +31,7 @@ The following environment variables are supported:
 * `W4IT_PASSWORD` (password for the services that needs password)
 * `W4IT_DBNAME` (database name for MySQL or PostgreSQL)
 * `W4IT_SSL_MODE` (whether to enable or disable ssl-mode for Postgres [disable, enable])
-* `W4IT_CLUSTER_MODE` (whether to enable or disable ssl-mode for Redis [disable, enable])
+* `W4IT_OPERATION_MODE` (to select operation mode for redis [standalone, cluster])
 * `W4IT_HTTP_STATUS_CODE` (for Http check, which status code to expect)
 * `W4IT_HTTP_TEXT` (for Http check, find substring inside the response)
 
@@ -46,7 +46,7 @@ The following command-line flags are supported
 * `-P` (password for the services that needs password)
 * `-n` (database name for MySQL or PostgreSQL)  
 * `-ssl` (whether to enable or disable ssl-mode for Postgres [disable, enable])  
-* `-cluster` (whether to enable or disable cluster-mode for Redis [disable, enable])  
+* `-operation-mode` (to select operation mode for redis [standalone, cluster])  
 * `-http-status` (for Http check, which status code to expect)  
 * `-http-text` (for Http check, find substring inside the response)  
 
@@ -83,7 +83,7 @@ Check a Redis instance
 ./wait4it -type=redis -p=6379 -t=60 -h=127.0.0.1
 
 # if you use redis cluster
-./wait4it -type=redis -p=6379 -t=60 -P=secret -cluster=enable -h=127.0.0.1
+./wait4it -type=redis -p=6379 -t=60 -P=secret -operation-mode=cluster -h=127.0.0.1
 ```
 
 ### Docker
@@ -128,7 +128,7 @@ docker run ph4r5h4d/wait4it -type=redis -p=6379 -t=60 -P=secret -h=127.0.0.1
 docker run ph4r5h4d/wait4it -type=redis -p=6379 -t=60 -h=127.0.0.1
 
 # if you use redis cluster
-docker run ph4r5h4d/wait4it -type=redis -p=6379 -t=60 -P=secret -cluster=enable -h=127.0.0.1
+docker run ph4r5h4d/wait4it -type=redis -p=6379 -t=60 -P=secret -operation-mode=cluster -h=127.0.0.1
 ```
 ## Notes
 #### Configuration
@@ -151,4 +151,4 @@ This means if you define both `W4IT_TYPE` and `-type`, the application takes the
 * for the moment only username/password authentication mechanism is supported.
 
 #### Redis check
-* if `cluster` is not defined then it's `disable` by default. Redis Sentinel is not supported yet.
+* if `operation-mode` is not defined then it's `standalone` by default. Redis Sentinel is not supported yet.
