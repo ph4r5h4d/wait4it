@@ -51,6 +51,19 @@ func (m *RedisConnection) Validate() (bool, error) {
 	return true, nil
 }
 
+func (m *RedisConnection) Check() (bool, bool, error) {
+	c := context.Background()
+
+	switch m.OperationMode {
+	case Standalone:
+		return m.checkStandAlone(c)
+	case Cluster:
+		return m.checkCluster(c)
+	default:
+		return false, false, nil
+	}
+}
+
 func (m *RedisConnection) checkStandAlone(ctx context.Context) (bool, bool, error) {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     m.BuildConnectionString(),
@@ -70,7 +83,7 @@ func (m *RedisConnection) checkStandAlone(ctx context.Context) (bool, bool, erro
 
 func (m *RedisConnection) checkCluster(ctx context.Context) (bool, bool, error) {
 	rdb := redis.NewClusterClient(&redis.ClusterOptions{
-		Addrs:    []string{m.BuildConnectionString()},
+		Addrs:    []string{m.BuildConnectionString()}, //todo: add support for multiple hosts
 		Password: m.Password,
 	})
 	defer rdb.Close()
@@ -87,22 +100,9 @@ func (m *RedisConnection) checkCluster(ctx context.Context) (bool, bool, error) 
 
 	if result != "" {
 		if !strings.Contains(result, "cluster_state:ok") {
-			return false, false, errors.New("can't find cluster_state:ok in response")
+			return false, false, errors.New("cluster is not healthy")
 		}
 	}
 
-	return true, false, nil
-}
-
-func (m *RedisConnection) Check() (bool, bool, error) {
-	ctx := context.Background()
-
-	switch m.OperationMode {
-	case StandAloneMode:
-		return m.checkStandAlone(ctx)
-	case ClusterMode:
-		return m.checkCluster(ctx)
-	default:
-		return false, false, errors.New("operation mode is invalid")
-	}
+	return true, true, nil
 }
