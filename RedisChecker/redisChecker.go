@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	ClusterMode    = "cluster"
-	StandAloneMode = "standalone"
+	Cluster    = "cluster"
+	Standalone = "standalone"
 )
 
 func (m *RedisConnection) BuildContext(cx model.CheckContext) {
@@ -26,12 +26,12 @@ func (m *RedisConnection) BuildContext(cx model.CheckContext) {
 	m.Database = d
 
 	switch cx.DBConf.OperationMode {
-	case ClusterMode:
-		m.OperationMode = ClusterMode
-	case StandAloneMode:
-		m.OperationMode = StandAloneMode
+	case Cluster:
+		m.OperationMode = Cluster
+	case Standalone:
+		m.OperationMode = Standalone
 	default:
-		m.OperationMode = StandAloneMode
+		m.OperationMode = Standalone
 	}
 }
 
@@ -40,8 +40,8 @@ func (m *RedisConnection) Validate() (bool, error) {
 		return false, errors.New("host or username can't be empty")
 	}
 
-	if m.OperationMode != ClusterMode && m.OperationMode != StandAloneMode {
-		return false, errors.New("operation mode is invalid, 'cluster' and 'standalone' modes are valid")
+	if m.OperationMode != Cluster && m.OperationMode != Standalone {
+		return false, errors.New("invalid operation mode")
 	}
 
 	if m.Port < 0 || m.Port > 65535 {
