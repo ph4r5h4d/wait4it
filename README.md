@@ -152,3 +152,4 @@ This means if you define both `W4IT_TYPE` and `-type`, the application takes the
 
 #### Redis check
 * if `operation-mode` is not defined then it's `standalone` by default. Redis Sentinel is not supported yet.
+* this version can only check one host within Redis cluster, using multiple hosts to check cluster status for Redis will be added in the next version.
