@@ -10,6 +10,8 @@ import (
 	"wait4it/model"
 )
 
+const WaitTimeOutSeconds = 2
+
 func (m *MongoDbConnection) BuildContext(cx model.CheckContext) {
 	m.Port = cx.Port
 	m.Host = cx.Host
@@ -40,7 +42,7 @@ func (m *MongoDbConnection) Check() (bool, bool, error) {
 		return false, true, err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), WaitTimeOutSeconds*time.Second)
 	defer cancel()
 
 	err = client.Connect(ctx)

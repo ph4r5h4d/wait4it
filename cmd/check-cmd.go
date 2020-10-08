@@ -8,11 +8,13 @@ import (
 	"wait4it/model"
 )
 
+const InvalidUsageStatus = 2
+
 func RunCheck(c model.CheckContext) {
 	m, err := findCheckModule(c.Config.CheckType)
 	if err != nil {
 		wStdErr(err)
-		os.Exit(2)
+		os.Exit(InvalidUsageStatus)
 	}
 
 	cx := m.(model.CheckInterface)
@@ -21,7 +23,7 @@ func RunCheck(c model.CheckContext) {
 	r, err := cx.Validate()
 	if !r {
 		wStdErr(err)
-		os.Exit(2)
+		os.Exit(InvalidUsageStatus)
 	}
 
 	fmt.Print("Wait4it...")
@@ -62,7 +64,7 @@ func check(cs model.CheckInterface) {
 	r, eor, err := cs.Check()
 	if err != nil && eor {
 		wStdErr(err.Error())
-		os.Exit(2)
+		os.Exit(InvalidUsageStatus)
 	}
 
 	wStdOut(r)
