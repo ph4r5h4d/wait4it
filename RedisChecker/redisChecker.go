@@ -3,10 +3,11 @@ package RedisChecker
 import (
 	"context"
 	"errors"
-	"github.com/go-redis/redis/v8"
 	"strconv"
 	"strings"
 	"wait4it/model"
+
+	"github.com/go-redis/redis/v8"
 )
 
 const (
@@ -35,20 +36,20 @@ func (m *RedisConnection) BuildContext(cx model.CheckContext) {
 	}
 }
 
-func (m *RedisConnection) Validate() (bool, error) {
+func (m *RedisConnection) Validate() error {
 	if len(m.Host) == 0 {
-		return false, errors.New("host or username can't be empty")
+		return errors.New("host or username can't be empty")
 	}
 
 	if m.OperationMode != Cluster && m.OperationMode != Standalone {
-		return false, errors.New("invalid operation mode")
+		return errors.New("invalid operation mode")
 	}
 
 	if m.Port < 1 || m.Port > 65535 {
-		return false, errors.New("invalid port range for redis")
+		return errors.New("invalid port range for redis")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (m *RedisConnection) Check() (bool, bool, error) {

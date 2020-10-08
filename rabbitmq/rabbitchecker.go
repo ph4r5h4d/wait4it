@@ -25,22 +25,22 @@ func (rc *RabbitChecker) BuildContext(cx model.CheckContext) {
 	rc.Password = cx.Password
 }
 
-func (rc *RabbitChecker) Validate() (bool, error) {
+func (rc *RabbitChecker) Validate() error {
 	if rc.Host == "" {
-		return false, errors.New("Host should not be empty")
+		return errors.New("Host should not be empty")
 	}
 
 	if rc.Username == "" {
-		return false, errors.New("Username should not be empty")
+		return errors.New("Username should not be empty")
 	}
 
 	if rc.Port == 0 {
-		return false, errors.New("Port should not be empty")
+		return errors.New("Port should not be empty")
 	}
 
 	rc.conString = fmt.Sprintf("amqp://%s:%s@%s:%d/", rc.Username, rc.Password, rc.Host, rc.Port)
 
-	return true, nil
+	return nil
 }
 
 func (rc *RabbitChecker) Check() (bool, bool, error) {
