@@ -14,6 +14,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * Http
 * MongoDB
 * Redis
+* RabbitMQ
 
 ## Install
 You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
@@ -118,6 +119,11 @@ docker run ph4r5h4d/wait4it -type=http -h=https://farshad.nematdoust.com -t=60 -
 Check a MongoDB instance
 ```bash
 docker run ph4r5h4d/wait4it -type=mongo -p=32768 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
+```
+
+Check a RabbitMQ instance
+```bash
+docker run ph4r5h4d/wait4it -type=rabbitmq -p=5267 -t=60  -u=guest -P=guest -h=127.0.0.1
 ```
 
 Check a Redis instance

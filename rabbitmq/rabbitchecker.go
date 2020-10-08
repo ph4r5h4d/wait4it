@@ -56,5 +56,5 @@ func (rc *RabbitChecker) Check() (bool, bool, error) {
 	}
 	defer ch.Close()
 
-	return true,false,nil
+	return true, false, nil
 }
