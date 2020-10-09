@@ -79,16 +79,16 @@ Check a Redis instance
 ```bash
 ./wait4it -type=redis -p=6379 -t=60 -P=secret -h=127.0.0.1
 
-Check a Memcached instance
-```bash
-./wait4it -type=memcached -h=127.0.0.1 -p=11211
-```
-
 # if your redis is not password protected
 ./wait4it -type=redis -p=6379 -t=60 -h=127.0.0.1
 
 # if you use redis cluster
 ./wait4it -type=redis -p=6379 -t=60 -P=secret -operation-mode=cluster -h=127.0.0.1
+```
+
+Check a Memcached instance
+```bash
+./wait4it -type=memcached -h=127.0.0.1 -p=11211
 ```
 
 ### Docker
