@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"wait4it/MemcachedChecker"
 	"wait4it/MongoDbChecker"
 	"wait4it/MySQLChecker"
 	"wait4it/PostgreSQLChecker"
@@ -10,10 +11,11 @@ import (
 )
 
 var cm = map[string]interface{}{
-	"tcp":      &TcpChecker.Tcp{},
-	"mysql":    &MySQLChecker.MySQLConnection{},
-	"postgres": &PostgreSQLChecker.PostgresSQLConnection{},
-	"http":     &httpChecker.HttpCheck{},
-	"mongo":    &MongoDbChecker.MongoDbConnection{},
-	"redis":    &RedisChecker.RedisConnection{},
+	"tcp":       &TcpChecker.Tcp{},
+	"mysql":     &MySQLChecker.MySQLConnection{},
+	"postgres":  &PostgreSQLChecker.PostgresSQLConnection{},
+	"http":      &httpChecker.HttpCheck{},
+	"mongo":     &MongoDbChecker.MongoDbConnection{},
+	"redis":     &RedisChecker.RedisConnection{},
+	"memcached": &MemcachedChecker.MemcachedConnection{},
 }
