@@ -34,6 +34,7 @@ func (h *HttpCheck) Check() (bool, bool, error) {
 	if err != nil {
 		return false, true, err
 	}
+	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
