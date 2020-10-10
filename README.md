@@ -87,6 +87,11 @@ Check a Redis instance
 ./wait4it -type=redis -p=6379 -t=60 -P=secret -operation-mode=cluster -h=127.0.0.1
 ```
 
+Check a RabbitMQ instance
+```bash
+./wait4it -type=rabbitmq -p=5267 -t=60  -u=guest -P=guest -h=127.0.0.1
+```
+
 ### Docker
 You can run this `wait4it` inside a docker container, and it's possible to run this container as init container inside
 K8s and Openshift.  
