@@ -14,6 +14,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * Http
 * MongoDB
 * Redis
+* Memcached
 
 ## Install
 You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
