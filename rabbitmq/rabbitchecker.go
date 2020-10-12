@@ -49,6 +49,7 @@ func (rc *RabbitChecker) Check() (bool, bool, error) {
 	if err != nil {
 		return false, false, err
 	}
+	defer con.Close()
 
 	ch, err := con.Channel()
 	if err != nil {
