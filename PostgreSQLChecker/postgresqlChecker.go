@@ -25,8 +25,8 @@ func (pq *PostgresSQLConnection) Validate() (bool, error) {
 		return false, errors.New("host or username can't be empty")
 	}
 
-	if pq.Port < 0 || pq.Port > 65535 {
-		return false, errors.New("invalid port range for mysql")
+	if pq.Port < 1 || pq.Port > 65535 {
+		return false, errors.New("invalid port range for PostgresSQL")
 	}
 
 	return true, nil

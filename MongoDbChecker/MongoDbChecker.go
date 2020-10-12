@@ -10,6 +10,8 @@ import (
 	"wait4it/model"
 )
 
+const WaitTimeOutSeconds = 2
+
 func (m *MongoDbConnection) BuildContext(cx model.CheckContext) {
 	m.Port = cx.Port
 	m.Host = cx.Host
@@ -26,7 +28,7 @@ func (m *MongoDbConnection) Validate() (bool, error) {
 		return false, errors.New("password can't be empty")
 	}
 
-	if m.Port < 0 || m.Port > 65535 {
+	if m.Port < 1 || m.Port > 65535 {
 		return false, errors.New("invalid port range for mysql")
 	}
 
@@ -35,12 +37,11 @@ func (m *MongoDbConnection) Validate() (bool, error) {
 
 func (m *MongoDbConnection) Check() (bool, bool, error) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(m.buildConnectionString()))
-
 	if err != nil {
 		return false, true, err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), WaitTimeOutSeconds*time.Second)
 	defer cancel()
 
 	err = client.Connect(ctx)

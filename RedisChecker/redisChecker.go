@@ -44,7 +44,7 @@ func (m *RedisConnection) Validate() (bool, error) {
 		return false, errors.New("invalid operation mode")
 	}
 
-	if m.Port < 0 || m.Port > 65535 {
+	if m.Port < 1 || m.Port > 65535 {
 		return false, errors.New("invalid port range for redis")
 	}
 
