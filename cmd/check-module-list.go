@@ -7,6 +7,7 @@ import (
 	"wait4it/RedisChecker"
 	"wait4it/TcpChecker"
 	"wait4it/httpChecker"
+	"wait4it/rabbitmq"
 )
 
 var cm = map[string]interface{}{
@@ -16,4 +17,5 @@ var cm = map[string]interface{}{
 	"http":     &httpChecker.HttpCheck{},
 	"mongo":    &MongoDbChecker.MongoDbConnection{},
 	"redis":    &RedisChecker.RedisConnection{},
+	"rabbitmq": &rabbitmq.RabbitChecker{},
 }
