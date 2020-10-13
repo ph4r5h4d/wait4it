@@ -16,16 +16,16 @@ func (h *HttpCheck) BuildContext(cx model.CheckContext) {
 	}
 }
 
-func (h *HttpCheck) Validate() (bool, error) {
+func (h *HttpCheck) Validate() error {
 	if !h.validateUrl() {
-		return false, errors.New("invalid URL provided")
+		return errors.New("invalid URL provided")
 	}
 
 	if !h.validateStatusCode() {
-		return false, errors.New("invalid status code provided")
+		return errors.New("invalid status code provided")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (h *HttpCheck) Check() (bool, bool, error) {

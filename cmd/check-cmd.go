@@ -20,8 +20,8 @@ func RunCheck(c model.CheckContext) {
 	cx := m.(model.CheckInterface)
 
 	cx.BuildContext(c)
-	r, err := cx.Validate()
-	if !r {
+	err = cx.Validate()
+	if err != nil {
 		wStdErr(err)
 		os.Exit(InvalidUsageStatus)
 	}

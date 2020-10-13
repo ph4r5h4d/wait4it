@@ -3,8 +3,9 @@ package PostgreSQLChecker
 import (
 	"database/sql"
 	"errors"
-	_ "github.com/lib/pq"
 	"wait4it/model"
+
+	_ "github.com/lib/pq"
 )
 
 func (pq *PostgresSQLConnection) BuildContext(cx model.CheckContext) {
@@ -20,16 +21,16 @@ func (pq *PostgresSQLConnection) BuildContext(cx model.CheckContext) {
 	}
 }
 
-func (pq *PostgresSQLConnection) Validate() (bool, error) {
+func (pq *PostgresSQLConnection) Validate() error {
 	if len(pq.Host) == 0 || len(pq.Username) == 0 {
-		return false, errors.New("host or username can't be empty")
+		return errors.New("host or username can't be empty")
 	}
 
 	if pq.Port < 1 || pq.Port > 65535 {
-		return false, errors.New("invalid port range for PostgresSQL")
+		return  errors.New("invalid port range for PostgresSQL")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (pq *PostgresSQLConnection) Check() (bool, bool, error) {

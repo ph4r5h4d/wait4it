@@ -3,11 +3,12 @@ package MySQLChecker
 import (
 	"database/sql"
 	"errors"
-	"github.com/go-sql-driver/mysql"
-	_ "github.com/go-sql-driver/mysql"
 	"io/ioutil"
 	"log"
 	"wait4it/model"
+
+	"github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func (m *MySQLConnection) BuildContext(cx model.CheckContext) {
@@ -18,16 +19,16 @@ func (m *MySQLConnection) BuildContext(cx model.CheckContext) {
 	m.DatabaseName = cx.DatabaseName
 }
 
-func (m *MySQLConnection) Validate() (bool, error) {
+func (m *MySQLConnection) Validate() error {
 	if len(m.Host) == 0 || len(m.Username) == 0 {
-		return false, errors.New("host or username can't be empty")
+		return errors.New("host or username can't be empty")
 	}
 
 	if m.Port < 1 || m.Port > 65535 {
-		return false, errors.New("invalid port range for mysql")
+		return  errors.New("invalid port range for mysql")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (m *MySQLConnection) Check() (bool, bool, error) {
