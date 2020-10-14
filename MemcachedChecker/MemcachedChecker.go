@@ -12,16 +12,16 @@ func (m *MemcachedConnection) BuildContext(cx model.CheckContext) {
 	m.Port = cx.Port
 }
 
-func (m *MemcachedConnection) Validate() (bool, error) {
+func (m *MemcachedConnection) Validate() error {
 	if len(m.Host) == 0 {
-		return false, errors.New("Host can't be empty")
+		return errors.New("Host can't be empty")
 	}
 
 	if m.Port < 1 {
-		return false, errors.New("Invalid port range for Memcached")
+		return errors.New("Invalid port range for Memcached")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (m *MemcachedConnection) Check() (bool, bool, error) {
