@@ -3,12 +3,15 @@ package MongoDbChecker
 import (
 	"context"
 	"errors"
+	"time"
+	"wait4it/model"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"time"
-	"wait4it/model"
 )
+
+const WaitTimeOutSeconds = 2
 
 func (m *MongoDbConnection) BuildContext(cx model.CheckContext) {
 	m.Port = cx.Port
@@ -17,30 +20,29 @@ func (m *MongoDbConnection) BuildContext(cx model.CheckContext) {
 	m.Password = cx.Password
 }
 
-func (m *MongoDbConnection) Validate() (bool, error) {
+func (m *MongoDbConnection) Validate() error {
 	if len(m.Host) == 0 {
-		return false, errors.New("host can't be empty")
+		return errors.New("host can't be empty")
 	}
 
 	if len(m.Username) > 0 && len(m.Password) == 0 {
-		return false, errors.New("password can't be empty")
+		return errors.New("password can't be empty")
 	}
 
-	if m.Port < 0 || m.Port > 65535 {
-		return false, errors.New("invalid port range for mysql")
+	if m.Port < 1 || m.Port > 65535 {
+		return errors.New("invalid port range for mysql")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (m *MongoDbConnection) Check() (bool, bool, error) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(m.buildConnectionString()))
-
 	if err != nil {
 		return false, true, err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), WaitTimeOutSeconds*time.Second)
 	defer cancel()
 
 	err = client.Connect(ctx)

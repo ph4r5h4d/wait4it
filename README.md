@@ -14,6 +14,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * Http
 * MongoDB
 * Redis
+* RabbitMQ
 * Memcached
 
 ## Install
@@ -87,9 +88,14 @@ Check a Redis instance
 ./wait4it -type=redis -p=6379 -t=60 -P=secret -operation-mode=cluster -h=127.0.0.1
 ```
 
+Check a RabbitMQ instance
+```bash
+./wait4it -type=rabbitmq -p=5267 -t=60  -u=guest -P=guest -h=127.0.0.1
+```
+
 Check a Memcached instance
 ```bash
-./wait4it -type=memcached -h=127.0.0.1 -p=11211
+./wait4it -type=memcached -h=127.0.0.1 -p=11211 -t=60
 ```
 
 ### Docker
@@ -124,6 +130,11 @@ docker run ph4r5h4d/wait4it -type=http -h=https://farshad.nematdoust.com -t=60 -
 Check a MongoDB instance
 ```bash
 docker run ph4r5h4d/wait4it -type=mongo -p=32768 -t=60  -u=mongoadmin -P=secret -h=127.0.0.1
+```
+
+Check a RabbitMQ instance
+```bash
+docker run ph4r5h4d/wait4it -type=rabbitmq -p=5267 -t=60  -u=guest -P=guest -h=127.0.0.1
 ```
 
 Check a Redis instance
