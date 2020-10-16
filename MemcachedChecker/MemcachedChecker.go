@@ -17,7 +17,7 @@ func (m *MemcachedConnection) Validate() error {
 		return errors.New("Host can't be empty")
 	}
 
-	if m.Port < 1 {
+	if m.Port < 1 || m.Port > 65535 {
 		return errors.New("Invalid port range for Memcached")
 	}
 
