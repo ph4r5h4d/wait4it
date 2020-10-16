@@ -15,6 +15,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * MongoDB
 * Redis
 * RabbitMQ
+* Memcached
 
 ## Install
 You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
@@ -92,6 +93,11 @@ Check a RabbitMQ instance
 ./wait4it -type=rabbitmq -p=5267 -t=60  -u=guest -P=guest -h=127.0.0.1
 ```
 
+Check a Memcached instance
+```bash
+./wait4it -type=memcached -h=127.0.0.1 -p=11211 -t=60
+```
+
 ### Docker
 You can run this `wait4it` inside a docker container, and it's possible to run this container as init container inside
 K8s and Openshift.  
@@ -141,6 +147,12 @@ docker run ph4r5h4d/wait4it -type=redis -p=6379 -t=60 -h=127.0.0.1
 # if you use redis cluster
 docker run ph4r5h4d/wait4it -type=redis -p=6379 -t=60 -P=secret -operation-mode=cluster -h=127.0.0.1
 ```
+
+Check a Memcached instance
+```bash
+docker run ph4r5h4d/wait4it -type=memcached -h=127.0.0.1 -p=11211
+```
+
 ## Notes
 #### Configuration
 * note that environment variables have higher priority than command-line arguments. 
@@ -164,3 +176,6 @@ This means if you define both `W4IT_TYPE` and `-type`, the application takes the
 #### Redis check
 * if `operation-mode` is not defined then it's `standalone` by default. Redis Sentinel is not supported yet.
 * this version can only check one host within Redis cluster, using multiple hosts to check cluster status for Redis will be added in the next version.
+
+### Memcached check
+* for the moment multiple hosts to check cluster is not supported due to the current structure of the project.
