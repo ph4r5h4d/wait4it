@@ -16,6 +16,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * Redis
 * RabbitMQ
 * Memcached
+* ElasticSearch
 
 ## Install
 You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
@@ -98,6 +99,11 @@ Check a Memcached instance
 ./wait4it -type=memcached -h=127.0.0.1 -p=11211 -t=60
 ```
 
+Check ElasticSearch instance
+```bash
+./wait4it -type=elasticsearch -h=http://127.0.0.1 -p=9200 -t=60
+```
+
 ### Docker
 You can run this `wait4it` inside a docker container, and it's possible to run this container as init container inside
 K8s and Openshift.  
@@ -153,6 +159,11 @@ Check a Memcached instance
 docker run ph4r5h4d/wait4it -type=memcached -h=127.0.0.1 -p=11211
 ```
 
+Check a ElasticSearch instance
+```bash
+docker run ph4r5h4d/wait4it -type=elasticsearch -h=http://127.0.0.1 -p=9200
+```
+
 ## Notes
 #### Configuration
 * note that environment variables have higher priority than command-line arguments. 
@@ -178,4 +189,8 @@ This means if you define both `W4IT_TYPE` and `-type`, the application takes the
 * this version can only check one host within Redis cluster, using multiple hosts to check cluster status for Redis will be added in the next version.
 
 #### Memcached check
-* for the moment multiple hosts and cluster check is not supported.
+* for the moment multiple hosts and cluster checks are not supported.
+
+#### ElasticSearch
+* for the moment multiple hosts and cluster checks are not supported.
+* as you know, username/password authentication mechanism is only supported along with the X-Pack extension and if the X-Pack extension wasn't activated, filling username/password won't have any effect. According to these reasons, username/password isn't required.
