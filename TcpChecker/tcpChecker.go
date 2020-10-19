@@ -12,11 +12,11 @@ func (tcp *Tcp) BuildContext(cx model.CheckContext) {
 	tcp.Port = cx.Port
 }
 
-func (tcp *Tcp) Validate() (bool, error) {
+func (tcp *Tcp) Validate() error {
 	if !tcp.isPortInValidRange() {
-		return false, errors.New("invalid port range")
+		return errors.New("invalid port range")
 	}
-	return true, nil
+	return nil
 }
 
 func (tcp *Tcp) Check() (bool, bool, error) {
