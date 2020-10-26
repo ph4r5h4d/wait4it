@@ -7,7 +7,7 @@ import (
 
 func wStdOut(r bool) {
 	if r {
-		_, _ = fmt.Fprint(os.Stdout, "succeed")
+		_, _ = fmt.Fprintln(os.Stdout, "succeed")
 		os.Exit(0)
 	} else {
 		_, _ = fmt.Fprint(os.Stdout, ".")
@@ -15,5 +15,5 @@ func wStdOut(r bool) {
 }
 
 func wStdErr(a ...interface{}) {
-	_, _ = fmt.Fprint(os.Stderr, a...)
+	_, _ = fmt.Fprintln(os.Stderr, a...)
 }

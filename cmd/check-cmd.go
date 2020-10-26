@@ -36,7 +36,7 @@ func RunCheck(c model.CheckContext) {
 	time.Sleep(time.Duration(c.Config.Timeout) * time.Second)
 	done <- true
 
-	fmt.Print("failed")
+	fmt.Println("failed")
 	os.Exit(1)
 }
 
