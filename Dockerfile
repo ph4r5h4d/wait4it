@@ -1,4 +1,4 @@
-FROM golang:1.13-alpine3.11 as build-env
+FROM golang:1.15-alpine3.12 as build-env
 RUN apk add git gcc
 RUN mkdir /app
 WORKDIR /app
