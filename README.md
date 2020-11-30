@@ -17,6 +17,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * RabbitMQ
 * Memcached
 * ElasticSearch
+* Aerospike
 
 ## Install
 You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
@@ -104,6 +105,11 @@ Check ElasticSearch instance
 ./wait4it -type=elasticsearch -h=http://127.0.0.1 -p=9200 -t=60
 ```
 
+Check a Aerospike instance
+```bash
+./wait4it -type=aerospike -h=127.0.0.1 -p=3000 -t=60
+``` 
+
 ### Docker
 You can run this `wait4it` inside a docker container, and it's possible to run this container as init container inside
 K8s and Openshift.  
@@ -163,6 +169,11 @@ Check a ElasticSearch instance
 ```bash
 docker run ph4r5h4d/wait4it -type=elasticsearch -h=http://127.0.0.1 -p=9200
 ```
+
+Check a Aerospike instance
+```bash
+docker run ph4r5h4d/wait4it -type=aerospike -h=127.0.0.1 -p=3000 -t=60
+``` 
 
 ## Notes
 #### Configuration
