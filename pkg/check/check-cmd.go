@@ -1,46 +1,40 @@
 package check
 
 import (
-	"errors"
+	"context"
 	"fmt"
-	"os"
 	"time"
+
+	"github.com/pkg/errors"
+
 	"wait4it/pkg/model"
 )
 
-const InvalidUsageStatus = 2
-
-func RunCheck(c model.CheckContext) {
-	m, err := findCheckModule(c.Config.CheckType)
+func RunCheck(ctx context.Context, c *model.CheckContext) error {
+	cx, err := findCheckModule(c.Config.CheckType)
 	if err != nil {
-		wStdErr(err)
-		os.Exit(InvalidUsageStatus)
+		return errors.Wrap(err, "can not find the module")
 	}
 
-	cx := m.(model.CheckInterface)
-
-	cx.BuildContext(c)
+	cx.BuildContext(*c)
 	err = cx.Validate()
 	if err != nil {
-		wStdErr(err)
-		os.Exit(InvalidUsageStatus)
+		return errors.Wrap(err, "validation failed")
 	}
 
 	fmt.Print("Wait4it...")
 
-	t := time.NewTicker(1 * time.Second)
-	done := make(chan bool)
+	newCtx, cnl := context.WithTimeout(ctx, time.Duration(c.Config.Timeout)*time.Second)
+	defer cnl()
 
-	go ticker(cx, t, done)
+	if err := ticker(newCtx, cx); err != nil {
+		return errors.Wrap(err, "check failed")
+	}
 
-	time.Sleep(time.Duration(c.Config.Timeout) * time.Second)
-	done <- true
-
-	fmt.Println("failed")
-	os.Exit(1)
+	return nil
 }
 
-func findCheckModule(ct string) (interface{}, error) {
+func findCheckModule(ct string) (model.CheckInterface, error) {
 	m, ok := cm[ct]
 	if !ok {
 		return nil, errors.New("unsupported check type")
@@ -49,23 +43,33 @@ func findCheckModule(ct string) (interface{}, error) {
 	return m, nil
 }
 
-func ticker(cs model.CheckInterface, t *time.Ticker, d chan bool) {
+func ticker(ctx context.Context, cs model.CheckInterface) error {
+	t := time.NewTicker(1 * time.Second)
+	defer t.Stop()
 	for {
 		select {
-		case <-d:
-			return
+		case <-ctx.Done():
+			return ctx.Err()
 		case <-t.C:
-			check(cs)
+			r, err := check(ctx, cs)
+			if err != nil {
+				return errors.Wrap(err, "check failed")
+			}
+
+			if r {
+				return nil
+			}
+
+			wStdOut(false)
 		}
 	}
 }
 
-func check(cs model.CheckInterface) {
-	r, eor, err := cs.Check()
+func check(ctx context.Context, cs model.CheckInterface) (bool, error) {
+	r, eor, err := cs.Check(ctx)
 	if err != nil && eor {
-		wStdErr(err.Error())
-		os.Exit(InvalidUsageStatus)
+		return false, errors.Wrap(err, "failed")
 	}
 
-	wStdOut(r)
+	return r, nil
 }

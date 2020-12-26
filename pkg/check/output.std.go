@@ -13,7 +13,3 @@ func wStdOut(r bool) {
 		_, _ = fmt.Fprint(os.Stdout, ".")
 	}
 }
-
-func wStdErr(a ...interface{}) {
-	_, _ = fmt.Fprintln(os.Stderr, a...)
-}

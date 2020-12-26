@@ -1,9 +1,12 @@
 package aerospike
 
 import (
+	"context"
 	"errors"
-	"github.com/aerospike/aerospike-client-go"
+
 	"wait4it/pkg/model"
+
+	"github.com/aerospike/aerospike-client-go"
 )
 
 func (m *AerospikeConnection) BuildContext(cx model.CheckContext) {
@@ -23,7 +26,8 @@ func (m *AerospikeConnection) Validate() error {
 	return nil
 }
 
-func (m *AerospikeConnection) Check() (bool, bool, error) {
+func (m *AerospikeConnection) Check(_ context.Context) (bool, bool, error) {
+	// TODO: is it possible to handle ping using context?
 	c, err := aerospike.NewClient(m.Host, m.Port)
 
 	if err != nil {

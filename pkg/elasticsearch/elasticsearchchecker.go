@@ -1,6 +1,7 @@
 package elasticsearch
 
 import (
+	"context"
 	"errors"
 	"strconv"
 	"wait4it/pkg/model"
@@ -34,7 +35,7 @@ func (esc *ElasticSearchChecker) Validate() error {
 	return nil
 }
 
-func (esc *ElasticSearchChecker) Check() (bool, bool, error) {
+func (esc *ElasticSearchChecker) Check(ctx context.Context) (bool, bool, error) {
 	cfg := elasticsearch.Config{
 		Addresses: []string{
 			esc.BuildConnectionString(),
@@ -48,7 +49,7 @@ func (esc *ElasticSearchChecker) Check() (bool, bool, error) {
 		return false, true, err
 	}
 
-	if _, err := es.Ping(); err != nil {
+	if _, err := es.Ping(es.Ping.WithContext(ctx)); err != nil {
 		return false, false, err
 	}
 

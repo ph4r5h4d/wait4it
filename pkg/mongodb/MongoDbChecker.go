@@ -3,7 +3,7 @@ package mongodb
 import (
 	"context"
 	"errors"
-	"time"
+
 	"wait4it/pkg/model"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -36,14 +36,11 @@ func (m *MongoDbConnection) Validate() error {
 	return nil
 }
 
-func (m *MongoDbConnection) Check() (bool, bool, error) {
+func (m *MongoDbConnection) Check(ctx context.Context) (bool, bool, error) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(m.buildConnectionString()))
 	if err != nil {
 		return false, true, err
 	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), WaitTimeOutSeconds*time.Second)
-	defer cancel()
 
 	err = client.Connect(ctx)
 	if err != nil {
