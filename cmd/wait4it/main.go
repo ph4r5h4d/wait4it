@@ -1,8 +1,11 @@
 package main
 
 import (
-	"github.com/magefile/mage/mage"
+	"flag"
 	"os"
+	"strconv"
+	"wait4it/pkg/check"
+	"wait4it/pkg/model"
 )
 
 func defaultEnv(env string, def string) string {
@@ -35,9 +38,9 @@ func main() {
 	flag.StringVar(&ctx.Username, "u", defaultEnv("W4IT_USERNAME", ""), "Username of the service")
 	flag.StringVar(&ctx.Password, "P", "", "Password of the service, it picks the W4IT_PASSWORD env if it is empty")
 	flag.StringVar(&ctx.DatabaseName, "n", defaultEnv("W4IT_DBNAME", ""), "Name of the database")
-	flag.StringVar(&ctx.DBConf.SSLMode, "ssl", defaultEnv("W4IT_SSL_MODE", "disable"), "Enable or Disable ssl mode (for some database or services)")
-	flag.StringVar(&ctx.DBConf.SSLMode, "operation-mode", defaultEnv("W4IT_OPERATION_MODE", "standalone"), "choose operation mode (for some database or services)")
-	flag.IntVar(&ctx.HttpConf.StatusCode, "status-code", defaultEnvInt("W4IT_HTTP_STATUS_CODE", 200), "Status code to be expected from http call")
+	flag.StringVar(&ctx.DBConf.SSLMode, "ssl", defaultEnv("W4IT_DBNAME", "disable"), "Enable or Disable ssl mode (for some database or services)")
+	flag.StringVar(&ctx.DBConf.SSLMode, "operation-mode", defaultEnv("W4IT_SSL_MODE", "standalone"), "choose operation mode (for some database or services)")
+	flag.IntVar(&ctx.HttpConf.StatusCode, "status-code", defaultEnvInt("W4IT_OPERATION_MODE", 200), "Status code to be expected from http call")
 	flag.StringVar(&ctx.HttpConf.Text, "http-text", defaultEnv("W4IT_HTTP_TEXT", ""), "Text to check inside http response")
 
 	flag.Parse()
@@ -45,5 +48,5 @@ func main() {
 	if ctx.Password == "" {
 		defaultEnv("W4IT_PASSWORD", "")
 	}
-	cmd.RunCheck(*ctx)
+	check.RunCheck(*ctx)
 }
