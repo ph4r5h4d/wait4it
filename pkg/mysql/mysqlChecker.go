@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"io/ioutil"
@@ -31,12 +32,10 @@ func (m *MySQLConnection) Validate() error {
 	return nil
 }
 
-func (m *MySQLConnection) Check() (bool, bool, error) {
+func (m *MySQLConnection) Check(ctx context.Context) (bool, bool, error) {
 	dsl := m.BuildConnectionString()
 
 	db, err := sql.Open("mysql", dsl)
-
-	// if there is an error opening the connection, handle it
 	if err != nil {
 		return false, true, err
 	}
@@ -46,7 +45,7 @@ func (m *MySQLConnection) Check() (bool, bool, error) {
 		return false, true, err
 	}
 
-	err = db.Ping()
+	err = db.PingContext(ctx)
 	if err != nil {
 		// todo: need a logger
 		return false, false, nil

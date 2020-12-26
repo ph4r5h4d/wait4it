@@ -1,6 +1,7 @@
 package tcp
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net"
@@ -19,8 +20,9 @@ func (tcp *Tcp) Validate() error {
 	return nil
 }
 
-func (tcp *Tcp) Check() (bool, bool, error) {
-	c, err := net.Dial("tcp", fmt.Sprintf("%s:%d", tcp.Addr, tcp.Port))
+func (tcp *Tcp) Check(ctx context.Context) (bool, bool, error) {
+	var d net.Dialer
+	c, err := d.DialContext(ctx, "tcp", fmt.Sprintf("%s:%d", tcp.Addr, tcp.Port))
 	if err != nil {
 		return false, false, err
 	}

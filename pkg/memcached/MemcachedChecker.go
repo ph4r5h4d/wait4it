@@ -1,7 +1,9 @@
 package memcached
 
 import (
+	"context"
 	"errors"
+
 	"wait4it/pkg/model"
 
 	"github.com/bradfitz/gomemcache/memcache"
@@ -24,7 +26,8 @@ func (m *MemcachedConnection) Validate() error {
 	return nil
 }
 
-func (m *MemcachedConnection) Check() (bool, bool, error) {
+func (m *MemcachedConnection) Check(_ context.Context) (bool, bool, error) {
+	// TODO: is it possible to handle ping using context?
 	mc := memcache.New(m.BuildConnectionString())
 
 	if err := mc.Ping(); err != nil {

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"strconv"
 	"strings"
+
 	"wait4it/pkg/model"
 
 	"github.com/go-redis/redis/v8"
@@ -52,14 +53,12 @@ func (m *RedisConnection) Validate() error {
 	return nil
 }
 
-func (m *RedisConnection) Check() (bool, bool, error) {
-	c := context.Background()
-
+func (m *RedisConnection) Check(ctx context.Context) (bool, bool, error) {
 	switch m.OperationMode {
 	case Standalone:
-		return m.checkStandAlone(c)
+		return m.checkStandAlone(ctx)
 	case Cluster:
-		return m.checkCluster(c)
+		return m.checkCluster(ctx)
 	default:
 		return false, false, nil
 	}

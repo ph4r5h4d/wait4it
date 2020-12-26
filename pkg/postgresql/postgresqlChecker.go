@@ -1,6 +1,7 @@
 package postgresql
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"wait4it/pkg/model"
@@ -33,17 +34,15 @@ func (pq *PostgresSQLConnection) Validate() error {
 	return nil
 }
 
-func (pq *PostgresSQLConnection) Check() (bool, bool, error) {
+func (pq *PostgresSQLConnection) Check(ctx context.Context) (bool, bool, error) {
 	dsl := pq.BuildConnectionString()
 
 	db, err := sql.Open("postgres", dsl)
-
-	// if there is an error opening the connection, handle it
 	if err != nil {
 		return false, true, err
 	}
 
-	err = db.Ping()
+	err = db.PingContext(ctx)
 	if err != nil {
 		return false, false, nil
 	}

@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"errors"
 	"io/ioutil"
 	"net/http"
@@ -28,8 +29,13 @@ func (h *HttpCheck) Validate() error {
 	return nil
 }
 
-func (h *HttpCheck) Check() (bool, bool, error) {
-	resp, err := http.Get(h.Url)
+func (h *HttpCheck) Check(ctx context.Context) (bool, bool, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, h.Url, nil)
+	if err != nil {
+		return false, false, err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
 
 	if err != nil {
 		return false, true, err
