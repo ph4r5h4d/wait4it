@@ -1,7 +1,7 @@
 package model
 
 import (
-	"golang.org/x/net/context"
+	"context"
 )
 
 // CheckInterface is an interface to handle single check

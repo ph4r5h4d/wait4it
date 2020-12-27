@@ -14,5 +14,4 @@ require (
 	github.com/streadway/amqp v1.0.0
 	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da // indirect
 	go.mongodb.org/mongo-driver v1.4.0
-	golang.org/x/net v0.0.0-20200202094626-16171245cfb2
 )
