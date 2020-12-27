@@ -14,15 +14,15 @@ import (
 	"wait4it/pkg/tcp"
 )
 
-var cm = map[string]model.CheckInterface{
-	"tcp":           &tcp.Tcp{},
-	"mysql":         &mysql.MySQLConnection{},
-	"postgres":      &postgresql.PostgresSQLConnection{},
-	"http":          &http.HttpCheck{},
-	"mongo":         &mongodb.MongoDbConnection{},
-	"redis":         &redis.RedisConnection{},
-	"rabbitmq":      &rabbitmq.RabbitChecker{},
-	"memcached":     &memcached.MemcachedConnection{},
-	"elasticsearch": &elasticsearch.ElasticSearchChecker{},
-	"aerospike":     &aerospike.AerospikeConnection{},
+var cm = map[string]func(c *model.CheckContext) (model.CheckInterface, error){
+	"tcp":           tcp.NewChecker,
+	"mysql":         mysql.NewChecker,
+	"postgres":      postgresql.NewChecker,
+	"http":          http.NewChecker,
+	"mongo":         mongodb.NewChecker,
+	"redis":         redis.NewChecker,
+	"rabbitmq":      rabbitmq.NewChecker,
+	"memcached":     memcached.NewChecker,
+	"elasticsearch": elasticsearch.NewChecker,
+	"aerospike":     aerospike.NewChecker,
 }

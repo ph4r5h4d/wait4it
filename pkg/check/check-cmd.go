@@ -10,15 +10,9 @@ import (
 )
 
 func RunCheck(ctx context.Context, c *model.CheckContext) error {
-	cx, err := findCheckModule(c.Config.CheckType)
+	cx, err := findCheckModule(c)
 	if err != nil {
 		return errors.Wrap(err, "can not find the module")
-	}
-
-	cx.BuildContext(*c)
-	err = cx.Validate()
-	if err != nil {
-		return errors.Wrap(err, "validation failed")
 	}
 
 	newCtx, cnl := context.WithTimeout(ctx, time.Duration(c.Config.Timeout)*time.Second)
@@ -38,13 +32,13 @@ func RunCheck(ctx context.Context, c *model.CheckContext) error {
 	return nil
 }
 
-func findCheckModule(ct string) (model.CheckInterface, error) {
-	m, ok := cm[ct]
+func findCheckModule(c *model.CheckContext) (model.CheckInterface, error) {
+	newFunc, ok := cm[c.Config.CheckType]
 	if !ok {
 		return nil, errors.New("unsupported check type")
 	}
 
-	return m, nil
+	return newFunc(c)
 }
 
 func ticker(ctx context.Context, cs model.CheckInterface, progress func(string)) error {

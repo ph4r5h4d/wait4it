@@ -82,3 +82,14 @@ func (rc *RabbitChecker) Check(ctx context.Context) (bool, bool, error) {
 
 	return true, false, nil
 }
+
+// NewChecker creates a new checker
+func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
+	check := &RabbitChecker{}
+	check.BuildContext(*c)
+	if err := check.Validate(); err != nil {
+		return nil, err
+	}
+
+	return check, nil
+}

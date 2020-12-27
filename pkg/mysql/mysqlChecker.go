@@ -6,10 +6,10 @@ import (
 	"errors"
 	"io/ioutil"
 	"log"
+
 	"wait4it/pkg/model"
 
 	"github.com/go-sql-driver/mysql"
-	_ "github.com/go-sql-driver/mysql"
 )
 
 func (m *MySQLConnection) BuildContext(cx model.CheckContext) {

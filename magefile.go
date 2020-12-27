@@ -13,7 +13,7 @@ import (
 func Build() error {
 	gocmd := mg.GoCmd()
 	os.Setenv("CGO_ENABLED", "0")
-	return sh.RunV(gocmd, "build", "-a", "-installsuffix", "cgo", "-o", "w4it", "./cmd/w4it")
+	return sh.RunV(gocmd, "build", "-a", "-installsuffix", "cgo", "-o", "wait4it", "./cmd/wait4it")
 }
 
 // Docker build the docker file.
