@@ -2,7 +2,6 @@ package check
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/pkg/errors"
@@ -22,12 +21,17 @@ func RunCheck(ctx context.Context, c *model.CheckContext) error {
 		return errors.Wrap(err, "validation failed")
 	}
 
-	fmt.Print("Wait4it...")
-
 	newCtx, cnl := context.WithTimeout(ctx, time.Duration(c.Config.Timeout)*time.Second)
 	defer cnl()
 
-	if err := ticker(newCtx, cx); err != nil {
+	progress := c.Progress
+	if progress == nil {
+		progress = func(s string) {}
+	}
+
+	progress("Wait4it...")
+
+	if err := ticker(newCtx, cx, progress); err != nil {
 		return errors.Wrap(err, "check failed")
 	}
 
@@ -43,7 +47,7 @@ func findCheckModule(ct string) (model.CheckInterface, error) {
 	return m, nil
 }
 
-func ticker(ctx context.Context, cs model.CheckInterface) error {
+func ticker(ctx context.Context, cs model.CheckInterface, progress func(string)) error {
 	t := time.NewTicker(1 * time.Second)
 	defer t.Stop()
 	for {
@@ -60,7 +64,7 @@ func ticker(ctx context.Context, cs model.CheckInterface) error {
 				return nil
 			}
 
-			wStdOut(false)
+			progress(".")
 		}
 	}
 }
