@@ -3,11 +3,28 @@ package memcached
 import (
 	"context"
 	"errors"
+	"strconv"
 
 	"wait4it/pkg/model"
 
 	"github.com/bradfitz/gomemcache/memcache"
 )
+
+type checker struct {
+	host string
+	port int
+}
+
+// NewChecker creates a new checker
+func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
+	checker := &checker{}
+	checker.buildContext(*c)
+	if err := checker.validate(); err != nil {
+		return nil, err
+	}
+
+	return checker, nil
+}
 
 func (c *checker) buildContext(cx model.CheckContext) {
 	c.host = cx.Host
@@ -35,4 +52,8 @@ func (c *checker) Check(context.Context) (bool, bool, error) {
 	}
 
 	return true, true, nil
+}
+
+func (c *checker) buildConnectionString() string {
+	return c.host + ":" + strconv.Itoa(c.port)
 }

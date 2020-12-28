@@ -5,9 +5,28 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
+
 	"wait4it/pkg/model"
 )
+
+type checker struct {
+	url    string
+	status int
+	text   string
+}
+
+// NewChecker creates a new checker
+func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
+	checker := &checker{}
+	checker.buildContext(*c)
+	if err := checker.validate(); err != nil {
+		return nil, err
+	}
+
+	return checker, nil
+}
 
 func (c *checker) buildContext(cx model.CheckContext) {
 	c.url = cx.Host
@@ -19,7 +38,7 @@ func (c *checker) buildContext(cx model.CheckContext) {
 }
 
 func (c *checker) validate() error {
-	if !c.validateUrl() {
+	if !c.validateURL() {
 		return errors.New("invalid URL provided")
 	}
 
@@ -28,6 +47,28 @@ func (c *checker) validate() error {
 	}
 
 	return nil
+}
+
+func (c *checker) validateURL() bool {
+	_, err := url.ParseRequestURI(c.url)
+	if err != nil {
+		return false
+	}
+
+	u, err := url.Parse(c.url)
+	if err != nil || u.Scheme == "" || u.Host == "" {
+		return false
+	}
+
+	return true
+}
+
+func (c *checker) validateStatusCode() bool {
+	// check against common status code
+	if c.status < 100 || c.status > 599 {
+		return false
+	}
+	return true
 }
 
 func (c *checker) Check(ctx context.Context) (bool, bool, error) {
