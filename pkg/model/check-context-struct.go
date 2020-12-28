@@ -9,6 +9,8 @@ type CheckContext struct {
 	DatabaseName string
 	DBConf       DatabaseSpecificConf
 	HttpConf     HttpSpecificConf
+
+	Progress func(string)
 }
 
 type ConfigurationContext struct {

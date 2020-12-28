@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -50,6 +51,9 @@ func main() {
 	// We don't want to show password in help message
 	if cfg.Password == "" {
 		defaultEnv("W4IT_PASSWORD", "")
+	}
+	cfg.Progress = func(s string) {
+		fmt.Print(s)
 	}
 	if err := check.RunCheck(context.Background(), cfg); err != nil {
 		log.Fatal(err)

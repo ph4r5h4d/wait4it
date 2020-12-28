@@ -59,3 +59,14 @@ func (esc *ElasticSearchChecker) Check(ctx context.Context) (bool, bool, error) 
 func (esc *ElasticSearchChecker) BuildConnectionString() string {
 	return esc.Host + ":" + strconv.Itoa(esc.Port)
 }
+
+// NewChecker creates a new checker
+func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
+	check := &ElasticSearchChecker{}
+	check.BuildContext(*c)
+	if err := check.Validate(); err != nil {
+		return nil, err
+	}
+
+	return check, nil
+}
