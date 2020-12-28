@@ -12,43 +12,53 @@ import (
 	"github.com/streadway/amqp"
 )
 
-// RabbitChecker is the struct to check for a RabbitMQ instance
-type RabbitChecker struct {
-	Host     string
-	Port     int
-	Username string
-	Password string
+type checker struct {
+	host     string
+	port     int
+	username string
+	password string
 
 	conString string
 }
 
-func (rc *RabbitChecker) BuildContext(cx model.CheckContext) {
-	rc.Host = cx.Host
-	rc.Port = cx.Port
-	rc.Username = cx.Username
-	rc.Password = cx.Password
+// NewChecker creates a new checker
+func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
+	checker := &checker{}
+	checker.buildContext(*c)
+	if err := checker.validate(); err != nil {
+		return nil, err
+	}
+
+	return checker, nil
 }
 
-func (rc *RabbitChecker) Validate() error {
-	if rc.Host == "" {
+func (c *checker) buildContext(cx model.CheckContext) {
+	c.host = cx.Host
+	c.port = cx.Port
+	c.username = cx.Username
+	c.password = cx.Password
+}
+
+func (c *checker) validate() error {
+	if c.host == "" {
 		return errors.New("Host should not be empty")
 	}
 
-	if rc.Username == "" {
+	if c.username == "" {
 		return errors.New("Username should not be empty")
 	}
 
-	if rc.Port == 0 {
+	if c.port == 0 {
 		return errors.New("Port should not be empty")
 	}
 
-	rc.conString = fmt.Sprintf("amqp://%s:%s@%s:%d/", rc.Username, rc.Password, rc.Host, rc.Port)
+	c.conString = fmt.Sprintf("amqp://%s:%s@%s:%d/", c.username, c.password, c.host, c.port)
 
 	return nil
 }
 
-func (rc *RabbitChecker) Check(ctx context.Context) (bool, bool, error) {
-	con, err := amqp.DialConfig(rc.conString, amqp.Config{
+func (c *checker) Check(ctx context.Context) (bool, bool, error) {
+	con, err := amqp.DialConfig(c.conString, amqp.Config{
 		Heartbeat: time.Second * 10,
 		Locale:    "en_US",
 		Dial: func(network, addr string) (net.Conn, error) {
@@ -81,15 +91,4 @@ func (rc *RabbitChecker) Check(ctx context.Context) (bool, bool, error) {
 	defer ch.Close()
 
 	return true, false, nil
-}
-
-// NewChecker creates a new checker
-func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
-	check := &RabbitChecker{}
-	check.BuildContext(*c)
-	if err := check.Validate(); err != nil {
-		return nil, err
-	}
-
-	return check, nil
 }

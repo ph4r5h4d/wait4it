@@ -1,7 +1,7 @@
 package tcp
 
-func (tcp *check) isPortInValidRange() bool {
-	if tcp.port < minPort || tcp.port > maxPort {
+func (c *checker) isPortInValidRange() bool {
+	if c.port < minPort || c.port > maxPort {
 		return false
 	}
 	return true

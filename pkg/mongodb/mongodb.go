@@ -13,31 +13,31 @@ import (
 
 const WaitTimeOutSeconds = 2
 
-func (m *MongoDbConnection) BuildContext(cx model.CheckContext) {
-	m.Port = cx.Port
-	m.Host = cx.Host
-	m.Username = cx.Username
-	m.Password = cx.Password
+func (c *checker) buildContext(cx model.CheckContext) {
+	c.port = cx.Port
+	c.host = cx.Host
+	c.username = cx.Username
+	c.password = cx.Password
 }
 
-func (m *MongoDbConnection) Validate() error {
-	if len(m.Host) == 0 {
+func (c *checker) validate() error {
+	if len(c.host) == 0 {
 		return errors.New("host can't be empty")
 	}
 
-	if len(m.Username) > 0 && len(m.Password) == 0 {
+	if len(c.username) > 0 && len(c.password) == 0 {
 		return errors.New("password can't be empty")
 	}
 
-	if m.Port < 1 || m.Port > 65535 {
+	if c.port < 1 || c.port > 65535 {
 		return errors.New("invalid port range for mysql")
 	}
 
 	return nil
 }
 
-func (m *MongoDbConnection) Check(ctx context.Context) (bool, bool, error) {
-	client, err := mongo.NewClient(options.Client().ApplyURI(m.buildConnectionString()))
+func (c *checker) Check(ctx context.Context) (bool, bool, error) {
+	client, err := mongo.NewClient(options.Client().ApplyURI(c.buildConnectionString()))
 	if err != nil {
 		return false, true, err
 	}

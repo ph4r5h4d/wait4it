@@ -9,39 +9,50 @@ import (
 	elasticsearch "github.com/elastic/go-elasticsearch/v8"
 )
 
-type ElasticSearchChecker struct {
-	Host     string
-	Port     int
-	Username string
-	Password string
+type checker struct {
+	host     string
+	port     int
+	username string
+	password string
 }
 
-func (esc *ElasticSearchChecker) BuildContext(cx model.CheckContext) {
-	esc.Host = cx.Host
-	esc.Port = cx.Port
-	esc.Username = cx.Username
-	esc.Password = cx.Password
+// NewChecker creates a new checker
+func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
+	checker := &checker{}
+	checker.buildContext(*c)
+	if err := checker.validate(); err != nil {
+		return nil, err
+	}
+
+	return checker, nil
 }
 
-func (esc *ElasticSearchChecker) Validate() error {
-	if len(esc.Host) == 0 {
+func (c *checker) buildContext(cx model.CheckContext) {
+	c.host = cx.Host
+	c.port = cx.Port
+	c.username = cx.Username
+	c.password = cx.Password
+}
+
+func (c *checker) validate() error {
+	if len(c.host) == 0 {
 		return errors.New("Host can't be empty")
 	}
 
-	if esc.Port < 1 || esc.Port > 65535 {
+	if c.port < 1 || c.port > 65535 {
 		return errors.New("Invalid port range for ElasticSearch")
 	}
 
 	return nil
 }
 
-func (esc *ElasticSearchChecker) Check(ctx context.Context) (bool, bool, error) {
+func (c *checker) Check(ctx context.Context) (bool, bool, error) {
 	cfg := elasticsearch.Config{
 		Addresses: []string{
-			esc.BuildConnectionString(),
+			c.buildConnectionString(),
 		},
-		Username: esc.Username,
-		Password: esc.Password,
+		Username: c.username,
+		Password: c.password,
 	}
 
 	es, err := elasticsearch.NewClient(cfg)
@@ -56,17 +67,6 @@ func (esc *ElasticSearchChecker) Check(ctx context.Context) (bool, bool, error) 
 	return true, true, nil
 }
 
-func (esc *ElasticSearchChecker) BuildConnectionString() string {
-	return esc.Host + ":" + strconv.Itoa(esc.Port)
-}
-
-// NewChecker creates a new checker
-func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
-	check := &ElasticSearchChecker{}
-	check.BuildContext(*c)
-	if err := check.Validate(); err != nil {
-		return nil, err
-	}
-
-	return check, nil
+func (c *checker) buildConnectionString() string {
+	return c.host + ":" + strconv.Itoa(c.port)
 }

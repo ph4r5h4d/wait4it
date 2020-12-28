@@ -2,13 +2,13 @@ package http
 
 import "net/url"
 
-func (h *HttpCheck) validateUrl() bool {
-	_, err := url.ParseRequestURI(h.Url)
+func (c *checker) validateUrl() bool {
+	_, err := url.ParseRequestURI(c.url)
 	if err != nil {
 		return false
 	}
 
-	u, err := url.Parse(h.Url)
+	u, err := url.Parse(c.url)
 	if err != nil || u.Scheme == "" || u.Host == "" {
 		return false
 	}
@@ -16,9 +16,9 @@ func (h *HttpCheck) validateUrl() bool {
 	return true
 }
 
-func (h *HttpCheck) validateStatusCode() bool {
+func (c *checker) validateStatusCode() bool {
 	// check against common status code
-	if h.Status < 100 || h.Status > 599 {
+	if c.status < 100 || c.status > 599 {
 		return false
 	}
 	return true

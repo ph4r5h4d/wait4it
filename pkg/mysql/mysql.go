@@ -12,28 +12,28 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
-func (m *MySQLConnection) BuildContext(cx model.CheckContext) {
-	m.Port = cx.Port
-	m.Host = cx.Host
-	m.Username = cx.Username
-	m.Password = cx.Password
-	m.DatabaseName = cx.DatabaseName
+func (c *checker) buildContext(cx model.CheckContext) {
+	c.port = cx.Port
+	c.host = cx.Host
+	c.username = cx.Username
+	c.password = cx.Password
+	c.databaseName = cx.DatabaseName
 }
 
-func (m *MySQLConnection) Validate() error {
-	if len(m.Host) == 0 || len(m.Username) == 0 {
+func (c *checker) validate() error {
+	if len(c.host) == 0 || len(c.username) == 0 {
 		return errors.New("host or username can't be empty")
 	}
 
-	if m.Port < 1 || m.Port > 65535 {
+	if c.port < 1 || c.port > 65535 {
 		return errors.New("invalid port range for mysql")
 	}
 
 	return nil
 }
 
-func (m *MySQLConnection) Check(ctx context.Context) (bool, bool, error) {
-	dsl := m.BuildConnectionString()
+func (c *checker) Check(ctx context.Context) (bool, bool, error) {
+	dsl := c.buildConnectionString()
 
 	db, err := sql.Open("mysql", dsl)
 	if err != nil {

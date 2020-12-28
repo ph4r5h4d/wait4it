@@ -4,6 +4,6 @@ import (
 	"strconv"
 )
 
-func (m *MemcachedConnection) BuildConnectionString() string {
-	return m.Host + ":" + strconv.Itoa(m.Port)
+func (c *checker) buildConnectionString() string {
+	return c.host + ":" + strconv.Itoa(c.port)
 }

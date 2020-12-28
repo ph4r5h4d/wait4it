@@ -4,21 +4,21 @@ import (
 	"wait4it/pkg/model"
 )
 
-type MySQLConnection struct {
-	Host         string
-	Port         int
-	Username     string
-	Password     string
-	DatabaseName string
+type checker struct {
+	host         string
+	port         int
+	username     string
+	password     string
+	databaseName string
 }
 
 // NewChecker creates a new checker
 func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
-	check := &MySQLConnection{}
-	check.BuildContext(*c)
-	if err := check.Validate(); err != nil {
+	checker := &checker{}
+	checker.buildContext(*c)
+	if err := checker.validate(); err != nil {
 		return nil, err
 	}
 
-	return check, nil
+	return checker, nil
 }

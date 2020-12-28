@@ -9,33 +9,34 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func (pq *PostgresSQLConnection) BuildContext(cx model.CheckContext) {
-	pq.Port = cx.Port
-	pq.Host = cx.Host
-	pq.Username = cx.Username
-	pq.Password = cx.Password
-	pq.DatabaseName = cx.DatabaseName
+func (c *checker) buildContext(cx model.CheckContext) {
+	c.port = cx.Port
+	c.host = cx.Host
+	c.username = cx.Username
+	c.password = cx.Password
+	c.databaseName = cx.DatabaseName
+
 	if len(cx.DBConf.SSLMode) < 1 {
-		pq.SSLMode = "disable"
+		c.sslMode = "disable"
 	} else {
-		pq.SSLMode = cx.DBConf.SSLMode
+		c.sslMode = cx.DBConf.SSLMode
 	}
 }
 
-func (pq *PostgresSQLConnection) Validate() error {
-	if len(pq.Host) == 0 || len(pq.Username) == 0 {
+func (c *checker) validate() error {
+	if len(c.host) == 0 || len(c.username) == 0 {
 		return errors.New("host or username can't be empty")
 	}
 
-	if pq.Port < 1 || pq.Port > 65535 {
+	if c.port < 1 || c.port > 65535 {
 		return errors.New("invalid port range for PostgresSQL")
 	}
 
 	return nil
 }
 
-func (pq *PostgresSQLConnection) Check(ctx context.Context) (bool, bool, error) {
-	dsl := pq.BuildConnectionString()
+func (c *checker) Check(ctx context.Context) (bool, bool, error) {
+	dsl := c.buildConnectionString()
 
 	db, err := sql.Open("postgres", dsl)
 	if err != nil {

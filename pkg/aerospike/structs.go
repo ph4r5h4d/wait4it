@@ -4,18 +4,18 @@ import (
 	"wait4it/pkg/model"
 )
 
-type AerospikeConnection struct {
-	Host string
-	Port int
+type checker struct {
+	host string
+	port int
 }
 
 // NewChecker creates a new checker
 func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
-	check := &AerospikeConnection{}
-	check.BuildContext(*c)
-	if err := check.Validate(); err != nil {
+	checker := &checker{}
+	checker.buildContext(*c)
+	if err := checker.validate(); err != nil {
 		return nil, err
 	}
 
-	return check, nil
+	return checker, nil
 }

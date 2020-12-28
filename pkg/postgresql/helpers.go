@@ -4,10 +4,9 @@ import (
 	"fmt"
 )
 
-// TODO: why this is exported?
-func (pq PostgresSQLConnection) BuildConnectionString() string {
+func (c *checker) buildConnectionString() string {
 	dsl := fmt.Sprintf("host=%s port=%d user=%s password=%s sslmode=%s dbname=%s ",
-		pq.Host, pq.Port, pq.Username, pq.Password, pq.SSLMode, pq.DatabaseName)
+		c.host, c.port, c.username, c.password, c.sslMode, c.databaseName)
 
 	return dsl
 }

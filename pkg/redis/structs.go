@@ -4,21 +4,21 @@ import (
 	"wait4it/pkg/model"
 )
 
-type RedisConnection struct {
-	Host          string
-	Port          int
-	Password      string
-	Database      int
-	OperationMode string
+type checker struct {
+	host          string
+	port          int
+	password      string
+	database      int
+	operationMode string
 }
 
 // NewChecker creates a new checker
 func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
-	check := &RedisConnection{}
-	check.BuildContext(*c)
-	if err := check.Validate(); err != nil {
+	checker := &checker{}
+	checker.buildContext(*c)
+	if err := checker.validate(); err != nil {
 		return nil, err
 	}
 
-	return check, nil
+	return checker, nil
 }

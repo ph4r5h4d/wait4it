@@ -4,20 +4,20 @@ import (
 	"wait4it/pkg/model"
 )
 
-type MongoDbConnection struct {
-	Host     string
-	Port     int
-	Username string
-	Password string
+type checker struct {
+	host     string
+	port     int
+	username string
+	password string
 }
 
 // NewChecker creates a new checker
 func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
-	check := &MongoDbConnection{}
-	check.BuildContext(*c)
-	if err := check.Validate(); err != nil {
+	checker := &checker{}
+	checker.buildContext(*c)
+	if err := checker.validate(); err != nil {
 		return nil, err
 	}
 
-	return check, nil
+	return checker, nil
 }

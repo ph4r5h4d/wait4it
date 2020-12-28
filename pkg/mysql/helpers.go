@@ -4,19 +4,19 @@ import (
 	"strconv"
 )
 
-func (m MySQLConnection) BuildConnectionString() string {
+func (c *checker) buildConnectionString() string {
 	dsl := ""
 
-	if len(m.Password) == 0 {
-		dsl = dsl + m.Username
+	if len(c.password) == 0 {
+		dsl = dsl + c.username
 	} else {
-		dsl = dsl + m.Username + ":" + m.Password
+		dsl = dsl + c.username + ":" + c.password
 	}
 
-	dsl = dsl + "@tcp(" + m.Host + ":" + strconv.Itoa(m.Port) + ")/"
+	dsl = dsl + "@tcp(" + c.host + ":" + strconv.Itoa(c.port) + ")/"
 
-	if len(m.DatabaseName) > 0 {
-		dsl = dsl + m.DatabaseName
+	if len(c.databaseName) > 0 {
+		dsl = dsl + c.databaseName
 	}
 
 	return dsl

@@ -12,63 +12,63 @@ import (
 )
 
 const (
-	Cluster    = "cluster"
-	Standalone = "standalone"
+	cluster    = "cluster"
+	standalone = "standalone"
 )
 
-func (m *RedisConnection) BuildContext(cx model.CheckContext) {
-	m.Host = cx.Host
-	m.Port = cx.Port
-	m.Password = cx.Password
+func (c *checker) buildContext(cx model.CheckContext) {
+	c.host = cx.Host
+	c.port = cx.Port
+	c.password = cx.Password
 
 	d, err := strconv.Atoi(cx.DatabaseName)
 	if err != nil {
 		d = 0
 	}
-	m.Database = d
+	c.database = d
 
 	switch cx.DBConf.OperationMode {
-	case Cluster:
-		m.OperationMode = Cluster
-	case Standalone:
-		m.OperationMode = Standalone
+	case cluster:
+		c.operationMode = cluster
+	case standalone:
+		c.operationMode = standalone
 	default:
-		m.OperationMode = Standalone
+		c.operationMode = standalone
 	}
 }
 
-func (m *RedisConnection) Validate() error {
-	if len(m.Host) == 0 {
+func (c *checker) validate() error {
+	if len(c.host) == 0 {
 		return errors.New("host or username can't be empty")
 	}
 
-	if m.OperationMode != Cluster && m.OperationMode != Standalone {
+	if c.operationMode != cluster && c.operationMode != standalone {
 		return errors.New("invalid operation mode")
 	}
 
-	if m.Port < 1 || m.Port > 65535 {
+	if c.port < 1 || c.port > 65535 {
 		return errors.New("invalid port range for redis")
 	}
 
 	return nil
 }
 
-func (m *RedisConnection) Check(ctx context.Context) (bool, bool, error) {
-	switch m.OperationMode {
-	case Standalone:
-		return m.checkStandAlone(ctx)
-	case Cluster:
-		return m.checkCluster(ctx)
+func (c *checker) Check(ctx context.Context) (bool, bool, error) {
+	switch c.operationMode {
+	case standalone:
+		return c.checkStandAlone(ctx)
+	case cluster:
+		return c.checkCluster(ctx)
 	default:
 		return false, false, nil
 	}
 }
 
-func (m *RedisConnection) checkStandAlone(ctx context.Context) (bool, bool, error) {
+func (c *checker) checkStandAlone(ctx context.Context) (bool, bool, error) {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     m.BuildConnectionString(),
-		Password: m.Password, // no password set
-		DB:       m.Database, // use default DB
+		Addr:     c.buildConnectionString(),
+		Password: c.password, // no password set
+		DB:       c.database, // use default DB
 	})
 
 	_, err := rdb.Ping(ctx).Result()
@@ -81,10 +81,10 @@ func (m *RedisConnection) checkStandAlone(ctx context.Context) (bool, bool, erro
 	return true, true, nil
 }
 
-func (m *RedisConnection) checkCluster(ctx context.Context) (bool, bool, error) {
+func (c *checker) checkCluster(ctx context.Context) (bool, bool, error) {
 	rdb := redis.NewClusterClient(&redis.ClusterOptions{
-		Addrs:    []string{m.BuildConnectionString()}, //todo: add support for multiple hosts
-		Password: m.Password,
+		Addrs:    []string{c.buildConnectionString()}, // todo: add support for multiple hosts
+		Password: c.password,
 	})
 	defer rdb.Close()
 
