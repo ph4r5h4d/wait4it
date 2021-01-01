@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 DISTRIBUTION = $(shell sed -n "s/^VERSION_CODENAME=//p" /etc/os-release)
-VERSION = 11.0.0-1
+VERSION = 11.0.0
 PACKAGEVERSION = $(VERSION)-0~$(DISTRIBUTION)0
 TARBALL = wait4it-$(VERSION).tar.gz
 URL = https://github.com/ph4r5h4d/wait4it/
@@ -13,7 +13,7 @@ override_dh_auto_test:
 override_dh_auto_build:
 override_dh_auto_install:
 	go mod download
-	go build -o bin/wait4it
+	go build -o ../bin/wait4it
 
 override_dh_gencontrol:
 	dh_gencontrol -- -v$(PACKAGEVERSION)
