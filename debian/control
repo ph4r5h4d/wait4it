@@ -1,18 +1,19 @@
 Source: wait4it
-Binary: wait4it
-Build-Depends: debhelper (>= 11),
-               golang-go (>= 1.15),
-               ${shlibs:Depends},
-               ${misc:Depends}
+Section: misc
+Priority: optional
 Maintainer: Farshad Nematdoust <farshad@nematdoust.com>
-section: misc
-Priorities: optional
+Build-Depends: debhelper (>= 11),
+               golang-go (>= 1.15)
 Vcs-Browser: https://github.com/ph4r5h4d/wait4it.git
-Vcs-Git: git@github.com:ph4r5h4d/wait4it.git
+Vcs-Git: https://github.com/ph4r5h4d/wait4it.git
 Homepage: https://github.com/ph4r5h4d/wait4it
-Standards-Version: 11.0.0
+Standards-Version: 4.1.4
+
 Package: wait4it
 Architecture: amd64
-Description: A simple go application to test whether a port is ready to accept a connection or check MySQL, PostgreSQL,
- MongoDB or Redis server is ready or not, Also you can do Http call and check the response code and text in response.
+Description: Check if a service available
+ Simple go application to test whether a port is ready to
+ accept a connection or check MySQL, PostgreSQL,
+ MongoDB or Redis server is ready or not, Also you can do
+ Http call and check the response code and text in response.
  It also supports timeout so it can wait for a particular time and then fail.
