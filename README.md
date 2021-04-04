@@ -121,12 +121,12 @@ Inside container you can do the following:
 #### Sample
 Check a TCP port  
 ```bash
-docker run ph4r5h4d/wait4it -h=127.0.0.1 -p=8080 -t=60
+docker run ph4r5h4d/wait4it -type=tcp -h=127.0.0.1 -p=8080 -t=60
 ``` 
 
 Check a MySQL instance
 ```bash
-docker run ph4r5h4d/wait4it -h=127.0.0.1 -p=3306 -t=60 -u=root -P=secret -n=app 
+docker run ph4r5h4d/wait4it -type=mysql -h=127.0.0.1 -p=3306 -t=60 -u=root -P=secret -n=app 
 ```
 
 Check a PostgresQL instance
