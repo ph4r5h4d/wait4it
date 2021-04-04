@@ -15,6 +15,7 @@ func (h *HttpCheck) BuildContext(cx model.CheckContext) {
 	if len(cx.HttpConf.Text) > 0 {
 		h.Text = cx.HttpConf.Text
 	}
+	h.FollowRedirect = cx.HttpConf.FollowRedirect
 }
 
 func (h *HttpCheck) Validate() error {
@@ -35,7 +36,7 @@ func (h *HttpCheck) Check(ctx context.Context) (bool, bool, error) {
 		return false, false, err
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := h.getClient().Do(req)
 
 	if err != nil {
 		return false, true, err
@@ -58,4 +59,15 @@ func (h *HttpCheck) Check(ctx context.Context) (bool, bool, error) {
 	}
 
 	return true, false, nil
+}
+
+func (h *HttpCheck) getClient() *http.Client {
+	if h.FollowRedirect {
+		return http.DefaultClient
+	}
+	return &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
 }
