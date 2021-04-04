@@ -57,12 +57,12 @@ The following command-line flags are supported
 ### Sample
 Check a TCP port  
 ```bash
-./wait4it -h=127.0.0.1 -p=8080 -t=60
+./wait4it -type=tcp -h=127.0.0.1 -p=8080 -t=60
 ``` 
 
 Check a MySQL instance
 ```bash
-./wait4it -h=127.0.0.1 -p=3306 -t=60 -u=root -P=secret -n=app 
+./wait4it -type=mysql -h=127.0.0.1 -p=3306 -t=60 -u=root -P=secret -n=app 
 ```
 Check a PostgresQL instance
 ```bash
