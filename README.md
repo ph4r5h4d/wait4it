@@ -38,6 +38,7 @@ The following environment variables are supported:
 * `W4IT_OPERATION_MODE` (to select operation mode for redis [standalone, cluster])
 * `W4IT_HTTP_STATUS_CODE` (for Http check, which status code to expect)
 * `W4IT_HTTP_TEXT` (for Http check, find substring inside the response)
+* `W4IT_HTTP_FOLLOW_REDIRECT` (Whether to follow the redirect while doing the HTTP check [true, false] default is *true*)
 
 ### Command Line Args
 The following command-line flags are supported
@@ -53,6 +54,7 @@ The following command-line flags are supported
 * `-operation-mode` (to select operation mode for redis [standalone, cluster])  
 * `-http-status` (for Http check, which status code to expect)  
 * `-http-text` (for Http check, find substring inside the response)  
+* `-http-follow-redirect` (Whether to follow the redirect while doing the HTTP check [true, false], default is *true*)  
 
 ### Sample
 Check a TCP port  
@@ -72,6 +74,7 @@ Check a PostgresQL instance
 Check HTTP response and text
 ```bash
 ./wait4it -type=http -h=https://farshad.nematdoust.com -t=60 -status-code=200 -http-text="Software Engineer" 
+./wait4it -type=http -h=https://nematdoust.com -t=60 -status-code=301 -W4IT_HTTP_FOLLOW_REDIRECT=false 
 ```
 
 Check a MongoDB instance
@@ -137,6 +140,7 @@ docker run ph4r5h4d/wait4it -type=postgres -h=127.0.0.1 -p=5432 -t=60 -u=postgre
 Check HTTP response and text
 ```bash
 docker run ph4r5h4d/wait4it -type=http -h=https://farshad.nematdoust.com -t=60 -status-code=200 -http-text="Software Engineer" 
+docker run ph4r5h4d/wait4it -type=http -type=http -h=https://nematdoust.com -t=60 -status-code=301 -W4IT_HTTP_FOLLOW_REDIRECT=false  
 ```
 
 Check a MongoDB instance
