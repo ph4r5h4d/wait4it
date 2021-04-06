@@ -34,6 +34,17 @@ func defaultEnvInt(env string, def int) int {
 	return int(i)
 }
 
+func defaultEnvBool(env string, def bool) bool {
+	v := os.Getenv(env)
+	if v == "" {
+		return def
+	}
+	if v == "true" || v == "1" {
+		return true
+	}
+	return false
+}
+
 func main() {
 	cfg := &model.CheckContext{}
 	flag.StringVar(&cfg.Config.CheckType, "type", defaultEnv("W4IT_TYPE", "tcp"), "define the type of check")
@@ -47,6 +58,7 @@ func main() {
 	flag.StringVar(&cfg.DBConf.OperationMode, "operation-mode", defaultEnv("W4IT_OPERATION_MODE", "standalone"), "choose operation mode (for some database or services)")
 	flag.IntVar(&cfg.HttpConf.StatusCode, "status-code", defaultEnvInt("W4IT_HTTP_STATUS_CODE", 200), "Status code to be expected from http call")
 	flag.StringVar(&cfg.HttpConf.Text, "http-text", defaultEnv("W4IT_HTTP_TEXT", ""), "Text to check inside http response")
+	flag.BoolVar(&cfg.HttpConf.FollowRedirect, "http-follow-redirect", defaultEnvBool("W4IT_HTTP_FOLLOW_REDIRECT", true), "Whether to follow the redirect while doing the HTTP check")
 
 	flag.Parse()
 	// We don't want to show password in help message

@@ -23,6 +23,7 @@ type DatabaseSpecificConf struct {
 	OperationMode string
 }
 type HttpSpecificConf struct {
-	StatusCode int
-	Text       string
+	StatusCode     int
+	Text           string
+	FollowRedirect bool
 }

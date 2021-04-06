@@ -5,9 +5,10 @@ import (
 )
 
 type HttpCheck struct {
-	Url    string
-	Status int
-	Text   string
+	Url            string
+	Status         int
+	Text           string
+	FollowRedirect bool
 }
 
 // NewChecker creates a new checker
