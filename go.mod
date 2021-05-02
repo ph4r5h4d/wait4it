@@ -13,6 +13,7 @@ require (
 	github.com/magefile/mage v1.11.0
 	github.com/pkg/errors v0.9.1
 	github.com/streadway/amqp v1.0.0
+	github.com/stretchr/testify v1.6.1
 	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da // indirect
 	go.mongodb.org/mongo-driver v1.4.0
 )
