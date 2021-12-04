@@ -1,0 +1,23 @@
+on:
+  release:
+    types: [created]
+
+jobs:
+  release:
+    name: release linux/amd64
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [ linux, windows, darwin ]
+        goarch: [ amd64 ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: wangyoucao577/go-release-action@v1.22
+        with:
+          github_token: ${{ secrets.REPO_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          binary_name: wait4it
+          extra_files: LICENSE README.md
+          md5sum: true
+          sha256sum: true
