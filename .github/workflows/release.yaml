@@ -1,8 +1,8 @@
 name: Wait4it Release
 
 on:
+  workflow_dispatch:
   release:
-    workflow_dispatch:
     types: [created]
 
 jobs:
