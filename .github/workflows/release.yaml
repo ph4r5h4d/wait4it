@@ -1,3 +1,5 @@
+name: Wait4it Release
+
 on:
   release:
     workflow_dispatch:
