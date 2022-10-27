@@ -1,5 +1,6 @@
 on:
   release:
+    workflow_dispatch:
     types: [created]
 
 jobs:
@@ -9,10 +10,15 @@ jobs:
     strategy:
       matrix:
         goos: [ linux, windows, darwin ]
-        goarch: [ amd64 ]
+        goarch: [ amd64, arm64, arm ]
+        exclude:
+          - goarch: "386"
+            goos: darwin
+          - goarch: arm64
+            goos: windows
     steps:
       - uses: actions/checkout@v2
-      - uses: wangyoucao577/go-release-action@v1.22
+      - uses: wangyoucao577/go-release-action@v1.32
         with:
           github_token: ${{ secrets.REPO_TOKEN }}
           goos: ${{ matrix.goos }}
@@ -21,3 +27,4 @@ jobs:
           extra_files: LICENSE README.md
           md5sum: true
           sha256sum: true
+          goversion: 1.19
