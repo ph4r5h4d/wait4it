@@ -21,7 +21,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 
 ## Install
 You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
-To build just run `go run main.go build` it's using the [mage](https://magefile.org) for building.
+To build just run `go build`.
 
 ## Configuration
 ### Environment variables
