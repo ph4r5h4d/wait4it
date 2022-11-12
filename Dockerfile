@@ -1,7 +1,18 @@
-FROM golang:1.16-alpine3.13 as build-env
-RUN apk add git gcc
-RUN mkdir /app
-WORKDIR /app
+FROM golang:1.19-alpine as builder
+RUN apk update && apk add --no-cache gcc git
+
+ENV USER=appuser
+ENV UID=10001
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    "${USER}"
+
+WORKDIR $GOPATH/src/github.com/ph4r5h4d/wait4it
 COPY . .
 RUN go run main.go build
 FROM alpine:3.13
