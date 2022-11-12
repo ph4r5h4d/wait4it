@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"wait4it/internal/banner"
 
 	"wait4it/pkg/check"
 	"wait4it/pkg/model"
@@ -68,6 +69,7 @@ func main() {
 	cfg.Progress = func(s string) {
 		fmt.Print(s)
 	}
+	banner.Banner()
 	if err := check.RunCheck(clictx.DefaultContext(), cfg); err != nil {
 		log.Fatal(err)
 	}
