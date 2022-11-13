@@ -1,4 +1,4 @@
-name: Wait4it CI
+name: Dockerhub Release
 
 on:
   workflow_dispatch:
