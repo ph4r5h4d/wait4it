@@ -1,4 +1,4 @@
-name: Wait4it Release
+name: Github Release
 
 on:
   workflow_dispatch:

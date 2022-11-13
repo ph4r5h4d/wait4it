@@ -1,4 +1,4 @@
-name: Wait4it CI
+name: Dockerhub Release
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Build docker image
       run: docker build . --file Dockerfile --tag wait4it
     - name: Logging into docker hub
