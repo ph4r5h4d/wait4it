@@ -1,0 +1,18 @@
+name: Integrations tests
+on: push
+
+jobs:
+  redis:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.19.3'
+      - run: GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o wait4it
+      - run: ./wait4it -type=redis -p=6379 -t=60 -h=127.0.0.1
