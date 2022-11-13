@@ -15,4 +15,4 @@ jobs:
         with:
           go-version: '^1.19.3'
       - run: GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o wait4it
-      - run: ./wait4it -type=redis -p=6379 -t=60 -h=127.0.0.1
+      - run: ./wait4it -type=redis -p=6370 -t=60 -h=127.0.0.1
