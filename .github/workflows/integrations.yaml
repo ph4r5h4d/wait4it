@@ -55,4 +55,4 @@ jobs:
           path: wait4it
           key: wait4it-${{ github.run_id }}
       - name: Test Postgres
-        run: -type=postgres -h=127.0.0.1 -p=5432 -t=60 -u=postgres -P=postgres -ssl=disable
+        run: ./wait4it -type=postgres -h=127.0.0.1 -p=5432 -t=60 -u=postgres -P=postgres -ssl=disable
