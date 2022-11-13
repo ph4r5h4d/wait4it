@@ -55,6 +55,7 @@ func ticker(ctx context.Context, cs model.CheckInterface, progress func(string))
 			}
 
 			if r {
+				progress("\n")
 				return nil
 			}
 
