@@ -27,11 +27,14 @@ jobs:
         ports:
           - 6379:6379
     steps:
-      - name: Retrieve wait4it
-        uses: actions/cache@v3
+      - name: Build and cache
+        uses: docker/build-push-action@v3
         with:
-          path: wait4it
-          key: wait4it-${{ github.run_id }}
+          context: .
+          push: false
+          tags: "ph4r5h4d/wait4it:${{ github.run_id }}"
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: Test Redis
         run: docker run ph4r5h4d/wait4it:${{ github.run_id }} -type=redis -p=6379 -t=60 -h=127.0.0.1
       - name: Test TCP
