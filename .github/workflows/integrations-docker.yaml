@@ -37,6 +37,7 @@ jobs:
           tags: "ph4r5h4d/wait4it:${{ github.run_id }}"
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - uses: actions/checkout@v3
       - name: Test Redis
         run: docker run ph4r5h4d/wait4it:${{ github.run_id }} -type=redis -p=6379 -t=60 -h=127.0.0.1
       - name: Test TCP
