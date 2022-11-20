@@ -34,6 +34,7 @@ jobs:
         with:
           context: .
           push: false
+          load: true
           tags: "ph4r5h4d/wait4it:${{ github.run_id }}"
           cache-from: type=gha
           cache-to: type=gha,mode=max
