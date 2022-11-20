@@ -27,6 +27,8 @@ jobs:
         ports:
           - 6379:6379
     steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Build and cache
         uses: docker/build-push-action@v3
         with:
