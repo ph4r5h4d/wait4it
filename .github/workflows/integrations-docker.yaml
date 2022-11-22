@@ -22,7 +22,7 @@ jobs:
         with:
           path: docker-image.tar
           key: wait4it-docker-${{ github.run_id }}
-          restore-keys: wait4it-docker
+          restore-keys: wait4it-docker-${{ github.run_id }}
 
   redis-tcp:
     runs-on: ubuntu-latest
