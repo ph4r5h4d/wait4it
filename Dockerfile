@@ -23,7 +23,7 @@ FROM scratch
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /go/bin/wait4it /go/bin/wait4it
+COPY --from=builder /go/bin/wait4it wait4it
 
 USER appuser:appuser
-ENTRYPOINT ["/go/bin/wait4it"]
+ENTRYPOINT ["./wait4it"]
