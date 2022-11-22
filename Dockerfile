@@ -26,4 +26,4 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/bin/wait4it wait4it
 
 USER appuser:appuser
-ENTRYPOINT ["./wait4it"]
+CMD ["/wait4it"]
