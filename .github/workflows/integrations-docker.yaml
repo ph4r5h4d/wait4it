@@ -27,9 +27,9 @@ jobs:
   redis-tcp:
     runs-on: ubuntu-latest
     needs: build
-    services:
-      redis:
-        image: redis
+#    services:
+#      redis:
+#        image: redis
 
     steps:
       - name: Set up Docker Buildx
@@ -44,11 +44,9 @@ jobs:
       - name: Load Docker image
         run: |
           # docker load --input docker-image.tar
-          docker image ls -a
+          #docker image ls -a
+          docker run --network=app --name=redis redis:latest
           docker network ls
-          docker ps -a
-          docker network create app
-          docker network connect app redis
           docker network inspect app
 
       - name: Test Redis
