@@ -9,20 +9,20 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build and cache
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: false
-          tags: "ph4r5h4d/wait4it:${{ github.run_id }}"
-          outputs: type=docker,dest=docker-image.tar
-
-      - name: Cache wait4it docker image
-        uses: actions/cache@v3
-        with:
-          path: docker-image.tar
-          key: wait4it-docker-${{ github.run_id }}
-          restore-keys: wait4it-docker-${{ github.run_id }}
+#      - name: Build and cache
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: .
+#          push: false
+#          tags: "ph4r5h4d/wait4it:${{ github.run_id }}"
+#          outputs: type=docker,dest=docker-image.tar
+#
+#      - name: Cache wait4it docker image
+#        uses: actions/cache@v3
+#        with:
+#          path: docker-image.tar
+#          key: wait4it-docker-${{ github.run_id }}
+#          restore-keys: wait4it-docker-${{ github.run_id }}
 
   redis-tcp:
     runs-on: ubuntu-latest
@@ -45,6 +45,8 @@ jobs:
         run: |
           docker load --input docker-image.tar
           docker image ls -a
+          docker network ls
+          docker ps -a
 
       - name: Test Redis
         run: docker run ph4r5h4d/wait4it:${{ github.run_id }} -type=redis -p=6379 -t=60 -h=redis
