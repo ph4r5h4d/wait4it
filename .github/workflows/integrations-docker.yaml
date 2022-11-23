@@ -47,6 +47,9 @@ jobs:
           docker image ls -a
           docker network ls
           docker ps -a
+          docker network create app
+          docker network connect app redis
+          docker network inspect app
 
       - name: Test Redis
         run: docker run ph4r5h4d/wait4it:${{ github.run_id }} -type=redis -p=6379 -t=60 -h=redis
