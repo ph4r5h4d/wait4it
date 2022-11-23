@@ -43,7 +43,7 @@ jobs:
 
       - name: Load Docker image
         run: |
-          docker load --input docker-image.tar
+#          docker load --input docker-image.tar
           docker image ls -a
           docker network ls
           docker ps -a
