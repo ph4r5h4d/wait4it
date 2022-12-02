@@ -14,3 +14,5 @@ jobs:
         run: docker compose run test-redis
       - name: TCP test
         run: docker compose run test-tcp
+      - name: PostgreSQL test
+        run: docker compose run test-postgres
