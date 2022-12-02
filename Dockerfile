@@ -16,7 +16,8 @@ WORKDIR $GOPATH/src/github.com/ph4r5h4d/wait4it
 COPY . .
 RUN go mod download
 RUN go mod verify
-RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/wait4it
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/wait4it
+RUN chown appuser:appuser /go/bin/wait4it
 
 FROM scratch
 COPY --from=builder /etc/passwd /etc/passwd

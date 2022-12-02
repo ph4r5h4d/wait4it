@@ -1,0 +1,35 @@
+version: "3"
+services:
+  build:
+    build: .
+    image: wait4it-pipeline/docker:latest
+
+  redis:
+    image: redis:latest
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+  test-redis:
+    image: wait4it-pipeline/docker:latest
+    command: -type=redis -p=6379 -t=60 -h=redis
+    depends_on:
+      - build
+      - redis
+
+  test-tcp:
+    image: wait4it-pipeline/docker:latest
+    command: -type=tcp -h=redis -p=6379 -t=60
+    depends_on:
+      - build
+      - redis
+
+  test-postgres:
+    image: wait4it-pipeline/docker:latest
+    command: -type=postgres -h=postgres -p=5432 -t=60 -u=postgres -P=postgres -ssl=disable
+    depends_on:
+      - build
+      - postgres
+

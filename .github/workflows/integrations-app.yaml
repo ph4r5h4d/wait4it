@@ -1,4 +1,4 @@
-name: Integrations tests
+name: Integrations tests (App)
 on: push
 
 jobs:
