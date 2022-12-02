@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/aerospike/aerospike-client-go v4.5.2+incompatible
 	github.com/bradfitz/gomemcache v0.0.0-20220106215444-fb4bf637b56d
-	github.com/elastic/go-elasticsearch/v8 v8.4.0
+	github.com/elastic/go-elasticsearch/v8 v8.5.0
 	github.com/fzerorubigd/clictx v1.1.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.6.0
