@@ -1,0 +1,17 @@
+version: "3"
+services:
+  redis:
+    image: redis:latest
+
+  test-redis:
+    build: .
+    command: -type=redis -p=6379 -t=60 -h=redis
+    depends_on:
+      - redis
+
+  test-tcp:
+    build: .
+    command: -type=tcp -h=redis -p=6379 -t=60
+    depends_on:
+      - redis
+
