@@ -12,6 +12,9 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
 
+  nginx:
+    image: nginx
+
   test-redis:
     image: wait4it-pipeline/docker:latest
     command: -type=redis -p=6379 -t=60 -h=redis
@@ -33,3 +36,9 @@ services:
       - build
       - postgres
 
+  test-http:
+    image: wait4it-pipeline/docker:latest
+    command: -type=http -h=http://nginx/ -t=60 -status-code=200 -http-text="Welcome to nginx!"
+    depends_on:
+      - build
+      - nginx

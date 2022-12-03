@@ -16,3 +16,5 @@ jobs:
         run: docker compose run test-tcp
       - name: PostgreSQL test
         run: docker compose run test-postgres
+      - name: Http test
+        run: docker compose run test-http
