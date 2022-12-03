@@ -21,6 +21,9 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
   test-redis:
     image: wait4it-pipeline/docker:latest
     command: -type=redis -p=6379 -t=60 -h=redis
@@ -51,7 +54,14 @@ services:
 
   test-mongodb:
     image: wait4it-pipeline/docker:latest
-    command: -type=mongo -p=27017 -t=60  -u=root -P=root -h=mongodb
+    command: -type=mongo -p=27017 -t=60 -u=root -P=root -h=mongodb
     depends_on:
       - build
       - mongodb
+
+  test-rabbitmq:
+    image: wait4it-pipeline/docker:latest
+    command: -type=rabbitmq -p=5672 -t=60 -u=guest -P=guest -h=rabbitmq
+    depends_on:
+      - build
+      - rabbitmq
