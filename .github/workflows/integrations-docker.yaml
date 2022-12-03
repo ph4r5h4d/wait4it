@@ -12,9 +12,11 @@ jobs:
         run: docker compose build
       - name: Redis Test
         run: docker compose run test-redis
-      - name: TCP test
+      - name: TCP Test
         run: docker compose run test-tcp
-      - name: PostgreSQL test
+      - name: PostgreSQL Test
         run: docker compose run test-postgres
-      - name: Http test
+      - name: Http Test
         run: docker compose run test-http
+      - name: MongoDB Test
+        run: docker compose run test-mongodb

@@ -15,6 +15,12 @@ services:
   nginx:
     image: nginx
 
+  mongodb:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
   test-redis:
     image: wait4it-pipeline/docker:latest
     command: -type=redis -p=6379 -t=60 -h=redis
@@ -42,3 +48,10 @@ services:
     depends_on:
       - build
       - nginx
+
+  test-mongodb:
+    image: wait4it-pipeline/docker:latest
+    command: -type=mongo -p=27017 -t=60  -u=root -P=root -h=mongodb
+    depends_on:
+      - build
+      - mongodb
