@@ -27,6 +27,9 @@ services:
   memcached:
     image: docker.io/bitnami/memcached:1
 
+  elasticsearch:
+      image: docker.io/bitnami/elasticsearch:8
+
   test-redis:
     image: wait4it-pipeline/docker:latest
     command: -type=redis -p=6379 -t=60 -h=redis
@@ -75,3 +78,10 @@ services:
     depends_on:
       - build
       - memcached
+
+  test-elasticsearch:
+    image: wait4it-pipeline/docker:latest
+    command: -type=elasticsearch -h=http://elasticsearch -p=9200 -t=60
+    depends_on:
+      - build
+      - elasticsearch
