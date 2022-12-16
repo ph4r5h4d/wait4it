@@ -26,3 +26,5 @@ jobs:
         run: docker compose run test-memcached
       - name: ElasticSearch Test
         run: docker compose run test-elasticsearch
+      - name: Aerospike Test
+        run: docker compose run test-aerospike

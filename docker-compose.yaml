@@ -30,6 +30,9 @@ services:
   elasticsearch:
       image: docker.io/bitnami/elasticsearch:8
 
+  aerospike:
+    image: aerospike/aerospike-server-enterprise
+
   test-redis:
     image: wait4it-pipeline/docker:latest
     command: -type=redis -p=6379 -t=60 -h=redis
@@ -85,3 +88,10 @@ services:
     depends_on:
       - build
       - elasticsearch
+
+  test-aerospike:
+    image: wait4it-pipeline/docker:latest
+    command: -type=aerospike -h=aerospike -p=3000 -t=60
+    depends_on:
+      - build
+      - aerospike
