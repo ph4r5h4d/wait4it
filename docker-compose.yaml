@@ -24,6 +24,9 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
 
+  memcached:
+    image: docker.io/bitnami/memcached:1
+
   test-redis:
     image: wait4it-pipeline/docker:latest
     command: -type=redis -p=6379 -t=60 -h=redis
@@ -65,3 +68,10 @@ services:
     depends_on:
       - build
       - rabbitmq
+
+  test-memcached:
+    image: wait4it-pipeline/docker:latest
+    command: -type=memcached -h=memcached -p=11211 -t=60
+    depends_on:
+      - build
+      - memcached
