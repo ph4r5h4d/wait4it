@@ -17,7 +17,6 @@ jobs:
        with:
          path: wait4it
          key: wait4it-${{ github.run_id }}
-         restore-keys: wait4it-${{ github.run_id }}
 
   redis-tcp:
     runs-on: ubuntu-latest
