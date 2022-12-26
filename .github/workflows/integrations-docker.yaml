@@ -15,7 +15,7 @@ jobs:
           context: .
           file: ./Dockerfile
           tags: wait4it-pipeline/docker:${{ github.run_id }}
-          outputs: type=oci,dest=/wait4it.tar
+          outputs: type=oci,dest=wait4it.tar
       - name: Cache wait4it
         uses: actions/cache@v3
         with:
