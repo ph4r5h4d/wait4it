@@ -2,7 +2,7 @@ version: "3"
 services:
   build:
     build: .
-    image: wait4it-pipeline/docker:latest
+    image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
 
   redis:
     image: redis:latest
