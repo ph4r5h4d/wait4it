@@ -12,6 +12,12 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
 
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: app
+
   nginx:
     image: nginx
 
@@ -53,6 +59,13 @@ services:
     depends_on:
       - build
       - postgres
+
+  test-mysql:
+    image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
+    command: -type=mysql -h=mysql -p=3306 -t=60 -u=root -P=secret -n=app
+    depends_on:
+      - build
+      - mysql
 
   test-http:
     image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
