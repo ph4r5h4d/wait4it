@@ -41,7 +41,7 @@ jobs:
       - name: TCP Test
         run: docker compose run test-tcp
 
-    PostgreSQL:
+  PostgreSQL:
     runs-on: ubuntu-latest
     needs: build
     env:
