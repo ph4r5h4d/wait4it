@@ -38,3 +38,26 @@ jobs:
         run: docker image ls
       - name: Redis Test
         run: docker compose run test-redis
+      - name: TCP Test
+        run: docker compose run test-tcp
+
+    PostgreSQL:
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - uses: actions/checkout@v3
+      - name: Retrieve wait4it
+        uses: actions/cache@v3
+        with:
+          path: wait4it.tar
+          key: wait4it-docker-${{ github.run_id }}
+      - name: Load image into docker
+        run: docker load --input wait4it.tar
+      - name: List images
+        run: docker image ls
+      - name: Redis Test
+        run: docker compose run test-postgres
