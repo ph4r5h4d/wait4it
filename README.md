@@ -1,6 +1,6 @@
 # wait4it
  
-![LICENSE](https://img.shields.io/github/workflow/status/ph4r5h4d/wait4it/Wait4it&#32;CI?style=for-the-badge) [![Docker Pull](https://img.shields.io/docker/pulls/ph4r5h4d/wait4it?style=for-the-badge)](https://hub.docker.com/r/ph4r5h4d/wait4it)  ![GO Version](https://img.shields.io/github/go-mod/go-version/ph4r5h4d/wait4it?style=for-the-badge) ![TAG](https://img.shields.io/github/v/tag/ph4r5h4d/wait4it?style=for-the-badge) ![LICENSE](https://img.shields.io/github/license/ph4r5h4d/wait4it?style=for-the-badge)
+![DOCKER RELEASE](https://img.shields.io/github/actions/workflow/status/ph4r5h4d/wait4it/main.yml?label=Docker%20release&style=for-the-badge) ![TESTS](https://img.shields.io/github/actions/workflow/status/ph4r5h4d/wait4it/integrations-app.yaml?label=Tests&style=for-the-badge) ![DOCKERTESTS](https://img.shields.io/github/actions/workflow/status/ph4r5h4d/wait4it/integrations-docker.yaml?label=Docker%20Tests&style=for-the-badge) [![Docker Pull](https://img.shields.io/docker/pulls/ph4r5h4d/wait4it?style=for-the-badge)](https://hub.docker.com/r/ph4r5h4d/wait4it)  ![GO Version](https://img.shields.io/github/go-mod/go-version/ph4r5h4d/wait4it?style=for-the-badge) ![TAG](https://img.shields.io/github/v/tag/ph4r5h4d/wait4it?style=for-the-badge) ![LICENSE](https://img.shields.io/github/license/ph4r5h4d/wait4it?style=for-the-badge)
   
 A simple go application to test whether a port is ready to accept a connection or check 
 MySQL, PostgreSQL, MongoDB or Redis server is ready or not, Also you can do Http call and check 
