@@ -7,31 +7,56 @@ on:
       - v*
 
 jobs:
-  build:
-
+  build-scratch:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build docker image
       run: docker build . --file Dockerfile --tag wait4it
     - name: Logging into docker hub
-      run: echo "${{ secrets.dockerhubpwd }}" | docker login --username ph4r5h4d --password-stdin
+      run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
     - name: Tag and push
       run: |
         IMAGE=ph4r5h4d/wait4it
-        
+
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
         # Strip "v" prefix from tag name
         [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-        
+
         echo $IMAGE
         echo $VERSION
-        
-        docker tag wait4it $IMAGE:$VERSION
-        docker tag wait4it $IMAGE:latest
-        
-        docker push $IMAGE:$VERSION
-        docker push $IMAGE:latest
 
+        docker tag wait4it $IMAGE:$VERSION-scratch
+        docker tag wait4it $IMAGE:scratch
+
+        docker push $IMAGE:$VERSION-scratch
+        docker push $IMAGE:scratch
+
+  build-alpine:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build docker image
+      run: docker build . --file Dockerfile.alpine --tag wait4it
+    - name: Logging into docker hub
+      run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
+    - name: Tag and push
+      run: |
+        IMAGE=ph4r5h4d/wait4it
+
+        # Strip git ref prefix from version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        # Strip "v" prefix from tag name
+        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+        echo $IMAGE
+        echo $VERSION
+
+        docker tag wait4it $IMAGE:$VERSION-alpine
+        docker tag wait4it $IMAGE:alpine
+        docker tag wait4it $IMAGE:latest
+
+        docker push $IMAGE:$VERSION-alpine
+        docker push $IMAGE:alpine
+        docker push $IMAGE:latest
