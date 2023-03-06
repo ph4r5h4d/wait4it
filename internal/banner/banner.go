@@ -3,7 +3,7 @@ package banner
 import "fmt"
 
 func Banner() {
-	fmt.Println(applicationName() + sponsor() + support())
+	fmt.Println(applicationName() + sponsor() + support() + scratchImageNotice())
 }
 
 func applicationName() string {
@@ -20,5 +20,9 @@ func sponsor() string {
 }
 
 func support() string {
-	return "For NFR and issues go to: https://github.com/ph4r5h4d/wait4it/issues\n "
+	return "For NFR and issues go to: https://github.com/ph4r5h4d/wait4it/issues\n\n"
+}
+
+func scratchImageNotice() string {
+	return "ATTENTION: From June 2023, the latest tag will point to the scratch image. Alpine image will be available as ph4r5h4d/wait4it:alpine \n "
 }
