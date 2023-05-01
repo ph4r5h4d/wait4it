@@ -8,7 +8,7 @@ require (
 	github.com/elastic/go-elasticsearch/v8 v8.7.0
 	github.com/fzerorubigd/clictx v1.1.0
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/go-sql-driver/mysql v1.7.0
+	github.com/go-sql-driver/mysql v1.7.1
 	github.com/lib/pq v1.10.7
 	github.com/pkg/errors v0.9.1
 	github.com/streadway/amqp v1.0.0
