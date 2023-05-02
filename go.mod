@@ -1,6 +1,6 @@
 module wait4it
 
-go 1.19
+go 1.20
 
 require (
 	github.com/aerospike/aerospike-client-go v4.5.2+incompatible
