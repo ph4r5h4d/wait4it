@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -10,8 +11,6 @@ import (
 
 	"wait4it/pkg/check"
 	"wait4it/pkg/model"
-
-	"github.com/fzerorubigd/clictx"
 )
 
 func defaultEnv(env string, def string) string {
@@ -70,7 +69,7 @@ func main() {
 		fmt.Print(s)
 	}
 	banner.Banner()
-	if err := check.RunCheck(clictx.DefaultContext(), cfg); err != nil {
+	if err := check.RunCheck(context.Background(), cfg); err != nil {
 		log.Fatal(err)
 	}
 	log.Println("Success!")
