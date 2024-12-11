@@ -24,5 +24,5 @@ func support() string {
 }
 
 func scratchImageNotice() string {
-	return "ATTENTION: From June 2023, the latest tag will point to the scratch image. Alpine image will be available as ph4r5h4d/wait4it:alpine \n "
+	return "ATTENTION: Between Jan & Feb 2025, the latest tag will point to the scratch image. Alpine image will be available as ph4r5h4d/wait4it:alpine \n "
 }
