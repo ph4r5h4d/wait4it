@@ -1,0 +1,33 @@
+baseURL: https://wait4it.dev/
+languageCode: en-us
+title: Wait4it
+module:
+  imports:
+    - path: github.com/imfing/hextra
+menu:
+  main:
+    - name: Documentation
+      pageRef: /docs
+      weight: 1
+    - name: About
+      pageRef: /about
+      weight: 3
+    - name: Search
+      weight: 4
+      params:
+        type: search
+    - name: GitHub
+      weight: 5
+      url: "https://github.com/ph4r5h4d/wait4it"
+      params:
+        icon: github
+params:
+  navbar:
+    displayTitle: true
+    displayLogo: true
+    logo:
+      path: /wait4it.svg
+      dark: /wait4it-dark.svg
+      link: /
+      width: 40
+      height: 20
