@@ -3,6 +3,9 @@ date = '2024-12-24T21:25:42+01:00'
 draft = false
 title = 'Wait4it'
 +++
+ [![Docker Pull](https://img.shields.io/docker/pulls/ph4r5h4d/wait4it?style=for-the-badge)](https://hub.docker.com/r/ph4r5h4d/wait4it) 
+ ![TAG](https://img.shields.io/github/v/tag/ph4r5h4d/wait4it?style=for-the-badge&label=Version)  
+
 Ensure your services are ready to perform with Wait4it—a lightweight tool designed to test service readiness and exit gracefully once the checks are successful.
 ![Wait4it](index.png)
 
