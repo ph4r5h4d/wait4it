@@ -1,6 +1,6 @@
 +++
 date = '2024-12-24T21:25:42+01:00'
-draft = true
+draft = false
 title = 'Installation'
 weight = 10
 +++
