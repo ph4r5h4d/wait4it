@@ -66,4 +66,4 @@ Now you're ready to start using Wait4it!
 ---
 
 For more details on how to use Wait4it, refer to the left sidebar for specific checks and their usage instructions. 
-```
+
