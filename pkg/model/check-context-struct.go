@@ -9,6 +9,7 @@ type CheckContext struct {
 	DatabaseName string
 	DBConf       DatabaseSpecificConf
 	HttpConf     HttpSpecificConf
+	KafkaConf    KafkaConf
 
 	Progress func(string)
 }
@@ -26,4 +27,9 @@ type HttpSpecificConf struct {
 	StatusCode     int
 	Text           string
 	FollowRedirect bool
+}
+
+type KafkaConf struct {
+	ConnectionType              string
+	ConnectToLeaderViaNonLeader bool
 }
