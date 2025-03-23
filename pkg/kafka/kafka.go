@@ -22,7 +22,7 @@ func (c *KafkaConnection) Validate() error {
 	}
 
 	if c.Port < 1 || c.Port > 65535 {
-		return errors.New("invalid port range for mysql")
+		return errors.New("invalid port range for Kafka")
 	}
 
 	return nil
