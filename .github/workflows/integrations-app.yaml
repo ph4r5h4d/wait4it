@@ -185,7 +185,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Build
     services:
-      redis:
+      kafka:
         image: bitnami/kafka:latest
         env:
           KAFKA_CFG_NODE_ID: 0
