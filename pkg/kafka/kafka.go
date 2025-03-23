@@ -9,8 +9,6 @@ import (
 	"wait4it/pkg/model"
 )
 
-const WaitTimeOutSeconds = 2
-
 func (c *KafkaConnection) BuildContext(cx model.CheckContext) {
 	c.Port = cx.Port
 	c.Host = cx.Host
