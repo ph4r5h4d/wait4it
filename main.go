@@ -59,6 +59,8 @@ func main() {
 	flag.IntVar(&cfg.HttpConf.StatusCode, "status-code", defaultEnvInt("W4IT_HTTP_STATUS_CODE", 200), "Status code to be expected from http call")
 	flag.StringVar(&cfg.HttpConf.Text, "http-text", defaultEnv("W4IT_HTTP_TEXT", ""), "Text to check inside http response")
 	flag.BoolVar(&cfg.HttpConf.FollowRedirect, "http-follow-redirect", defaultEnvBool("W4IT_HTTP_FOLLOW_REDIRECT", true), "Whether to follow the redirect while doing the HTTP check")
+	flag.StringVar(&cfg.KafkaConf.ConnectionType, "kafka-connection-type", defaultEnv("W4IT_KAFKA_CONNECTION_TYPE", "tcp"), "Kafka Connection Type, default is tcp")
+	flag.BoolVar(&cfg.KafkaConf.ConnectToLeaderViaNonLeader, "kafka-connect-to-leader-via-non-leader", defaultEnvBool("W4IT_KAFKA_CONNECT_TO_LEADER_VIA_NON_LEADER", false), "Whether to connect to leader via non-leader, default is false")
 
 	flag.Parse()
 	// We don't want to show password in help message

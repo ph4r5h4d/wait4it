@@ -4,6 +4,7 @@ import (
 	"wait4it/pkg/aerospike"
 	"wait4it/pkg/elasticsearch"
 	"wait4it/pkg/http"
+	"wait4it/pkg/kafka"
 	"wait4it/pkg/memcached"
 	"wait4it/pkg/model"
 	"wait4it/pkg/mongodb"
@@ -25,4 +26,5 @@ var cm = map[string]func(c *model.CheckContext) (model.CheckInterface, error){
 	"memcached":     memcached.NewChecker,
 	"elasticsearch": elasticsearch.NewChecker,
 	"aerospike":     aerospike.NewChecker,
+	"kafka":         kafka.NewChecker,
 }
