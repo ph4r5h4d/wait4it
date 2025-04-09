@@ -9,7 +9,7 @@ require (
 	github.com/bradfitz/gomemcache v0.0.0-20230905024940-24af94b03874
 	github.com/elastic/go-elasticsearch/v8 v8.17.1
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/go-sql-driver/mysql v1.9.1
+	github.com/go-sql-driver/mysql v1.9.2
 	github.com/lib/pq v1.10.9
 	github.com/pkg/errors v0.9.1
 	github.com/segmentio/kafka-go v0.4.47
