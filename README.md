@@ -27,3 +27,6 @@ For detailed installation instructions, visit the [installation doc](https://wai
 
 ## Documentation
 Visit the [website](https://wait4it.dev) for detailed documentation.
+
+### Powered by
+[![GoLand logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/GoLand.svg)](https://jb.gg/OpenSourceSupport)
