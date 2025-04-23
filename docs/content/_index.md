@@ -41,3 +41,6 @@ This approach ensures smooth service synchronization while leaving orchestration
 ## Get Started with Wait4it
 
 Say goodbye to failed startups and hello to readiness. Whether in development or production, Wait4it is your go-to solution for ensuring service health with minimal effort.
+
+### Powered by
+[![GoLand logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/GoLand.svg)](https://jb.gg/OpenSourceSupport)
