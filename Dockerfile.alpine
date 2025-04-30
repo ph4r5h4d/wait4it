@@ -1,5 +1,4 @@
 FROM golang:1.23-alpine as build-env
-LABEL org.opencontainers.image.source="https://github.com/ph4r5h4d/wait4it"
 RUN apk add git gcc
 RUN mkdir /app
 WORKDIR /app
@@ -8,6 +7,7 @@ RUN go mod download
 RUN go mod verify
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o wait4it
 FROM alpine:3.17
+LABEL org.opencontainers.image.source="https://github.com/ph4r5h4d/wait4it"
 COPY --from=build-env /app/wait4it .
 USER 1001
 ENTRYPOINT ["./wait4it"]
