@@ -1,3 +1,5 @@
+LABEL org.opencontainers.image.source="https://github.com/ph4r5h4d/wait4it"
+
 FROM golang:1.23-alpine as builder
 RUN apk update && apk add --no-cache gcc git
 
