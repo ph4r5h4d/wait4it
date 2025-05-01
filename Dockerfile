@@ -20,6 +20,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/w
 RUN chown appuser:appuser /go/bin/wait4it
 
 FROM scratch
+LABEL org.opencontainers.image.source="https://github.com/ph4r5h4d/wait4it"
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
