@@ -12,7 +12,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build docker image
-      run: docker build . --file Dockerfile --tag wait4it
+      run: |
+        # Strip git ref prefix from version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        docker build . --file Dockerfile --label "org.opencontainers.image.revision=$VERSION" --tag wait4it
     - name: Logging into docker hub
       run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
     - name: Tag and push
@@ -38,7 +41,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build docker image
-      run: docker build . --file Dockerfile.alpine --tag wait4it
+      run: |
+        # Strip git ref prefix from version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        docker build . --file Dockerfile.alpine --label "org.opencontainers.image.revision=$VERSION" --tag wait4it
     - name: Logging into docker hub
       run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
     - name: Tag and push
