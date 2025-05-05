@@ -9,7 +9,7 @@ import (
 
 	"wait4it/pkg/model"
 
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 // RabbitChecker is the struct to check for a RabbitMQ instance
