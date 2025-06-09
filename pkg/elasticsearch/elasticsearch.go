@@ -20,7 +20,7 @@ func (esc *ElasticSearchChecker) BuildContext(cx model.CheckContext) {
 	esc.Host = cx.Host
 	esc.Port = cx.Port
 	esc.Username = cx.Username
-	esc.Password = cx.Password
+	esc.Password = cx.Password()
 }
 
 func (esc *ElasticSearchChecker) Validate() error {

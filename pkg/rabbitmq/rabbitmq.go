@@ -26,7 +26,7 @@ func (rc *RabbitChecker) BuildContext(cx model.CheckContext) {
 	rc.Host = cx.Host
 	rc.Port = cx.Port
 	rc.Username = cx.Username
-	rc.Password = cx.Password
+	rc.Password = cx.Password()
 }
 
 func (rc *RabbitChecker) Validate() error {
