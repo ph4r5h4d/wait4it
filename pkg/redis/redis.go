@@ -19,7 +19,7 @@ const (
 func (m *RedisConnection) BuildContext(cx model.CheckContext) {
 	m.Host = cx.Host
 	m.Port = cx.Port
-	m.Password = cx.Password
+	m.Password = cx.Password()
 
 	d, err := strconv.Atoi(cx.DatabaseName)
 	if err != nil {

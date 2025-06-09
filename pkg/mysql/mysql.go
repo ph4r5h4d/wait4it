@@ -16,7 +16,7 @@ func (m *MySQLConnection) BuildContext(cx model.CheckContext) {
 	m.Port = cx.Port
 	m.Host = cx.Host
 	m.Username = cx.Username
-	m.Password = cx.Password
+	m.Password = cx.Password()
 	m.DatabaseName = cx.DatabaseName
 }
 

@@ -52,7 +52,8 @@ func main() {
 	flag.StringVar(&cfg.Host, "h", defaultEnv("W4IT_HOST", "127.0.0.1"), "IP of the host you want to test against")
 	flag.IntVar(&cfg.Port, "p", defaultEnvInt("W4IT_PORT", 0), "Port")
 	flag.StringVar(&cfg.Username, "u", defaultEnv("W4IT_USERNAME", ""), "Username of the service")
-	flag.StringVar(&cfg.Password, "P", defaultEnv("W4IT_PASSWORD", ""), "Password of the service, it picks the W4IT_PASSWORD env if it is empty")
+	flag.StringVar(&cfg.PasswordValue, "P", defaultEnv("W4IT_PASSWORD", ""), "Password of the service, it picks the W4IT_PASSWORD env if it is empty")
+	flag.StringVar(&cfg.PasswordFile, "Pf", defaultEnv("W4IT_PASSWORD_FILE", ""), "File with password of the service, it picks the W4IT_PASSWORD_FILE env if it is empty")
 	flag.StringVar(&cfg.DatabaseName, "n", defaultEnv("W4IT_DBNAME", ""), "Name of the database")
 	flag.StringVar(&cfg.DBConf.SSLMode, "ssl", defaultEnv("W4IT_SSL_MODE", "disable"), "Enable or Disable ssl mode (for some database or services)")
 	flag.StringVar(&cfg.DBConf.OperationMode, "operation-mode", defaultEnv("W4IT_OPERATION_MODE", "standalone"), "choose operation mode (for some database or services)")
@@ -64,9 +65,13 @@ func main() {
 
 	flag.Parse()
 	// We don't want to show password in help message
-	if cfg.Password == "" {
+	if cfg.PasswordValue == "" {
 		defaultEnv("W4IT_PASSWORD", "")
 	}
+	if err := cfg.Validate(); err != nil {
+		log.Fatal(err)
+	}
+
 	cfg.Progress = func(s string) {
 		fmt.Print(s)
 	}
