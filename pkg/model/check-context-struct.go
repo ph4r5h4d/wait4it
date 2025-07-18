@@ -32,7 +32,7 @@ func (cc CheckContext) Password() string {
 	if cc.PasswordFile != "" {
 		// error checked during validation
 		password, _ := os.ReadFile(cc.PasswordFile)
-		return strings.Trim(string(password), "\n")
+		return strings.TrimSpace(string(password))
 	}
 	return cc.PasswordValue
 }
