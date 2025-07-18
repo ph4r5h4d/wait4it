@@ -1,6 +1,7 @@
 package model
 
 import (
+	"log"
 	"os"
 	"strings"
 )
@@ -30,8 +31,10 @@ func (cc CheckContext) Validate() (err error) {
 func (cc CheckContext) Password() string {
 	// assume higher precedence of password file over value
 	if cc.PasswordFile != "" {
-		// error checked during validation
-		password, _ := os.ReadFile(cc.PasswordFile)
+		password, err := os.ReadFile(cc.PasswordFile)
+		if err != nil {
+			log.Println("Failed to load password from file", "file", cc.PasswordFile, "err", err)
+		}
 		return strings.TrimSpace(string(password))
 	}
 	return cc.PasswordValue
