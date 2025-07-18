@@ -17,29 +17,31 @@ docker run ph4r5h4d/wait4it -type=postgres -h=127.0.0.1 -p=5432 -t=60 -u=postgre
 
 ## Environment Variables
 
-| Variable        | Description                                                               | Default   |
-|-----------------|---------------------------------------------------------------------------|-----------|
-| W4IT_TYPE       | The type of check (set to `postgres` for PostgreSQL check).               | -         |
-| W4IT_TIMEOUT    | Timeout in seconds.                                                      | 30        |
-| W4IT_HOST       | The host to check.                                                       | 127.0.0.1 |
-| W4IT_PORT       | The port to check on the PostgreSQL host.                                 | 5432      |
-| W4IT_USERNAME   | The username for PostgreSQL authentication.                               | -         |
-| W4IT_PASSWORD   | The password for PostgreSQL authentication.                               | -         |
-| W4IT_DBNAME     | The name of the database to check.                                        | -         |
-| W4IT_SSL_MODE   | Whether to enable or disable SSL mode for PostgreSQL (`enable` or `disable`). | `disable` |
+| Variable           | Description                                                                   | Default   |
+|--------------------|-------------------------------------------------------------------------------|-----------|
+| W4IT_TYPE          | The type of check (set to `postgres` for PostgreSQL check).                   | -         |
+| W4IT_TIMEOUT       | Timeout in seconds.                                                           | 30        |
+| W4IT_HOST          | The host to check.                                                            | 127.0.0.1 |
+| W4IT_PORT          | The port to check on the PostgreSQL host.                                     | 5432      |
+| W4IT_USERNAME      | The username for PostgreSQL authentication.                                   | -         |
+| W4IT_PASSWORD      | The password for PostgreSQL authentication.                                   | -         |
+| W4IT_PASSWORD_FILE | The file with password for PostgreSQL authentication.                         | -         |
+| W4IT_DBNAME        | The name of the database to check.                                            | -         |
+| W4IT_SSL_MODE      | Whether to enable or disable SSL mode for PostgreSQL (`enable` or `disable`). | `disable` |
 
 ## Command-Line Arguments
 
-| Argument        | Description                                                               | Default   |
-|-----------------|---------------------------------------------------------------------------|-----------|
-| -type           | The type of check (set to `postgres`).                                    | -         |
-| -t              | Timeout in seconds.                                                      | 30        |
-| -h              | The host to check.                                                       | 127.0.0.1 |
-| -p              | The port to check on the PostgreSQL host.                                 | 5432      |
-| -u              | The username for PostgreSQL authentication.                               | -         |
-| -P              | The password for PostgreSQL authentication.                               | -         |
-| -n              | The name of the database to check.                                        | -         |
-| -ssl            | Whether to enable or disable SSL mode for PostgreSQL (`disable` or `enable`). | `disable` |
+| Argument | Description                                                                   | Default   |
+|----------|-------------------------------------------------------------------------------|-----------|
+| -type    | The type of check (set to `postgres`).                                        | -         |
+| -t       | Timeout in seconds.                                                           | 30        |
+| -h       | The host to check.                                                            | 127.0.0.1 |
+| -p       | The port to check on the PostgreSQL host.                                     | 5432      |
+| -u       | The username for PostgreSQL authentication.                                   | -         |
+| -P       | The password for PostgreSQL authentication.                                   | -         |
+| -Pf      | The file with password for PostgreSQL authentication.                         | -         |
+| -n       | The name of the database to check.                                            | -         |
+| -ssl     | Whether to enable or disable SSL mode for PostgreSQL (`disable` or `enable`). | `disable` |
 
 ## Notes
 {{< callout type="info" >}}
@@ -49,8 +51,8 @@ docker run ph4r5h4d/wait4it -type=postgres -h=127.0.0.1 -p=5432 -t=60 -u=postgre
 - {{< /callout >}}
 
 ## Exit Codes
-| Code | Meaning                            |
-|------|------------------------------------|
-| 0    | Connection successful.            |
-| 1    | Timed out.                         |
-| 2    | Validation error or incorrect input.
+| Code | Meaning                              |
+|------|--------------------------------------|
+| 0    | Connection successful.               |
+| 1    | Timed out.                           |
+| 2    | Validation error or incorrect input. |
