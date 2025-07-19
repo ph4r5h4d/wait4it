@@ -55,6 +55,10 @@ jobs:
           key: wait4it-${{ github.run_id }}
       - name: Test PostgreSQL
         run: ./wait4it -type=postgres -h=127.0.0.1 -p=5432 -t=60 -u=postgres -P=postgres -ssl=disable
+      - name: Create password file
+        run: echo 'postgres' > ./pg_pw.txt
+      - name: Test PostgreSQL with password file
+        run: ./wait4it -type=postgres -h=127.0.0.1 -p=5432 -t=60 -u=postgres -Pf=./pg_pw.txt -ssl=disable
 
   MySQL:
     runs-on: ubuntu-latest

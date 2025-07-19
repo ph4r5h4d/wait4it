@@ -13,7 +13,7 @@ func (pq *PostgresSQLConnection) BuildContext(cx model.CheckContext) {
 	pq.Port = cx.Port
 	pq.Host = cx.Host
 	pq.Username = cx.Username
-	pq.Password = cx.Password
+	pq.Password = cx.Password()
 	pq.DatabaseName = cx.DatabaseName
 	if len(cx.DBConf.SSLMode) < 1 {
 		pq.SSLMode = "disable"
