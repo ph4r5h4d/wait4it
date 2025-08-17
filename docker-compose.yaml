@@ -69,6 +69,15 @@ services:
       - build
       - postgres
 
+  test-password-file:
+    image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
+    command: -type=postgres -h=postgres -p=5432 -t=60 -u=postgres -Pf=/tmp/pg_pw.txt -ssl=disable
+    volumes:
+      - ./pg_pw.txt:/tmp/pg_pw.txt:ro
+    depends_on:
+      - build
+      - postgres
+
   test-mysql:
     image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
     command: -type=mysql -h=mysql -p=3306 -t=60 -u=root -P=secret -n=app
