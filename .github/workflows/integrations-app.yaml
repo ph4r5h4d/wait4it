@@ -67,6 +67,11 @@ jobs:
         ports:
           - 5432:5432
     steps:
+      - name: Retrieve wait4it
+        uses: actions/cache@v3
+        with:
+          path: wait4it
+          key: wait4it-${{ github.run_id }}
       - name: Create password file
         run: echo 'postgres' > ./pg_pw.txt
       - name: Test PostgreSQL with password file
