@@ -17,27 +17,29 @@ docker run ph4r5h4d/wait4it -type=mysql -h=127.0.0.1 -p=3306 -t=60 -u=root -P=se
 
 ## Environment Variables
 
-| Variable     | Description                                                               | Default   |
-|--------------|---------------------------------------------------------------------------|-----------|
-| W4IT_TYPE    | The type of check (set to `mysql` for MySQL check).                       | -         |
-| W4IT_TIMEOUT | Timeout in seconds.                                                      | 30        |
-| W4IT_HOST    | The host to check.                                                       | 127.0.0.1 |
-| W4IT_PORT    | The port to check on the MySQL host.                                      | 3306      |
-| W4IT_USERNAME| The username for MySQL authentication.                                    | -         |
-| W4IT_PASSWORD| The password for MySQL authentication.                                    | -         |
-| W4IT_DBNAME  | The name of the database to check.                                        | -         |
+| Variable           | Description                                         | Default   |
+|--------------------|-----------------------------------------------------|-----------|
+| W4IT_TYPE          | The type of check (set to `mysql` for MySQL check). | -         |
+| W4IT_TIMEOUT       | Timeout in seconds.                                 | 30        |
+| W4IT_HOST          | The host to check.                                  | 127.0.0.1 |
+| W4IT_PORT          | The port to check on the MySQL host.                | 3306      |
+| W4IT_USERNAME      | The username for MySQL authentication.              | -         |
+| W4IT_PASSWORD      | The password for MySQL authentication.              | -         |
+| W4IT_PASSWORD_FILE | The file with password for MySQL authentication.    | -         |
+| W4IT_DBNAME        | The name of the database to check.                  | -         |
 
 ## Command-Line Arguments
 
-| Argument      | Description                                                               | Default   |
-|---------------|---------------------------------------------------------------------------|-----------|
-| -type         | The type of check (set to `mysql`).                                       | -         |
-| -t            | Timeout in seconds.                                                      | 30        |
-| -h            | The host to check.                                                       | 127.0.0.1 |
-| -p            | The port to check on the MySQL host.                                      | 3306      |
-| -u            | The username for MySQL authentication.                                    | -         |
-| -P            | The password for MySQL authentication.                                    | -         |
-| -n            | The name of the database to check.                                        | -         |
+| Argument | Description                                      | Default   |
+|----------|--------------------------------------------------|-----------|
+| -type    | The type of check (set to `mysql`).              | -         |
+| -t       | Timeout in seconds.                              | 30        |
+| -h       | The host to check.                               | 127.0.0.1 |
+| -p       | The port to check on the MySQL host.             | 3306      |
+| -u       | The username for MySQL authentication.           | -         |
+| -P       | The password for MySQL authentication.           | -         |
+| -Pf      | The file with password for MySQL authentication. | -         |
+| -n       | The name of the database to check.               | -         |
 
 ## Notes
 {{< callout type="info" >}}
@@ -46,8 +48,8 @@ docker run ph4r5h4d/wait4it -type=mysql -h=127.0.0.1 -p=3306 -t=60 -u=root -P=se
 {{< /callout >}}
 
 ## Exit Codes
-| Code | Meaning                            |
-|------|------------------------------------|
-| 0    | Connection successful.            |
-| 1    | Timed out.                         |
-| 2    | Validation error or incorrect input.
+| Code | Meaning                              |
+|------|--------------------------------------|
+| 0    | Connection successful.               |
+| 1    | Timed out.                           |
+| 2    | Validation error or incorrect input. |

@@ -17,25 +17,27 @@ docker run ph4r5h4d/wait4it -type=redis -h=127.0.0.1 -p=6379 -t=60 -P=secret
 
 ## Environment Variables
 
-| Variable         | Description                                                               | Default   |
-|------------------|---------------------------------------------------------------------------|-----------|
-| W4IT_TYPE        | The type of check (set to `redis` for Redis check).                       | -         |
-| W4IT_TIMEOUT     | Timeout in seconds.                                                      | 30        |
-| W4IT_HOST        | The host to check.                                                       | 127.0.0.1 |
-| W4IT_PORT        | The port to check on the Redis host.                                      | 6379      |
-| W4IT_PASSWORD    | The password for Redis authentication (if any).                          | -         |
-| W4IT_OPERATION_MODE | The Redis operation mode (`standalone` or `cluster`).                   | `standalone` |
+| Variable            | Description                                               | Default      |
+|---------------------|-----------------------------------------------------------|--------------|
+| W4IT_TYPE           | The type of check (set to `redis` for Redis check).       | -            |
+| W4IT_TIMEOUT        | Timeout in seconds.                                       | 30           |
+| W4IT_HOST           | The host to check.                                        | 127.0.0.1    |
+| W4IT_PORT           | The port to check on the Redis host.                      | 6379         |
+| W4IT_PASSWORD       | The password for Redis authentication (if any).           | -            |
+| W4IT_PASSWORD_FILE  | The file with password for Redis authentication (if any). | -            |
+| W4IT_OPERATION_MODE | The Redis operation mode (`standalone` or `cluster`).     | `standalone` |
 
 ## Command-Line Arguments
 
-| Argument           | Description                                                               | Default   |
-|--------------------|---------------------------------------------------------------------------|-----------|
-| -type              | The type of check (set to `redis`).                                       | -         |
-| -t                 | Timeout in seconds.                                                      | 30        |
-| -h                 | The host to check.                                                       | 127.0.0.1 |
-| -p                 | The port to check on the Redis host.                                      | 6379      |
-| -P                 | The password for Redis authentication (if any).                          | -         |
-| -operation-mode    | The Redis operation mode (`standalone` or `cluster`).                    | `standalone` |
+| Argument        | Description                                               | Default      |
+|-----------------|-----------------------------------------------------------|--------------|
+| -type           | The type of check (set to `redis`).                       | -            |
+| -t              | Timeout in seconds.                                       | 30           |
+| -h              | The host to check.                                        | 127.0.0.1    |
+| -p              | The port to check on the Redis host.                      | 6379         |
+| -P              | The password for Redis authentication (if any).           | -            |
+| -Pf             | The file with password for Redis authentication (if any). | -            |
+| -operation-mode | The Redis operation mode (`standalone` or `cluster`).     | `standalone` |
 
 ## Notes
 {{< callout type="info" >}}
@@ -47,8 +49,8 @@ docker run ph4r5h4d/wait4it -type=redis -h=127.0.0.1 -p=6379 -t=60 -P=secret
 
 
 ## Exit Codes
-| Code | Meaning                            |
-|------|------------------------------------|
-| 0    | Connection successful.            |
-| 1    | Timed out.                         |
-| 2    | Validation error or incorrect input.
+| Code | Meaning                              |
+|------|--------------------------------------|
+| 0    | Connection successful.               |
+| 1    | Timed out.                           |
+| 2    | Validation error or incorrect input. |

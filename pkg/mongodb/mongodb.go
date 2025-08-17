@@ -17,7 +17,7 @@ func (m *MongoDbConnection) BuildContext(cx model.CheckContext) {
 	m.Port = cx.Port
 	m.Host = cx.Host
 	m.Username = cx.Username
-	m.Password = cx.Password
+	m.Password = cx.Password()
 }
 
 func (m *MongoDbConnection) Validate() error {
