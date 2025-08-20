@@ -1,0 +1,122 @@
+name: Trivy Security Scan
+
+on:
+  # Trigger on every release
+  push:
+    tags:
+      - v*
+  # Weekly security scan
+  schedule:
+    - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  trivy-scan:
+    name: Trivy Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    
+    strategy:
+      matrix:
+        image-variant: [scratch, alpine]
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Determine image tag
+        id: image-tag
+        run: |
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/tags/"* ]]; then
+            # For release tags, use the tag version
+            VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,' | sed -e 's/^v//')
+            echo "tag=${VERSION}" >> $GITHUB_OUTPUT
+          else
+            # For scheduled runs or manual triggers, use latest
+            echo "tag=latest" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build Docker image for scanning
+        run: |
+          if [ "${{ matrix.image-variant }}" = "scratch" ]; then
+            docker build . --file Dockerfile --tag scan-target:${{ matrix.image-variant }}
+          else
+            docker build . --file Dockerfile.alpine --tag scan-target:${{ matrix.image-variant }}
+          fi
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'scan-target:${{ matrix.image-variant }}'
+          format: 'sarif'
+          output: 'trivy-results-${{ matrix.image-variant }}.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results-${{ matrix.image-variant }}.sarif'
+          category: 'trivy-${{ matrix.image-variant }}'
+
+      - name: Run Trivy vulnerability scanner (JSON format)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'scan-target:${{ matrix.image-variant }}'
+          format: 'json'
+          output: 'trivy-results-${{ matrix.image-variant }}.json'
+
+      - name: Upload scan results as artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-results-${{ matrix.image-variant }}
+          path: |
+            trivy-results-${{ matrix.image-variant }}.sarif
+            trivy-results-${{ matrix.image-variant }}.json
+          retention-days: 30
+
+      - name: Run Trivy vulnerability scanner (table format for summary)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'scan-target:${{ matrix.image-variant }}'
+          format: 'table'
+          output: 'trivy-summary-${{ matrix.image-variant }}.txt'
+
+      - name: Display scan summary
+        if: always()
+        run: |
+          echo "## Trivy Security Scan Results - ${{ matrix.image-variant }} variant" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat trivy-summary-${{ matrix.image-variant }}.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: trivy-scan
+    if: always()
+    
+    steps:
+      - name: Download all scan results
+        uses: actions/download-artifact@v4
+        
+      - name: Create security summary
+        run: |
+          echo "# 🛡️ Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Security scan completed for wait4it Docker images." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📊 **Scan Results:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Scratch variant: $(ls trivy-results-scratch/ 2>/dev/null | wc -l) files generated" >> $GITHUB_STEP_SUMMARY
+          echo "- Alpine variant: $(ls trivy-results-alpine/ 2>/dev/null | wc -l) files generated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔍 **View detailed results:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Check the Security tab in this repository for SARIF results" >> $GITHUB_STEP_SUMMARY
+          echo "- Download artifacts for detailed JSON and table reports" >> $GITHUB_STEP_SUMMARY
