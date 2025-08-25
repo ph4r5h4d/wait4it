@@ -132,6 +132,8 @@ jobs:
   security-summary:
     name: Security Summary
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: trivy-scan
     if: always()
     
