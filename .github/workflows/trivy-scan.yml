@@ -1,0 +1,167 @@
+name: Trivy Security Scan
+
+on:
+  # Trigger on every release
+  push:
+    tags:
+      - v*
+  # Weekly security scan
+  schedule:
+    - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  trivy-scan:
+    name: Trivy Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    
+    strategy:
+      matrix:
+        image-variant: [scratch, alpine]
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Determine scan strategy
+        id: scan-strategy
+        run: |
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/tags/"* ]]; then
+            # For release tags, build fresh images for scanning
+            echo "method=build" >> $GITHUB_OUTPUT
+            VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,' | sed -e 's/^v//')
+            echo "tag=${VERSION}" >> $GITHUB_OUTPUT
+          else
+            # For scheduled runs or manual triggers, scan existing published images
+            echo "method=pull" >> $GITHUB_OUTPUT
+            echo "tag=latest" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build Docker image for scanning (on release)
+        if: steps.scan-strategy.outputs.method == 'build'
+        run: |
+          if [ "${{ matrix.image-variant }}" = "scratch" ]; then
+            docker build . --file Dockerfile --tag scan-target:${{ matrix.image-variant }}
+          else
+            docker build . --file Dockerfile.alpine --tag scan-target:${{ matrix.image-variant }}
+          fi
+
+      - name: Pull Docker image for scanning (scheduled/manual)
+        if: steps.scan-strategy.outputs.method == 'pull'
+        run: |
+          if [ "${{ matrix.image-variant }}" = "scratch" ]; then
+            docker pull ph4r5h4d/wait4it:scratch || {
+              echo "Failed to pull scratch image, building locally..."
+              docker build . --file Dockerfile --tag scan-target:${{ matrix.image-variant }}
+            }
+            if docker image inspect ph4r5h4d/wait4it:scratch >/dev/null 2>&1; then
+              docker tag ph4r5h4d/wait4it:scratch scan-target:${{ matrix.image-variant }}
+            fi
+          else
+            docker pull ph4r5h4d/wait4it:alpine || {
+              echo "Failed to pull alpine image, building locally..."
+              docker build . --file Dockerfile.alpine --tag scan-target:${{ matrix.image-variant }}
+            }
+            if docker image inspect ph4r5h4d/wait4it:alpine >/dev/null 2>&1; then
+              docker tag ph4r5h4d/wait4it:alpine scan-target:${{ matrix.image-variant }}
+            fi
+          fi
+
+      - name: Verify scan target image exists
+        run: |
+          docker image inspect scan-target:${{ matrix.image-variant }} || {
+            echo "Error: scan-target:${{ matrix.image-variant }} image not found"
+            exit 1
+          }
+          echo "✅ Successfully prepared scan-target:${{ matrix.image-variant }} for security scanning"
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'scan-target:${{ matrix.image-variant }}'
+          format: 'sarif'
+          output: 'trivy-results-${{ matrix.image-variant }}.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results-${{ matrix.image-variant }}.sarif'
+          category: 'trivy-${{ matrix.image-variant }}'
+
+      - name: Run Trivy vulnerability scanner (JSON format)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'scan-target:${{ matrix.image-variant }}'
+          format: 'json'
+          output: 'trivy-results-${{ matrix.image-variant }}.json'
+
+      - name: Upload scan results as artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-results-${{ matrix.image-variant }}
+          path: |
+            trivy-results-${{ matrix.image-variant }}.sarif
+            trivy-results-${{ matrix.image-variant }}.json
+          retention-days: 30
+
+      - name: Run Trivy vulnerability scanner (table format for summary)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'scan-target:${{ matrix.image-variant }}'
+          format: 'table'
+          output: 'trivy-summary-${{ matrix.image-variant }}.txt'
+
+      - name: Display scan summary
+        if: always()
+        run: |
+          echo "## Trivy Security Scan Results - ${{ matrix.image-variant }} variant" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat trivy-summary-${{ matrix.image-variant }}.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs: trivy-scan
+    if: always()
+    
+    steps:
+      - name: Download all scan results
+        uses: actions/download-artifact@v4
+        
+      - name: Create security summary
+        run: |
+          echo "# 🛡️ Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Security scan completed for wait4it Docker images." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📊 **Scan Results:**" >> $GITHUB_STEP_SUMMARY
+          
+          # Count artifacts safely
+          scratch_files=0
+          alpine_files=0
+          if [ -d "trivy-results-scratch" ]; then
+            scratch_files=$(ls trivy-results-scratch/ 2>/dev/null | wc -l)
+          fi
+          if [ -d "trivy-results-alpine" ]; then
+            alpine_files=$(ls trivy-results-alpine/ 2>/dev/null | wc -l)
+          fi
+          
+          echo "- Scratch variant: $scratch_files files generated" >> $GITHUB_STEP_SUMMARY
+          echo "- Alpine variant: $alpine_files files generated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔍 **View detailed results:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Check the Security tab in this repository for SARIF results" >> $GITHUB_STEP_SUMMARY
+          echo "- Download artifacts for detailed JSON and table reports" >> $GITHUB_STEP_SUMMARY
