@@ -27,7 +27,7 @@ jobs:
           cat trivy-integration-report.txt || echo "No report generated"
       - name: Upload security scan results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trivy-integration-report
           path: trivy-integration-report.txt

@@ -31,7 +31,7 @@ jobs:
         cat trivy-scratch-report.txt || echo "No report generated"
     - name: Upload scratch scan results
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: trivy-scratch-report
         path: trivy-scratch-report.txt
@@ -80,7 +80,7 @@ jobs:
         cat trivy-alpine-report.txt || echo "No report generated"
     - name: Upload alpine scan results
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: trivy-alpine-report
         path: trivy-alpine-report.txt
