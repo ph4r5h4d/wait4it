@@ -25,6 +25,15 @@ jobs:
         run: |
           echo "=== Trivy Security Scan Results ==="
           cat trivy-integration-report.txt || echo "No report generated"
+      - name: Add security scan results to summary
+        if: always()
+        run: |
+          echo "## 🔒 Trivy Security Scan - Integration Test Image" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat trivy-integration-report.txt >> $GITHUB_STEP_SUMMARY || echo "No vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
       - name: Run Trivy vulnerability scanner for SARIF
         uses: aquasecurity/trivy-action@master
         with:

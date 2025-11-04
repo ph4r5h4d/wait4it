@@ -29,6 +29,15 @@ jobs:
       run: |
         echo "=== Trivy Scan Results for Scratch Image ==="
         cat trivy-scratch-report.txt || echo "No report generated"
+    - name: Add scratch scan results to summary
+      if: always()
+      run: |
+        echo "## 🔒 Trivy Security Scan - Scratch Image" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        cat trivy-scratch-report.txt >> $GITHUB_STEP_SUMMARY || echo "No vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
     - name: Run Trivy vulnerability scanner for SARIF (scratch)
       uses: aquasecurity/trivy-action@master
       with:
@@ -92,6 +101,15 @@ jobs:
       run: |
         echo "=== Trivy Scan Results for Alpine Image ==="
         cat trivy-alpine-report.txt || echo "No report generated"
+    - name: Add alpine scan results to summary
+      if: always()
+      run: |
+        echo "## 🔒 Trivy Security Scan - Alpine Image" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        cat trivy-alpine-report.txt >> $GITHUB_STEP_SUMMARY || echo "No vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
     - name: Run Trivy vulnerability scanner for SARIF (alpine)
       uses: aquasecurity/trivy-action@master
       with:
