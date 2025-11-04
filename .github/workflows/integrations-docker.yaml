@@ -10,6 +10,49 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build image
         run: docker build . --file Dockerfile --tag wait4it-pipeline/docker:${{ github.run_id }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'wait4it-pipeline/docker:${{ github.run_id }}'
+          format: 'table'
+          exit-code: '0'
+          severity: 'HIGH,CRITICAL'
+          output: 'trivy-integration-report.txt'
+      - name: Display security scan results
+        if: always()
+        run: |
+          echo "=== Trivy Security Scan Results ==="
+          cat trivy-integration-report.txt || echo "No report generated"
+      - name: Add security scan results to summary
+        if: always()
+        run: |
+          echo "## 🔒 Trivy Security Scan - Integration Test Image" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat trivy-integration-report.txt >> $GITHUB_STEP_SUMMARY || echo "No vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+      - name: Run Trivy vulnerability scanner for SARIF
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'wait4it-pipeline/docker:${{ github.run_id }}'
+          format: 'sarif'
+          exit-code: '0'
+          severity: 'HIGH,CRITICAL'
+          output: 'trivy-integration-results.sarif'
+      - name: Upload Trivy scan results to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-integration-results.sarif'
+          category: 'trivy-integration'
+      - name: Upload security scan results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-integration-report
+          path: trivy-integration-report.txt
+          retention-days: 30
       - name: Export image as tar
         run: docker save -o wait4it.tar wait4it-pipeline/docker:${{ github.run_id }}
       - name: Cache wait4it

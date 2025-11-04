@@ -16,6 +16,49 @@ jobs:
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
         docker build . --file Dockerfile --label "org.opencontainers.image.revision=$VERSION" --tag wait4it
+    - name: Run Trivy vulnerability scanner (scratch)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'wait4it'
+        format: 'table'
+        exit-code: '0'
+        severity: 'HIGH,CRITICAL'
+        output: 'trivy-scratch-report.txt'
+    - name: Display scratch scan results
+      if: always()
+      run: |
+        echo "=== Trivy Scan Results for Scratch Image ==="
+        cat trivy-scratch-report.txt || echo "No report generated"
+    - name: Add scratch scan results to summary
+      if: always()
+      run: |
+        echo "## 🔒 Trivy Security Scan - Scratch Image" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        cat trivy-scratch-report.txt >> $GITHUB_STEP_SUMMARY || echo "No vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+    - name: Run Trivy vulnerability scanner for SARIF (scratch)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'wait4it'
+        format: 'sarif'
+        exit-code: '0'
+        severity: 'HIGH,CRITICAL'
+        output: 'trivy-scratch-results.sarif'
+    - name: Upload Trivy scan results to GitHub Security (scratch)
+      if: always()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: 'trivy-scratch-results.sarif'
+        category: 'trivy-scratch'
+    - name: Upload scratch scan results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: trivy-scratch-report
+        path: trivy-scratch-report.txt
+        retention-days: 30
     - name: Logging into docker hub
       run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
     - name: Tag and push
@@ -45,6 +88,49 @@ jobs:
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
         docker build . --file Dockerfile.alpine --label "org.opencontainers.image.revision=$VERSION" --tag wait4it
+    - name: Run Trivy vulnerability scanner (alpine)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'wait4it'
+        format: 'table'
+        exit-code: '0'
+        severity: 'HIGH,CRITICAL'
+        output: 'trivy-alpine-report.txt'
+    - name: Display alpine scan results
+      if: always()
+      run: |
+        echo "=== Trivy Scan Results for Alpine Image ==="
+        cat trivy-alpine-report.txt || echo "No report generated"
+    - name: Add alpine scan results to summary
+      if: always()
+      run: |
+        echo "## 🔒 Trivy Security Scan - Alpine Image" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        cat trivy-alpine-report.txt >> $GITHUB_STEP_SUMMARY || echo "No vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+    - name: Run Trivy vulnerability scanner for SARIF (alpine)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'wait4it'
+        format: 'sarif'
+        exit-code: '0'
+        severity: 'HIGH,CRITICAL'
+        output: 'trivy-alpine-results.sarif'
+    - name: Upload Trivy scan results to GitHub Security (alpine)
+      if: always()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: 'trivy-alpine-results.sarif'
+        category: 'trivy-alpine'
+    - name: Upload alpine scan results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: trivy-alpine-report
+        path: trivy-alpine-report.txt
+        retention-days: 30
     - name: Logging into docker hub
       run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
     - name: Tag and push
