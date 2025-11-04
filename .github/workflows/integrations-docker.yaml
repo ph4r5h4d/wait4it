@@ -1,7 +1,5 @@
 name: Integrations tests (Docker)
-on:
-  push:
-  pull_request:
+on: push
 
 jobs:
   Build:
