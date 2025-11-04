@@ -2,8 +2,6 @@ module wait4it
 
 go 1.25.3
 
-toolchain go1.25.3
-
 require (
 	github.com/aerospike/aerospike-client-go v4.5.2+incompatible
 	github.com/bradfitz/gomemcache v0.0.0-20250403215159-8d39553ac7cf
