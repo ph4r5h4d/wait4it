@@ -1,0 +1,79 @@
+name: Trivy Security Scan
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  scan-scratch-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build scratch-based image
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          docker build . --file Dockerfile --tag wait4it:scratch-scan
+
+      - name: Run Trivy vulnerability scanner (scratch)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'wait4it:scratch-scan'
+          format: 'table'
+          exit-code: '0'
+          severity: 'HIGH,CRITICAL'
+          output: 'trivy-scratch-report.txt'
+
+      - name: Display scratch scan results
+        if: always()
+        run: |
+          echo "=== Trivy Scan Results for Scratch Image ==="
+          cat trivy-scratch-report.txt || echo "No report generated"
+
+      - name: Upload scratch scan results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: trivy-scratch-report
+          path: trivy-scratch-report.txt
+          retention-days: 30
+
+  scan-alpine-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build alpine-based image
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          docker build . --file Dockerfile.alpine --tag wait4it:alpine-scan
+
+      - name: Run Trivy vulnerability scanner (alpine)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'wait4it:alpine-scan'
+          format: 'table'
+          exit-code: '0'
+          severity: 'HIGH,CRITICAL'
+          output: 'trivy-alpine-report.txt'
+
+      - name: Display alpine scan results
+        if: always()
+        run: |
+          echo "=== Trivy Scan Results for Alpine Image ==="
+          cat trivy-alpine-report.txt || echo "No report generated"
+
+      - name: Upload alpine scan results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: trivy-alpine-report
+          path: trivy-alpine-report.txt
+          retention-days: 30
