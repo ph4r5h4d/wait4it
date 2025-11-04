@@ -1,5 +1,7 @@
 name: Integrations tests (Docker)
-on: push
+on:
+  push:
+  pull_request:
 
 jobs:
   Build:
@@ -10,6 +12,26 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build image
         run: docker build . --file Dockerfile --tag wait4it-pipeline/docker:${{ github.run_id }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'wait4it-pipeline/docker:${{ github.run_id }}'
+          format: 'table'
+          exit-code: '0'
+          severity: 'HIGH,CRITICAL'
+          output: 'trivy-integration-report.txt'
+      - name: Display security scan results
+        if: always()
+        run: |
+          echo "=== Trivy Security Scan Results ==="
+          cat trivy-integration-report.txt || echo "No report generated"
+      - name: Upload security scan results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: trivy-integration-report
+          path: trivy-integration-report.txt
+          retention-days: 30
       - name: Export image as tar
         run: docker save -o wait4it.tar wait4it-pipeline/docker:${{ github.run_id }}
       - name: Cache wait4it
