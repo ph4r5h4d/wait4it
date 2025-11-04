@@ -1,8 +1,6 @@
 module wait4it
 
-go 1.23.0
-
-toolchain go1.24.2
+go 1.25.3
 
 require (
 	github.com/aerospike/aerospike-client-go v4.5.2+incompatible
@@ -14,7 +12,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/segmentio/kafka-go v0.4.49
-	go.mongodb.org/mongo-driver v1.17.4
+	go.mongodb.org/mongo-driver v1.17.6
 )
 
 require (
