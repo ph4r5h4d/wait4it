@@ -29,6 +29,20 @@ jobs:
       run: |
         echo "=== Trivy Scan Results for Scratch Image ==="
         cat trivy-scratch-report.txt || echo "No report generated"
+    - name: Run Trivy vulnerability scanner for SARIF (scratch)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'wait4it'
+        format: 'sarif'
+        exit-code: '0'
+        severity: 'HIGH,CRITICAL'
+        output: 'trivy-scratch-results.sarif'
+    - name: Upload Trivy scan results to GitHub Security (scratch)
+      if: always()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: 'trivy-scratch-results.sarif'
+        category: 'trivy-scratch'
     - name: Upload scratch scan results
       if: always()
       uses: actions/upload-artifact@v4
@@ -78,6 +92,20 @@ jobs:
       run: |
         echo "=== Trivy Scan Results for Alpine Image ==="
         cat trivy-alpine-report.txt || echo "No report generated"
+    - name: Run Trivy vulnerability scanner for SARIF (alpine)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'wait4it'
+        format: 'sarif'
+        exit-code: '0'
+        severity: 'HIGH,CRITICAL'
+        output: 'trivy-alpine-results.sarif'
+    - name: Upload Trivy scan results to GitHub Security (alpine)
+      if: always()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: 'trivy-alpine-results.sarif'
+        category: 'trivy-alpine'
     - name: Upload alpine scan results
       if: always()
       uses: actions/upload-artifact@v4

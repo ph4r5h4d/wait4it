@@ -25,6 +25,20 @@ jobs:
         run: |
           echo "=== Trivy Security Scan Results ==="
           cat trivy-integration-report.txt || echo "No report generated"
+      - name: Run Trivy vulnerability scanner for SARIF
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'wait4it-pipeline/docker:${{ github.run_id }}'
+          format: 'sarif'
+          exit-code: '0'
+          severity: 'HIGH,CRITICAL'
+          output: 'trivy-integration-results.sarif'
+      - name: Upload Trivy scan results to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-integration-results.sarif'
+          category: 'trivy-integration'
       - name: Upload security scan results
         if: always()
         uses: actions/upload-artifact@v4
