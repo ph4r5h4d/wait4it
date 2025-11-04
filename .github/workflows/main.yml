@@ -16,6 +16,26 @@ jobs:
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
         docker build . --file Dockerfile --label "org.opencontainers.image.revision=$VERSION" --tag wait4it
+    - name: Run Trivy vulnerability scanner (scratch)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'wait4it'
+        format: 'table'
+        exit-code: '0'
+        severity: 'HIGH,CRITICAL'
+        output: 'trivy-scratch-report.txt'
+    - name: Display scratch scan results
+      if: always()
+      run: |
+        echo "=== Trivy Scan Results for Scratch Image ==="
+        cat trivy-scratch-report.txt || echo "No report generated"
+    - name: Upload scratch scan results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: trivy-scratch-report
+        path: trivy-scratch-report.txt
+        retention-days: 30
     - name: Logging into docker hub
       run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
     - name: Tag and push
@@ -45,6 +65,26 @@ jobs:
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
         docker build . --file Dockerfile.alpine --label "org.opencontainers.image.revision=$VERSION" --tag wait4it
+    - name: Run Trivy vulnerability scanner (alpine)
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'wait4it'
+        format: 'table'
+        exit-code: '0'
+        severity: 'HIGH,CRITICAL'
+        output: 'trivy-alpine-report.txt'
+    - name: Display alpine scan results
+      if: always()
+      run: |
+        echo "=== Trivy Scan Results for Alpine Image ==="
+        cat trivy-alpine-report.txt || echo "No report generated"
+    - name: Upload alpine scan results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: trivy-alpine-report
+        path: trivy-alpine-report.txt
+        retention-days: 30
     - name: Logging into docker hub
       run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
     - name: Tag and push
