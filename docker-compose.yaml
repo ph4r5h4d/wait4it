@@ -33,10 +33,11 @@ services:
     image: memcached:1
 
   elasticsearch:
-    image: elasticsearch:8
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
 
   aerospike:
     image: aerospike/aerospike-server-enterprise
