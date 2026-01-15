@@ -2,6 +2,7 @@ package check
 
 import (
 	"wait4it/pkg/aerospike"
+	"wait4it/pkg/dns"
 	"wait4it/pkg/elasticsearch"
 	"wait4it/pkg/http"
 	"wait4it/pkg/kafka"
@@ -27,4 +28,5 @@ var cm = map[string]func(c *model.CheckContext) (model.CheckInterface, error){
 	"elasticsearch": elasticsearch.NewChecker,
 	"aerospike":     aerospike.NewChecker,
 	"kafka":         kafka.NewChecker,
+	"dns":           dns.NewChecker,
 }
