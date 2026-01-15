@@ -1,6 +1,9 @@
 name: Integrations tests (App)
 on: push
 
+permissions:
+  contents: read
+
 jobs:
   Build:
     runs-on: ubuntu-latest
