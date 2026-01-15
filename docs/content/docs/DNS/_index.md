@@ -5,8 +5,58 @@ title = 'DNS Check'
 +++
 DNS Check validates that a hostname can be resolved via DNS. Supports all record types (A, AAAA, CNAME, MX, TXT, SRV, NS, PTR), custom DNS servers, and expected value matching.
 
-## Usage Examples
+## Environment Variables
 
+| Variable        | Description                                              | Default   |
+|-----------------|----------------------------------------------------------|-----------|
+| W4IT_TYPE       | The type of check (set to `dns`).                        | -         |
+| W4IT_TIMEOUT    | Timeout in seconds.                                      | 30        |
+| W4IT_HOST       | The hostname to resolve.                                 | 127.0.0.1 |
+| W4IT_DNS_TYPE   | DNS record type (A, AAAA, CNAME, MX, TXT, SRV, NS, PTR). | A         |
+| W4IT_DNS_EXPECT | Expected value to find in DNS records (substring match). | -         |
+| W4IT_DNS_SERVER | Custom DNS server to query (e.g., `8.8.8.8:53`).         | -         |
+
+## Command-Line Arguments
+
+| Argument     | Description                                              | Default   |
+|--------------|----------------------------------------------------------|-----------|
+| -type        | The type of check (set to `dns`).                        | -         |
+| -t           | Timeout in seconds.                                      | 30        |
+| -h           | The hostname to resolve.                                 | 127.0.0.1 |
+| -dns-type    | DNS record type (A, AAAA, CNAME, MX, TXT, SRV, NS, PTR). | A         |
+| -dns-expect  | Expected value to find in DNS records (substring match). | -         |
+| -dns-server  | Custom DNS server to query (e.g., `8.8.8.8:53`).         | -         |
+
+## Supported Record Types
+
+| Type  | Description                                    |
+|-------|------------------------------------------------|
+| A     | IPv4 address records                           |
+| AAAA  | IPv6 address records                           |
+| CNAME | Canonical name records                         |
+| MX    | Mail exchange records                          |
+| TXT   | Text records (SPF, DKIM, domain verification)  |
+| SRV   | Service records (Kubernetes, service discovery)|
+| NS    | Nameserver records                             |
+| PTR   | Reverse DNS (pointer) records                  |
+
+## Notes
+{{< callout type="info" >}}
+- If `-dns-expect` is not specified, the check succeeds if any records are found.
+- The expected value uses substring matching, so partial matches work.
+- Custom DNS server format is `host:port` (e.g., `8.8.8.8:53`).
+- For SRV records, use the full format: `_service._proto.name`
+{{< /callout >}}
+
+## Exit Codes
+| Code | Meaning                           |
+|------|-----------------------------------|
+| 0    | DNS resolution successful.        |
+| 1    | Timed out.                        |
+| 2    | Validation error or invalid input.|
+
+
+## Usage Examples
 ### Basic DNS Resolution
 ```bash
 # Check if hostname resolves (A record by default)
@@ -135,20 +185,6 @@ docker run ph4r5h4d/wait4it -type=dns -h=example.com -dns-server=8.8.8.8:53 -t=6
 docker run ph4r5h4d/wait4it -type=dns -h=example.com -dns-type=TXT -dns-expect="v=spf1" -t=60
 ```
 
-### Docker Compose Examples
-```yaml
-services:
-  wait-for-dns:
-    image: ph4r5h4d/wait4it
-    command: ["-type=dns", "-h=database.internal", "-t=60"]
-
-  app:
-    image: myapp
-    depends_on:
-      wait-for-dns:
-        condition: service_completed_successfully
-```
-
 ### Real-World Use Cases
 
 #### Wait for DNS Propagation After Record Change
@@ -177,53 +213,3 @@ services:
 # Verify DNS is configured correctly before app starts
 ./wait4it -type=dns -h=api.example.com -dns-type=CNAME -dns-expect="loadbalancer.example.com" -t=30
 ```
-
-## Environment Variables
-
-| Variable        | Description                                              | Default   |
-|-----------------|----------------------------------------------------------|-----------|
-| W4IT_TYPE       | The type of check (set to `dns`).                        | -         |
-| W4IT_TIMEOUT    | Timeout in seconds.                                      | 30        |
-| W4IT_HOST       | The hostname to resolve.                                 | 127.0.0.1 |
-| W4IT_DNS_TYPE   | DNS record type (A, AAAA, CNAME, MX, TXT, SRV, NS, PTR). | A         |
-| W4IT_DNS_EXPECT | Expected value to find in DNS records (substring match). | -         |
-| W4IT_DNS_SERVER | Custom DNS server to query (e.g., `8.8.8.8:53`).         | -         |
-
-## Command-Line Arguments
-
-| Argument     | Description                                              | Default   |
-|--------------|----------------------------------------------------------|-----------|
-| -type        | The type of check (set to `dns`).                        | -         |
-| -t           | Timeout in seconds.                                      | 30        |
-| -h           | The hostname to resolve.                                 | 127.0.0.1 |
-| -dns-type    | DNS record type (A, AAAA, CNAME, MX, TXT, SRV, NS, PTR). | A         |
-| -dns-expect  | Expected value to find in DNS records (substring match). | -         |
-| -dns-server  | Custom DNS server to query (e.g., `8.8.8.8:53`).         | -         |
-
-## Supported Record Types
-
-| Type  | Description                                    |
-|-------|------------------------------------------------|
-| A     | IPv4 address records                           |
-| AAAA  | IPv6 address records                           |
-| CNAME | Canonical name records                         |
-| MX    | Mail exchange records                          |
-| TXT   | Text records (SPF, DKIM, domain verification)  |
-| SRV   | Service records (Kubernetes, service discovery)|
-| NS    | Nameserver records                             |
-| PTR   | Reverse DNS (pointer) records                  |
-
-## Notes
-{{< callout type="info" >}}
-- If `-dns-expect` is not specified, the check succeeds if any records are found.
-- The expected value uses substring matching, so partial matches work.
-- Custom DNS server format is `host:port` (e.g., `8.8.8.8:53`).
-- For SRV records, use the full format: `_service._proto.name`
-{{< /callout >}}
-
-## Exit Codes
-| Code | Meaning                           |
-|------|-----------------------------------|
-| 0    | DNS resolution successful.        |
-| 1    | Timed out.                        |
-| 2    | Validation error or invalid input.|
