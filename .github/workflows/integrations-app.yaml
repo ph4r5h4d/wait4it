@@ -262,24 +262,20 @@ jobs:
     needs: Build
     permissions:
       contents: read
-    services:
-      dnsmasq:
-        image: andyshinn/dnsmasq:latest
-        ports:
-          - 5353:53/udp
-        options: >-
-          --cap-add=NET_ADMIN
-          --no-daemon
-          --log-queries
-          --address=/testhost.local/192.168.1.100
-          --mx-host=testhost.local,mail.testhost.local,10
-          --txt-record=testhost.local,"v=spf1 include:_spf.testhost.local ~all"
     steps:
       - name: Retrieve wait4it
         uses: actions/cache@v3
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
+      - name: Start dnsmasq
+        run: |
+          docker run -d --name dnsmasq --cap-add=NET_ADMIN -p 5353:53/udp andyshinn/dnsmasq:latest \
+            --no-daemon \
+            --log-queries \
+            --address=/testhost.local/192.168.1.100 \
+            --mx-host=testhost.local,mail.testhost.local,10 \
+            --txt-record=testhost.local,"v=spf1 include:_spf.testhost.local ~all"
       - name: Test DNS A Record
         run: ./wait4it -type=dns -h=testhost.local -dns-server=127.0.0.1:5353 -dns-expect=192.168.1.100 -t=60
       - name: Test DNS MX Record
