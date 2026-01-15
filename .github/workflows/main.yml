@@ -6,6 +6,10 @@ on:
     tags:
       - v*
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   build-scratch:
     runs-on: ubuntu-latest
@@ -48,7 +52,7 @@ jobs:
         output: 'trivy-scratch-results.sarif'
     - name: Upload Trivy scan results to GitHub Security (scratch)
       if: always()
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: 'trivy-scratch-results.sarif'
         category: 'trivy-scratch'
@@ -120,7 +124,7 @@ jobs:
         output: 'trivy-alpine-results.sarif'
     - name: Upload Trivy scan results to GitHub Security (alpine)
       if: always()
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: 'trivy-alpine-results.sarif'
         category: 'trivy-alpine'
