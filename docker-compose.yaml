@@ -137,3 +137,43 @@ services:
     depends_on:
       - build
       - kafka
+
+  dnsmasq:
+    image: andyshinn/dnsmasq:latest
+    command: >
+      --no-daemon
+      --log-queries
+      --address=/testhost.local/192.168.1.100
+      --mx-host=testhost.local,mail.testhost.local,10
+      --txt-record=testhost.local,"v=spf1 include:_spf.testhost.local ~all"
+    cap_add:
+      - NET_ADMIN
+
+  test-dns:
+    image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
+    command: -type=dns -h=redis -t=60
+    depends_on:
+      - build
+      - redis
+
+  test-dns-custom-server:
+    image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
+    command: -type=dns -h=testhost.local -dns-server=dnsmasq:53 -dns-expect=192.168.1.100 -t=60
+    depends_on:
+      - build
+      - dnsmasq
+
+  test-dns-mx:
+    image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
+    command: -type=dns -h=testhost.local -dns-type=MX -dns-server=dnsmasq:53 -dns-expect=mail.testhost.local -t=60
+    depends_on:
+      - build
+      - dnsmasq
+
+  test-dns-txt:
+    image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
+    command: -type=dns -h=testhost.local -dns-type=TXT -dns-server=dnsmasq:53 -dns-expect=v=spf1 -t=60
+    depends_on:
+      - build
+      - dnsmasq
+
