@@ -12,6 +12,8 @@ jobs:
   release:
     name: release linux/amd64
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     strategy:
       matrix:
         goos: [ linux, windows, darwin ]

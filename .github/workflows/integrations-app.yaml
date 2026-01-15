@@ -7,6 +7,8 @@ permissions:
 jobs:
   Build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
      - uses: actions/checkout@v3
      - uses: actions/setup-go@v3
@@ -24,6 +26,8 @@ jobs:
   Redis-TCP:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       redis:
         image: redis
@@ -43,6 +47,8 @@ jobs:
   PostgreSQL:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       postgres:
         image: postgres
@@ -62,6 +68,8 @@ jobs:
   PasswordFileCheck:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       postgres:
         image: postgres
@@ -83,6 +91,8 @@ jobs:
   MySQL:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       redis:
         image: mysql
@@ -103,6 +113,8 @@ jobs:
   HTTP:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       redis:
         image: nginx
@@ -120,6 +132,8 @@ jobs:
   MongoDB:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       redis:
         image: mongo
@@ -140,6 +154,8 @@ jobs:
   RabbitMQ:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       redis:
         image: rabbitmq:3-management-alpine
@@ -157,6 +173,8 @@ jobs:
   Memcached:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       redis:
         image: memcached:1
@@ -174,6 +192,8 @@ jobs:
   ElasticSearch:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       redis:
         image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
@@ -195,6 +215,8 @@ jobs:
   Aerospike:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       redis:
         image: aerospike/aerospike-server-enterprise
@@ -212,6 +234,8 @@ jobs:
   Kafka:
     runs-on: ubuntu-latest
     needs: Build
+    permissions:
+      contents: read
     services:
       kafka:
         image: apache/kafka:latest
