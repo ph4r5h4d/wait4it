@@ -4,7 +4,6 @@ import (
 	"context"
 	"net"
 	"strings"
-	"time"
 )
 
 // Check performs the DNS lookup and returns (success, endOnError, error)
@@ -66,9 +65,7 @@ func (d *check) getResolver() *net.Resolver {
 	return &net.Resolver{
 		PreferGo: true,
 		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
-			dialer := net.Dialer{
-				Timeout: 5 * time.Second,
-			}
+			dialer := net.Dialer{}
 			return dialer.DialContext(ctx, "udp", d.server)
 		},
 	}
