@@ -17,8 +17,15 @@ type CheckContext struct {
 	DBConf        DatabaseSpecificConf
 	HttpConf      HttpSpecificConf
 	KafkaConf     KafkaConf
+	DNSConf       DNSConf
 
 	Progress func(string)
+}
+
+type DNSConf struct {
+	RecordType string // A, AAAA, CNAME, MX, TXT, SRV, NS, PTR
+	Expected   string // Expected value to match (optional)
+	Server     string // Custom DNS server (optional, e.g., "8.8.8.8:53")
 }
 
 func (cc CheckContext) Validate() (err error) {

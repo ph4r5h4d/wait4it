@@ -62,6 +62,9 @@ func main() {
 	flag.BoolVar(&cfg.HttpConf.FollowRedirect, "http-follow-redirect", defaultEnvBool("W4IT_HTTP_FOLLOW_REDIRECT", true), "Whether to follow the redirect while doing the HTTP check")
 	flag.StringVar(&cfg.KafkaConf.ConnectionType, "kafka-connection-type", defaultEnv("W4IT_KAFKA_CONNECTION_TYPE", "tcp"), "Kafka Connection Type, default is tcp")
 	flag.BoolVar(&cfg.KafkaConf.ConnectToLeaderViaNonLeader, "kafka-connect-to-leader-via-non-leader", defaultEnvBool("W4IT_KAFKA_CONNECT_TO_LEADER_VIA_NON_LEADER", false), "Whether to connect to leader via non-leader, default is false")
+	flag.StringVar(&cfg.DNSConf.RecordType, "dns-type", defaultEnv("W4IT_DNS_TYPE", "A"), "DNS record type to query (A, AAAA, CNAME, MX, TXT, SRV, NS, PTR)")
+	flag.StringVar(&cfg.DNSConf.Expected, "dns-expect", defaultEnv("W4IT_DNS_EXPECT", ""), "Expected value to find in DNS records (substring match)")
+	flag.StringVar(&cfg.DNSConf.Server, "dns-server", defaultEnv("W4IT_DNS_SERVER", ""), "Custom DNS server to query (e.g., 8.8.8.8:53)")
 
 	flag.Parse()
 	// We don't want to show password in help message

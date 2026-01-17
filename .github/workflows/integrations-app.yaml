@@ -256,3 +256,29 @@ jobs:
           key: wait4it-${{ github.run_id }}
       - name: Test Kafka
         run: ./wait4it -type=kafka -h=127.0.0.1 -p=9092 -t=60
+
+  DNS:
+    runs-on: ubuntu-latest
+    needs: Build
+    permissions:
+      contents: read
+    steps:
+      - name: Retrieve wait4it
+        uses: actions/cache@v3
+        with:
+          path: wait4it
+          key: wait4it-${{ github.run_id }}
+      - name: Start dnsmasq
+        run: |
+          docker run -d --name dnsmasq --cap-add=NET_ADMIN -p 5353:53/udp andyshinn/dnsmasq:latest \
+            --no-daemon \
+            --log-queries \
+            --address=/testhost.local/192.168.1.100 \
+            --mx-host=testhost.local,mail.testhost.local,10 \
+            --txt-record=testhost.local,"v=spf1 include:_spf.testhost.local ~all"
+      - name: Test DNS A Record
+        run: ./wait4it -type=dns -h=testhost.local -dns-server=127.0.0.1:5353 -dns-expect=192.168.1.100 -t=60
+      - name: Test DNS MX Record
+        run: ./wait4it -type=dns -h=testhost.local -dns-type=MX -dns-server=127.0.0.1:5353 -dns-expect=mail.testhost.local -t=60
+      - name: Test DNS TXT Record
+        run: ./wait4it -type=dns -h=testhost.local -dns-type=TXT -dns-server=127.0.0.1:5353 -dns-expect=v=spf1 -t=60
