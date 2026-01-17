@@ -45,6 +45,7 @@ DNS Check validates that a hostname can be resolved via DNS. Supports all record
 - If `-dns-expect` is not specified, the check succeeds if any records are found.
 - The expected value uses substring matching, so partial matches work.
 - Custom DNS server format is `host:port` (e.g., `8.8.8.8:53`).
+- The DNS resolver currently supports queries over **UDP only**.
 - For SRV records, use the full format: `_service._proto.name`
 {{< /callout >}}
 

@@ -65,6 +65,7 @@ func (d *check) getResolver() *net.Resolver {
 	return &net.Resolver{
 		PreferGo: true,
 		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+			// DNS resolver is currently hardcoded to use UDP only
 			dialer := net.Dialer{}
 			return dialer.DialContext(ctx, "udp", d.server)
 		},
