@@ -11,7 +11,7 @@ DNS Check validates that a hostname can be resolved via DNS. Supports all record
 |-----------------|----------------------------------------------------------|-----------|
 | W4IT_TYPE       | The type of check (set to `dns`).                        | -         |
 | W4IT_TIMEOUT    | Timeout in seconds.                                      | 30        |
-| W4IT_HOST       | The hostname to resolve.                                 | 127.0.0.1 |
+| W4IT_HOST       | The hostname to resolve (e.g. `example.com`).             | 127.0.0.1 |
 | W4IT_DNS_TYPE   | DNS record type (A, AAAA, CNAME, MX, TXT, SRV, NS, PTR). | A         |
 | W4IT_DNS_EXPECT | Expected value to find in DNS records (substring match). | -         |
 | W4IT_DNS_SERVER | Custom DNS server to query (e.g., `8.8.8.8:53`).         | -         |
@@ -22,7 +22,7 @@ DNS Check validates that a hostname can be resolved via DNS. Supports all record
 |--------------|----------------------------------------------------------|-----------|
 | -type        | The type of check (set to `dns`).                        | -         |
 | -t           | Timeout in seconds.                                      | 30        |
-| -h           | The hostname to resolve.                                 | 127.0.0.1 |
+| -h           | The hostname to resolve (e.g. `example.com`).             | 127.0.0.1 |
 | -dns-type    | DNS record type (A, AAAA, CNAME, MX, TXT, SRV, NS, PTR). | A         |
 | -dns-expect  | Expected value to find in DNS records (substring match). | -         |
 | -dns-server  | Custom DNS server to query (e.g., `8.8.8.8:53`).         | -         |
@@ -45,6 +45,7 @@ DNS Check validates that a hostname can be resolved via DNS. Supports all record
 - If `-dns-expect` is not specified, the check succeeds if any records are found.
 - The expected value uses substring matching, so partial matches work.
 - Custom DNS server format is `host:port` (e.g., `8.8.8.8:53`).
+- **Note on Default Host**: While the default host is set to `127.0.0.1` (application-wide default), you must provide a meaningful domain name or hostname for the DNS check to be effective.
 - The DNS resolver currently supports queries over **UDP only**.
 - For SRV records, use the full format: `_service._proto.name`
 {{< /callout >}}
