@@ -6,9 +6,9 @@ import (
 
 	"wait4it/pkg/model"
 
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo/readpref"
 )
 
 const WaitTimeOutSeconds = 2
@@ -37,12 +37,7 @@ func (m *MongoDbConnection) Validate() error {
 }
 
 func (m *MongoDbConnection) Check(ctx context.Context) (bool, bool, error) {
-	client, err := mongo.NewClient(options.Client().ApplyURI(m.buildConnectionString()))
-	if err != nil {
-		return false, true, err
-	}
-
-	err = client.Connect(ctx)
+	client, err := mongo.Connect(options.Client().ApplyURI(m.buildConnectionString()))
 	if err != nil {
 		return false, true, err
 	}
