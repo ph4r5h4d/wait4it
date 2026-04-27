@@ -10,7 +10,7 @@ require (
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/lib/pq v1.11.2
 	github.com/pkg/errors v0.9.1
-	github.com/rabbitmq/amqp091-go v1.10.0
+	github.com/rabbitmq/amqp091-go v1.11.0
 	github.com/segmentio/kafka-go v0.4.50
 	go.mongodb.org/mongo-driver v1.17.9
 )
