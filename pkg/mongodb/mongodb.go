@@ -30,7 +30,7 @@ func (m *MongoDbConnection) Validate() error {
 	}
 
 	if m.Port < 1 || m.Port > 65535 {
-		return errors.New("invalid port range for mysql")
+		return errors.New("invalid port range for mongodb")
 	}
 
 	return nil
