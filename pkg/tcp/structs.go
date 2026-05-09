@@ -9,20 +9,25 @@ const (
 	maxPort = 65535
 )
 
-type check struct {
-	addr string
-	port int
+type Check struct {
+	Addr string
+	Port int
 }
 
 // NewChecker creates a new checker
 func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
-	check := &check{
-		addr: c.Host,
-		port: c.Port,
+	check := &Check{
+		Addr: c.Host,
+		Port: c.Port,
 	}
-	if err := check.validate(); err != nil {
+	if err := check.Validate(); err != nil {
 		return nil, err
 	}
 
 	return check, nil
+}
+
+func (c *Check) BuildContext(cx model.CheckContext) {
+	c.Addr = cx.Host
+	c.Port = cx.Port
 }
