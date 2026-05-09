@@ -28,7 +28,7 @@ func (pq *PostgresSQLConnection) Validate() error {
 	}
 
 	if pq.Port < 1 || pq.Port > 65535 {
-		return errors.New("invalid port range for PostgresSQL")
+		return errors.New("invalid port range for postgresql")
 	}
 
 	return nil
