@@ -7,13 +7,13 @@ import (
 )
 
 // Check performs the DNS lookup and returns (success, endOnError, error)
-func (d *check) Check(ctx context.Context) (bool, bool, error) {
+func (d *Check) Check(ctx context.Context) (bool, bool, error) {
 	resolver := d.getResolver()
 
 	var records []string
 	var err error
 
-	switch d.recordType {
+	switch d.RecordType {
 	case "A":
 		records, err = d.lookupA(ctx, resolver)
 	case "AAAA":
@@ -42,13 +42,13 @@ func (d *check) Check(ctx context.Context) (bool, bool, error) {
 	}
 
 	// If no expected value, just check if records exist
-	if d.expected == "" {
+	if d.Expected == "" {
 		return true, false, nil
 	}
 
 	// Check if expected value is in any record
 	for _, record := range records {
-		if strings.Contains(record, d.expected) {
+		if strings.Contains(record, d.Expected) {
 			return true, false, nil
 		}
 	}
@@ -57,8 +57,8 @@ func (d *check) Check(ctx context.Context) (bool, bool, error) {
 }
 
 // getResolver returns a custom resolver if a DNS server is specified
-func (d *check) getResolver() *net.Resolver {
-	if d.server == "" {
+func (d *Check) getResolver() *net.Resolver {
+	if d.Server == "" {
 		return net.DefaultResolver
 	}
 
@@ -67,14 +67,14 @@ func (d *check) getResolver() *net.Resolver {
 		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
 			// DNS resolver is currently hardcoded to use UDP only
 			dialer := net.Dialer{}
-			return dialer.DialContext(ctx, "udp", d.server)
+			return dialer.DialContext(ctx, "udp", d.Server)
 		},
 	}
 }
 
 // lookupA returns IPv4 addresses
-func (d *check) lookupA(ctx context.Context, r *net.Resolver) ([]string, error) {
-	ips, err := r.LookupIP(ctx, "ip4", d.host)
+func (d *Check) lookupA(ctx context.Context, r *net.Resolver) ([]string, error) {
+	ips, err := r.LookupIP(ctx, "ip4", d.Host)
 	if err != nil {
 		return nil, err
 	}
@@ -86,8 +86,8 @@ func (d *check) lookupA(ctx context.Context, r *net.Resolver) ([]string, error) 
 }
 
 // lookupAAAA returns IPv6 addresses
-func (d *check) lookupAAAA(ctx context.Context, r *net.Resolver) ([]string, error) {
-	ips, err := r.LookupIP(ctx, "ip6", d.host)
+func (d *Check) lookupAAAA(ctx context.Context, r *net.Resolver) ([]string, error) {
+	ips, err := r.LookupIP(ctx, "ip6", d.Host)
 	if err != nil {
 		return nil, err
 	}
@@ -99,8 +99,8 @@ func (d *check) lookupAAAA(ctx context.Context, r *net.Resolver) ([]string, erro
 }
 
 // lookupCNAME returns canonical name
-func (d *check) lookupCNAME(ctx context.Context, r *net.Resolver) ([]string, error) {
-	cname, err := r.LookupCNAME(ctx, d.host)
+func (d *Check) lookupCNAME(ctx context.Context, r *net.Resolver) ([]string, error) {
+	cname, err := r.LookupCNAME(ctx, d.Host)
 	if err != nil {
 		return nil, err
 	}
@@ -108,8 +108,8 @@ func (d *check) lookupCNAME(ctx context.Context, r *net.Resolver) ([]string, err
 }
 
 // lookupMX returns mail exchange records
-func (d *check) lookupMX(ctx context.Context, r *net.Resolver) ([]string, error) {
-	mxs, err := r.LookupMX(ctx, d.host)
+func (d *Check) lookupMX(ctx context.Context, r *net.Resolver) ([]string, error) {
+	mxs, err := r.LookupMX(ctx, d.Host)
 	if err != nil {
 		return nil, err
 	}
@@ -121,15 +121,15 @@ func (d *check) lookupMX(ctx context.Context, r *net.Resolver) ([]string, error)
 }
 
 // lookupTXT returns text records
-func (d *check) lookupTXT(ctx context.Context, r *net.Resolver) ([]string, error) {
-	return r.LookupTXT(ctx, d.host)
+func (d *Check) lookupTXT(ctx context.Context, r *net.Resolver) ([]string, error) {
+	return r.LookupTXT(ctx, d.Host)
 }
 
 // lookupSRV returns service records
-func (d *check) lookupSRV(ctx context.Context, r *net.Resolver) ([]string, error) {
+func (d *Check) lookupSRV(ctx context.Context, r *net.Resolver) ([]string, error) {
 	// Parse SRV format: _service._proto.name
 	// For simplicity, we'll do a direct lookup using the host as-is
-	_, addrs, err := r.LookupSRV(ctx, "", "", d.host)
+	_, addrs, err := r.LookupSRV(ctx, "", "", d.Host)
 	if err != nil {
 		return nil, err
 	}
@@ -141,8 +141,8 @@ func (d *check) lookupSRV(ctx context.Context, r *net.Resolver) ([]string, error
 }
 
 // lookupNS returns nameserver records
-func (d *check) lookupNS(ctx context.Context, r *net.Resolver) ([]string, error) {
-	nss, err := r.LookupNS(ctx, d.host)
+func (d *Check) lookupNS(ctx context.Context, r *net.Resolver) ([]string, error) {
+	nss, err := r.LookupNS(ctx, d.Host)
 	if err != nil {
 		return nil, err
 	}
@@ -154,6 +154,6 @@ func (d *check) lookupNS(ctx context.Context, r *net.Resolver) ([]string, error)
 }
 
 // lookupPTR returns reverse DNS records
-func (d *check) lookupPTR(ctx context.Context, r *net.Resolver) ([]string, error) {
-	return r.LookupAddr(ctx, d.host)
+func (d *Check) lookupPTR(ctx context.Context, r *net.Resolver) ([]string, error) {
+	return r.LookupAddr(ctx, d.Host)
 }
