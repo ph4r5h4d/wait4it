@@ -18,8 +18,6 @@ type RabbitChecker struct {
 	Port     int
 	Username string
 	Password string
-
-	conString string
 }
 
 func (rc *RabbitChecker) BuildContext(cx model.CheckContext) {
@@ -31,24 +29,26 @@ func (rc *RabbitChecker) BuildContext(cx model.CheckContext) {
 
 func (rc *RabbitChecker) Validate() error {
 	if rc.Host == "" {
-		return errors.New("Host should not be empty")
+		return errors.New("host should not be empty")
 	}
 
 	if rc.Username == "" {
-		return errors.New("Username should not be empty")
+		return errors.New("username should not be empty")
 	}
 
-	if rc.Port == 0 {
-		return errors.New("Port should not be empty")
+	if rc.Port < 1 || rc.Port > 65535 {
+		return errors.New("invalid port range for rabbitmq")
 	}
-
-	rc.conString = fmt.Sprintf("amqp://%s:%s@%s:%d/", rc.Username, rc.Password, rc.Host, rc.Port)
 
 	return nil
 }
 
+func (rc *RabbitChecker) buildConnectionString() string {
+	return fmt.Sprintf("amqp://%s:%s@%s:%d/", rc.Username, rc.Password, rc.Host, rc.Port)
+}
+
 func (rc *RabbitChecker) Check(ctx context.Context) (bool, bool, error) {
-	con, err := amqp.DialConfig(rc.conString, amqp.Config{
+	con, err := amqp.DialConfig(rc.buildConnectionString(), amqp.Config{
 		Heartbeat: time.Second * 10,
 		Locale:    "en_US",
 		Dial: func(network, addr string) (net.Conn, error) {

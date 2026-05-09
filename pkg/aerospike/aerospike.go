@@ -20,7 +20,7 @@ func (m *AerospikeConnection) Validate() error {
 	}
 
 	if m.Port < 1 || m.Port > 65535 {
-		return errors.New("invalid port range for Memcached")
+		return errors.New("invalid port range for aerospike")
 	}
 
 	return nil

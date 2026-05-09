@@ -25,11 +25,11 @@ func (esc *ElasticSearchChecker) BuildContext(cx model.CheckContext) {
 
 func (esc *ElasticSearchChecker) Validate() error {
 	if len(esc.Host) == 0 {
-		return errors.New("Host can't be empty")
+		return errors.New("host can't be empty")
 	}
 
 	if esc.Port < 1 || esc.Port > 65535 {
-		return errors.New("Invalid port range for ElasticSearch")
+		return errors.New("invalid port range for elasticsearch")
 	}
 
 	return nil

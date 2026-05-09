@@ -4,11 +4,11 @@ import (
 	"wait4it/pkg/model"
 )
 
-type check struct {
-	host       string
-	recordType string
-	expected   string
-	server     string
+type Check struct {
+	Host       string
+	RecordType string
+	Expected   string
+	Server     string
 }
 
 // NewChecker creates a new DNS checker instance
@@ -18,26 +18,33 @@ func NewChecker(c *model.CheckContext) (model.CheckInterface, error) {
 		recordType = "A"
 	}
 
-	ch := &check{
-		host:       c.Host,
-		recordType: recordType,
-		expected:   c.DNSConf.Expected,
-		server:     c.DNSConf.Server,
+	ch := &Check{
+		Host:       c.Host,
+		RecordType: recordType,
+		Expected:   c.DNSConf.Expected,
+		Server:     c.DNSConf.Server,
 	}
 
-	if err := ch.validate(); err != nil {
+	if err := ch.Validate(); err != nil {
 		return nil, err
 	}
 
 	return ch, nil
 }
 
-func (d *check) validate() error {
-	if d.host == "" {
+func (d *Check) BuildContext(cx model.CheckContext) {
+	d.Host = cx.Host
+	d.RecordType = cx.DNSConf.RecordType
+	d.Expected = cx.DNSConf.Expected
+	d.Server = cx.DNSConf.Server
+}
+
+func (d *Check) Validate() error {
+	if d.Host == "" {
 		return ErrEmptyHost
 	}
 
-	switch d.recordType {
+	switch d.RecordType {
 	case "A", "AAAA", "CNAME", "MX", "TXT", "SRV", "NS", "PTR":
 		// Valid record types
 	default:
