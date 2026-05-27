@@ -13,6 +13,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * [PostgresQL](https://wait4it.dev/docs/postgresql/)
 * [Http](https://wait4it.dev/docs/http/)
 * [MongoDB](https://wait4it.dev/docs/mongodb/)
+* [Oracle](https://wait4it.dev/docs/oracle/)
 * [Redis](https://wait4it.dev/docs/redis/)
 * [RabbitMQ](https://wait4it.dev/docs/rabbitmq/)
 * [Memcached](https://wait4it.dev/docs/memcached/)
