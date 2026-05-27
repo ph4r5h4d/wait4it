@@ -177,3 +177,23 @@ services:
       - build
       - dnsmasq
 
+  oracle:
+    image: gvenzl/oracle-free:slim-faststart
+    environment:
+      ORACLE_PASSWORD: secret
+      APP_USER: app
+      APP_USER_PASSWORD: secret
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  test-oracle:
+    image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
+    command: -type=oracle -h=oracle -p=1521 -t=30 -u=app -P=secret -n=FREEPDB1
+    depends_on:
+      - build
+      - oracle
+

@@ -10,6 +10,7 @@ import (
 	"wait4it/pkg/model"
 	"wait4it/pkg/mongodb"
 	"wait4it/pkg/mysql"
+	"wait4it/pkg/oracle"
 	"wait4it/pkg/postgresql"
 	"wait4it/pkg/rabbitmq"
 	"wait4it/pkg/redis"
@@ -22,6 +23,7 @@ var cm = map[string]func(c *model.CheckContext) (model.CheckInterface, error){
 	"postgres":      postgresql.NewChecker,
 	"http":          http.NewChecker,
 	"mongo":         mongodb.NewChecker,
+	"oracle":        oracle.NewChecker,
 	"redis":         redis.NewChecker,
 	"rabbitmq":      rabbitmq.NewChecker,
 	"memcached":     memcached.NewChecker,
