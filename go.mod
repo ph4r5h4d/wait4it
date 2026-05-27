@@ -12,6 +12,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/rabbitmq/amqp091-go v1.11.0
 	github.com/segmentio/kafka-go v0.4.51
+	github.com/sijms/go-ora/v2 v2.9.0
 	go.mongodb.org/mongo-driver/v2 v2.6.0
 )
 
