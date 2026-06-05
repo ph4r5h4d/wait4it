@@ -18,6 +18,7 @@ type CheckContext struct {
 	HttpConf      HttpSpecificConf
 	KafkaConf     KafkaConf
 	DNSConf       DNSConf
+	InfluxConf    InfluxConf
 
 	Progress func(string)
 }
@@ -26,6 +27,12 @@ type DNSConf struct {
 	RecordType string // A, AAAA, CNAME, MX, TXT, SRV, NS, PTR
 	Expected   string // Expected value to match (optional)
 	Server     string // Custom DNS server (optional, e.g., "8.8.8.8:53")
+}
+
+type InfluxConf struct {
+	Token  string // API token (optional for basic health checks; passed to client)
+	Org    string // Organization name (optional; accepted but unused by basic checker)
+	Bucket string // Bucket name (optional; accepted but unused by basic checker)
 }
 
 func (cc CheckContext) Validate() (err error) {
