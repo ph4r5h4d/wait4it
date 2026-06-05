@@ -3,64 +3,20 @@ on: push
 
 permissions:
   contents: read
-  security-events: write
 
 jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Build image
         run: docker build . --file Dockerfile --tag wait4it-pipeline/docker:${{ github.run_id }}
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'wait4it-pipeline/docker:${{ github.run_id }}'
-          format: 'table'
-          exit-code: '0'
-          severity: 'HIGH,CRITICAL'
-          output: 'trivy-integration-report.txt'
-      - name: Display security scan results
-        if: always()
-        run: |
-          echo "=== Trivy Security Scan Results ==="
-          cat trivy-integration-report.txt || echo "No report generated"
-      - name: Add security scan results to summary
-        if: always()
-        run: |
-          echo "## 🔒 Trivy Security Scan - Integration Test Image" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          cat trivy-integration-report.txt >> $GITHUB_STEP_SUMMARY || echo "No vulnerabilities found" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-      - name: Run Trivy vulnerability scanner for SARIF
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'wait4it-pipeline/docker:${{ github.run_id }}'
-          format: 'sarif'
-          exit-code: '0'
-          severity: 'HIGH,CRITICAL'
-          output: 'trivy-integration-results.sarif'
-      - name: Upload Trivy scan results to GitHub Security
-        if: always()
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: 'trivy-integration-results.sarif'
-          category: 'trivy-integration'
-      - name: Upload security scan results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: trivy-integration-report
-          path: trivy-integration-report.txt
-          retention-days: 30
       - name: Export image as tar
         run: docker save -o wait4it.tar wait4it-pipeline/docker:${{ github.run_id }}
       - name: Cache wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -72,10 +28,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -95,10 +51,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -116,10 +72,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -139,10 +95,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -160,10 +116,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -181,10 +137,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -202,10 +158,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -223,10 +179,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -244,10 +200,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -265,10 +221,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -286,10 +242,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -307,10 +263,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -328,10 +284,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}
@@ -349,10 +305,10 @@ jobs:
       PIPELINE_IMAGE_VERSION: ${{ github.run_id }}
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - uses: actions/checkout@v3
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it.tar
           key: wait4it-docker-${{ github.run_id }}

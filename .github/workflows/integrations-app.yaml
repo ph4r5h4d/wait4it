@@ -10,15 +10,14 @@ jobs:
     permissions:
       contents: read
     steps:
-     - uses: actions/checkout@v3
-     - uses: actions/setup-go@v3
+     - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+     - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
        with:
-         go-version: '1.23'
+         go-version-file: go.mod
          check-latest: true
-         cache: true
      - run: GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o wait4it
      - name: Cache wait4it
-       uses: actions/cache@v3
+       uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
        with:
          path: wait4it
          key: wait4it-${{ github.run_id }}
@@ -35,7 +34,7 @@ jobs:
           - 6379:6379
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -58,7 +57,7 @@ jobs:
           - 5432:5432
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -79,7 +78,7 @@ jobs:
           - 5432:5432
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -103,7 +102,7 @@ jobs:
           - 3306:3306
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -122,7 +121,7 @@ jobs:
           - 80:80
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -144,7 +143,7 @@ jobs:
           - 27017:27017
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -163,7 +162,7 @@ jobs:
           - 5672:5672
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -182,7 +181,7 @@ jobs:
           - 11211:11211
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -205,7 +204,7 @@ jobs:
           - 9200:9200
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -224,7 +223,7 @@ jobs:
           - 3000:3000
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -250,7 +249,7 @@ jobs:
           - 9092:9092
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -279,7 +278,7 @@ jobs:
           --health-start-period 40s
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -311,7 +310,7 @@ jobs:
           --health-start-period 25s
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
@@ -325,7 +324,7 @@ jobs:
       contents: read
     steps:
       - name: Retrieve wait4it
-        uses: actions/cache@v3
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: wait4it
           key: wait4it-${{ github.run_id }}
