@@ -63,6 +63,20 @@ Make sure you have [Go](https://golang.org/dl/) installed on your machine.
 
 Now you're ready to start using Wait4it!
 
+## Docker Images
+
+Official images are published to Docker Hub (`ph4r5h4d/wait4it`) and are also available from GitHub Container Registry (GHCR):
+
+```bash
+# GHCR (also published)
+docker run --rm ghcr.io/ph4r5h4d/wait4it --version
+
+# Docker Hub (primary)
+docker run --rm ph4r5h4d/wait4it --version
+```
+
+See the per-service pages for concrete `docker run` examples (they use the Docker Hub name).
+
 ---
 
 For more details on how to use Wait4it, refer to the left sidebar for specific checks and their usage instructions. 

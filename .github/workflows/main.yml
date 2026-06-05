@@ -1,4 +1,4 @@
-name: Dockerhub Release
+name: Docker Release
 
 on:
   workflow_dispatch:
@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   build-scratch:
@@ -21,9 +22,12 @@ jobs:
         docker build . --file Dockerfile --label "org.opencontainers.image.revision=$VERSION" --tag wait4it
     - name: Logging into docker hub
       run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
+    - name: Log in to GHCR
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io --username ${{ github.actor }} --password-stdin
     - name: Tag and push
       run: |
         IMAGE=ph4r5h4d/wait4it
+        GHCR_IMAGE=ghcr.io/ph4r5h4d/wait4it
 
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
@@ -35,9 +39,13 @@ jobs:
 
         docker tag wait4it $IMAGE:$VERSION-scratch
         docker tag wait4it $IMAGE:scratch
+        docker tag wait4it $GHCR_IMAGE:$VERSION-scratch
+        docker tag wait4it $GHCR_IMAGE:scratch
 
         docker push $IMAGE:$VERSION-scratch
         docker push $IMAGE:scratch
+        docker push $GHCR_IMAGE:$VERSION-scratch
+        docker push $GHCR_IMAGE:scratch
 
   build-alpine:
     runs-on: ubuntu-latest
@@ -50,9 +58,12 @@ jobs:
         docker build . --file Dockerfile.alpine --label "org.opencontainers.image.revision=$VERSION" --tag wait4it
     - name: Logging into docker hub
       run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
+    - name: Log in to GHCR
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io --username ${{ github.actor }} --password-stdin
     - name: Tag and push
       run: |
         IMAGE=ph4r5h4d/wait4it
+        GHCR_IMAGE=ghcr.io/ph4r5h4d/wait4it
 
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
@@ -65,7 +76,13 @@ jobs:
         docker tag wait4it $IMAGE:$VERSION-alpine
         docker tag wait4it $IMAGE:alpine
         docker tag wait4it $IMAGE:latest
+        docker tag wait4it $GHCR_IMAGE:$VERSION-alpine
+        docker tag wait4it $GHCR_IMAGE:alpine
+        docker tag wait4it $GHCR_IMAGE:latest
 
         docker push $IMAGE:$VERSION-alpine
         docker push $IMAGE:alpine
         docker push $IMAGE:latest
+        docker push $GHCR_IMAGE:$VERSION-alpine
+        docker push $GHCR_IMAGE:alpine
+        docker push $GHCR_IMAGE:latest
