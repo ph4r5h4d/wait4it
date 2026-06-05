@@ -66,6 +66,10 @@ func main() {
 	flag.StringVar(&cfg.DNSConf.Expected, "dns-expect", defaultEnv("W4IT_DNS_EXPECT", ""), "Expected value to find in DNS records (substring match)")
 	flag.StringVar(&cfg.DNSConf.Server, "dns-server", defaultEnv("W4IT_DNS_SERVER", ""), "Custom DNS server to query (e.g., 8.8.8.8:53)")
 
+	flag.StringVar(&cfg.InfluxConf.Token, "token", defaultEnv("W4IT_INFLUX_TOKEN", ""), "InfluxDB API token")
+	flag.StringVar(&cfg.InfluxConf.Org, "org", defaultEnv("W4IT_INFLUX_ORG", ""), "InfluxDB organization name")
+	flag.StringVar(&cfg.InfluxConf.Bucket, "bucket", defaultEnv("W4IT_INFLUX_BUCKET", ""), "InfluxDB bucket name")
+
 	flag.Parse()
 	// We don't want to show password in help message
 	if cfg.PasswordValue == "" {
