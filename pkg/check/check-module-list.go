@@ -5,6 +5,7 @@ import (
 	"wait4it/pkg/dns"
 	"wait4it/pkg/elasticsearch"
 	"wait4it/pkg/http"
+	"wait4it/pkg/influxdb"
 	"wait4it/pkg/kafka"
 	"wait4it/pkg/memcached"
 	"wait4it/pkg/model"
@@ -24,6 +25,7 @@ var cm = map[string]func(c *model.CheckContext) (model.CheckInterface, error){
 	"http":          http.NewChecker,
 	"mongo":         mongodb.NewChecker,
 	"oracle":        oracle.NewChecker,
+	"influxdb":      influxdb.NewChecker,
 	"redis":         redis.NewChecker,
 	"rabbitmq":      rabbitmq.NewChecker,
 	"memcached":     memcached.NewChecker,

@@ -14,6 +14,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * [Http](https://wait4it.dev/docs/http/)
 * [MongoDB](https://wait4it.dev/docs/mongodb/)
 * [Oracle](https://wait4it.dev/docs/oracle/)
+* [InfluxDB](https://wait4it.dev/docs/influxdb/)
 * [Redis](https://wait4it.dev/docs/redis/)
 * [RabbitMQ](https://wait4it.dev/docs/rabbitmq/)
 * [Memcached](https://wait4it.dev/docs/memcached/)
