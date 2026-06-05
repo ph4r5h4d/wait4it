@@ -36,4 +36,4 @@ jobs:
           extra_files: LICENSE README.md
           md5sum: true
           sha256sum: true
-          goversion: 1.23
+          goversion: go.mod
