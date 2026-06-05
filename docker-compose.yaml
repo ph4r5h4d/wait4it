@@ -197,3 +197,26 @@ services:
       - build
       - oracle
 
+  influxdb:
+    image: influxdb:2-alpine
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=secret123
+      - DOCKER_INFLUXDB_INIT_ORG=myorg
+      - DOCKER_INFLUXDB_INIT_BUCKET=mybucket
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-token
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -s http://localhost:8086/health | grep -q '\"status\":\"pass\"' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  test-influxdb:
+    image: wait4it-pipeline/docker:${PIPELINE_IMAGE_VERSION:-latest}
+    command: -type=influxdb -h=influxdb -p=8086 -t=120 -token=my-super-secret-token
+    depends_on:
+      - build
+      - influxdb
+
