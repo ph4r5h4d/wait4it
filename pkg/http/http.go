@@ -3,7 +3,7 @@ package http
 import (
 	"context"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"wait4it/pkg/model"
@@ -41,9 +41,9 @@ func (h *HttpCheck) Check(ctx context.Context) (bool, bool, error) {
 	if err != nil {
 		return false, true, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return false, true, err
 	}

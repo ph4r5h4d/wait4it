@@ -33,7 +33,7 @@ func (c *KafkaConnection) Check(ctx context.Context) (bool, bool, error) {
 	if err != nil {
 		return false, false, err
 	}
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 
 	// check if the operation is successful, then we can assume this is a valid connection
 	_, err = conn.ReadPartitions()
@@ -52,7 +52,7 @@ func (c *KafkaConnection) Check(ctx context.Context) (bool, bool, error) {
 		if err != nil {
 			return false, true, err
 		}
-		defer connLeader.Close()
+		defer func() { _ = connLeader.Close() }()
 	}
 
 	return true, true, nil

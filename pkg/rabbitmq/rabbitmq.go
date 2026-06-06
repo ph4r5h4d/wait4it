@@ -72,13 +72,13 @@ func (rc *RabbitChecker) Check(ctx context.Context) (bool, bool, error) {
 	if err != nil {
 		return false, false, err
 	}
-	defer con.Close()
+	defer func() { _ = con.Close() }()
 
 	ch, err := con.Channel()
 	if err != nil {
 		return false, false, err
 	}
-	defer ch.Close()
+	defer func() { _ = ch.Close() }()
 
 	return true, false, nil
 }
