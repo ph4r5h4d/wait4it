@@ -21,6 +21,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * [ElasticSearch](https://wait4it.dev/docs/elasticsearch/)
 * [Aerospike](https://wait4it.dev/docs/aerospike/)
 * [Kafka](https://wait4it.dev/docs/kafka/)
+* [DNS](https://wait4it.dev/docs/dns/)
 
 ## Install
 You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
