@@ -5,6 +5,8 @@ BINARY_NAME  := wait4it
 GO          := go
 MAIN_PKG    := .
 BUILD_FLAGS := -ldflags="-s -w"
+GOPATH      := $(shell $(GO) env GOPATH)
+GOLINT      := $(GOPATH)/bin/golangci-lint
 
 # Test parameters
 INTEGRATION_TAG := integration
@@ -48,7 +50,7 @@ test-all: test-unit test-integration
 
 ## lint: Run golangci-lint
 lint:
-	golangci-lint run ./...
+	$(GOLINT) run ./...
 
 ## coverage: Generate test coverage report (unit tests only)
 coverage:
