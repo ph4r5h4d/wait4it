@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"io/ioutil"
+	"io"
 	"log"
 
 	"wait4it/pkg/model"
@@ -40,7 +40,7 @@ func (m *MySQLConnection) Check(ctx context.Context) (bool, bool, error) {
 		return false, true, err
 	}
 
-	err = mysql.SetLogger(log.New(ioutil.Discard, "", log.LstdFlags))
+	err = mysql.SetLogger(log.New(io.Discard, "", log.LstdFlags))
 	if err != nil {
 		return false, true, err
 	}
