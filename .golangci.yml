@@ -9,7 +9,3 @@ linters:
     - errcheck
     - govet
     - staticcheck
-
-issues:
-  exclude-dirs:
-    - docs
