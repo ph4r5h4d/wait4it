@@ -86,7 +86,7 @@ func (m *RedisConnection) checkCluster(ctx context.Context) (bool, bool, error) 
 		Addrs:    []string{m.BuildConnectionString()}, //todo: add support for multiple hosts
 		Password: m.Password,
 	})
-	defer rdb.Close()
+	defer func() { _ = rdb.Close() }()
 
 	_, err := rdb.Ping(ctx).Result()
 	if err != nil {

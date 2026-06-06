@@ -1,0 +1,13 @@
+# golangci-lint configuration
+# Ensures errcheck, govet, and staticcheck are enabled
+# (matches the stricter defaults in golangci-lint v2 used by CI)
+
+linters:
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+
+issues:
+  exclude-dirs:
+    - docs
