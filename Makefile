@@ -50,8 +50,8 @@ test-all: test-unit test-integration
 
 ## lint: Run golangci-lint
 lint:
-	@command -v golangci-lint >/dev/null 2>&1 || { echo "golangci-lint not found. Install with: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"; exit 1; }
-	golangci-lint run ./...
+	@command -v $(GOLINT) >/dev/null 2>&1 || { echo "golangci-lint not found. Install with: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"; exit 1; }
+	$(GOLINT) run ./...
 
 ## coverage: Generate test coverage report (unit tests only)
 coverage:
