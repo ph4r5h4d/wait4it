@@ -12,7 +12,7 @@ func TestCheck_SuccessfulConnection(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to listen: %v", err)
 	}
-	defer ln.Close()
+	defer func() { _ = ln.Close() }()
 
 	addr := ln.Addr().(*net.TCPAddr)
 	c := &Check{
@@ -44,7 +44,7 @@ func TestCheck_ConnectionRefused(t *testing.T) {
 	}
 	addr := ln.Addr().(*net.TCPAddr)
 	port := addr.Port
-	ln.Close()
+	_ = ln.Close()
 
 	c := &Check{
 		Addr: "127.0.0.1",
@@ -71,7 +71,7 @@ func TestCheck_ContextCancellation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to listen: %v", err)
 	}
-	defer ln.Close()
+	defer func() { _ = ln.Close() }()
 
 	addr := ln.Addr().(*net.TCPAddr)
 
@@ -101,7 +101,7 @@ func TestCheck_AcceptsConnection(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to listen: %v", err)
 	}
-	defer ln.Close()
+	defer func() { _ = ln.Close() }()
 
 	// Accept connections in background
 	go func() {
@@ -148,7 +148,7 @@ func TestCheck_CustomDialer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to listen: %v", err)
 	}
-	defer ln.Close()
+	defer func() { _ = ln.Close() }()
 
 	// Accept connections in background
 	go func() {
