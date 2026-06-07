@@ -15,8 +15,11 @@ func (tcp *Check) Validate() error {
 }
 
 func (tcp *Check) Check(ctx context.Context) (bool, bool, error) {
-	var d net.Dialer
-	c, err := d.DialContext(ctx, "tcp", fmt.Sprintf("%s:%d", tcp.Addr, tcp.Port))
+	dialer := tcp.dialer
+	if dialer == nil {
+		dialer = &net.Dialer{}
+	}
+	c, err := dialer.DialContext(ctx, "tcp", fmt.Sprintf("%s:%d", tcp.Addr, tcp.Port))
 	if err != nil {
 		return false, false, err
 	}
