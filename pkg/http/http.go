@@ -61,7 +61,10 @@ func (h *HttpCheck) Check(ctx context.Context) (bool, bool, error) {
 	return true, false, nil
 }
 
-func (h *HttpCheck) getClient() *http.Client {
+func (h *HttpCheck) getClient() HTTPClient {
+	if h.client != nil {
+		return h.client
+	}
 	if h.FollowRedirect {
 		return http.DefaultClient
 	}

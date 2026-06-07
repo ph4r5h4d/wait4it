@@ -1,6 +1,8 @@
 package tcp
 
 import (
+	"context"
+	"net"
 	"wait4it/pkg/model"
 )
 
@@ -9,9 +11,16 @@ const (
 	maxPort = 65535
 )
 
+// Dialer is an interface for dialing TCP connections.
+// This allows injection of custom dialers in tests.
+type Dialer interface {
+	DialContext(ctx context.Context, network, address string) (net.Conn, error)
+}
+
 type Check struct {
-	Addr string
-	Port int
+	Addr  string
+	Port  int
+	dialer Dialer
 }
 
 // NewChecker creates a new checker

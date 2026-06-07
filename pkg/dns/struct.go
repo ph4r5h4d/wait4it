@@ -1,14 +1,28 @@
 package dns
 
 import (
+	"context"
+	"net"
 	"wait4it/pkg/model"
 )
+
+// Resolver is an interface for DNS lookups, matching the methods we use from net.Resolver.
+type Resolver interface {
+	LookupIP(ctx context.Context, network, host string) ([]net.IP, error)
+	LookupCNAME(ctx context.Context, host string) (string, error)
+	LookupMX(ctx context.Context, host string) ([]*net.MX, error)
+	LookupTXT(ctx context.Context, host string) ([]string, error)
+	LookupSRV(ctx context.Context, service, proto, name string) (string, []*net.SRV, error)
+	LookupNS(ctx context.Context, host string) ([]*net.NS, error)
+	LookupAddr(ctx context.Context, addr string) ([]string, error)
+}
 
 type Check struct {
 	Host       string
 	RecordType string
 	Expected   string
 	Server     string
+	resolver   Resolver
 }
 
 // NewChecker creates a new DNS checker instance
