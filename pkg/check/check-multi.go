@@ -159,3 +159,66 @@ func SpecToCheckContext(spec CheckSpec, globalTimeout int) *model.CheckContext {
 
 	return cc
 }
+
+// runMulti is the pure orchestration skeleton for multi-check mode.
+// It uses the injected runner (instead of real check modules) so all
+// decision logic (names, timeouts, optional, fail_fast, warnings) can be
+// unit tested without Docker or real services.
+func runMulti(cfg *MultiConfig, runner func(*model.CheckContext) error) error {
+	if cfg == nil || len(cfg.Checks) == 0 {
+		return fmt.Errorf("no checks defined")
+	}
+
+	globalTimeout := cfg.Timeout
+	if globalTimeout <= 0 {
+		globalTimeout = 30
+	}
+
+	failFast := true
+	if cfg.FailFast != nil {
+		failFast = *cfg.FailFast
+	}
+
+	var firstRequiredErr error
+	var optWarnings []string
+
+	for i, spec := range cfg.Checks {
+		name := spec.Name
+		if name == "" {
+			name = fmt.Sprintf("check-%d", i+1)
+		}
+		typ := spec.Type
+
+		cc := SpecToCheckContext(spec, globalTimeout)
+
+		err := runner(cc)
+		if err != nil {
+			if spec.Optional {
+				optWarnings = append(optWarnings, fmt.Sprintf(`Warning: optional check "%s" (%s) failed: %v`, name, typ, err))
+				continue
+			}
+			if firstRequiredErr == nil {
+				firstRequiredErr = fmt.Errorf(`check "%s" (%s) failed: %w`, name, typ, err)
+			}
+			if failFast {
+				return firstRequiredErr
+			}
+			// !failFast: continue running remaining checks
+		}
+	}
+
+	if firstRequiredErr != nil {
+		return firstRequiredErr
+	}
+
+	// overall success (possibly with optional warnings)
+	for _, w := range optWarnings {
+		fmt.Println(w)
+	}
+	if len(optWarnings) > 0 {
+		fmt.Printf("Success with %d optional warning(s)!\n", len(optWarnings))
+	} else {
+		fmt.Println("Success!")
+	}
+	return nil
+}

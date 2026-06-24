@@ -1,9 +1,12 @@
 package check
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"wait4it/pkg/model"
 )
 
 func TestLoadConfig_FromInlineContent(t *testing.T) {
@@ -300,3 +303,126 @@ func TestSpecToCheckContext_TypeSpecificFields(t *testing.T) {
 		t.Errorf("influx conf not mapped")
 	}
 }
+
+// --- runMulti skeleton tests (pure, injectable runner) ---
+
+func TestRunMulti_NameSynthesis(t *testing.T) {
+	cfg := &MultiConfig{
+		Checks: []CheckSpec{
+			{Type: "tcp", Host: "h", Port: 1},
+			{Name: "custom", Type: "redis", Host: "h", Port: 2},
+		},
+	}
+	calls := []string{}
+	err := runMulti(cfg, func(cc *model.CheckContext) error {
+		calls = append(calls, cc.Config.CheckType)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("unexpected err: %v", err)
+	}
+	if len(calls) != 2 {
+		t.Fatalf("got %d calls", len(calls))
+	}
+}
+
+func TestRunMulti_AllSuccess(t *testing.T) {
+	cfg := &MultiConfig{
+		Checks: []CheckSpec{
+			{Type: "tcp", Host: "h", Port: 1},
+		},
+	}
+	err := runMulti(cfg, func(*model.CheckContext) error { return nil })
+	if err != nil {
+		t.Errorf("expected nil, got %v", err)
+	}
+}
+
+func TestRunMulti_OptionalFails_OverallSuccess(t *testing.T) {
+	cfg := &MultiConfig{
+		Checks: []CheckSpec{
+			{Type: "tcp", Host: "h", Port: 1},
+			{Type: "redis", Host: "h", Port: 2, Optional: true},
+		},
+	}
+	callCount := 0
+	err := runMulti(cfg, func(cc *model.CheckContext) error {
+		callCount++
+		if cc.Config.CheckType == "redis" {
+			return fmt.Errorf("redis down")
+		}
+		return nil
+	})
+	if err != nil {
+		t.Errorf("expected success despite optional fail, got %v", err)
+	}
+	if callCount != 2 {
+		t.Errorf("expected 2 calls, got %d", callCount)
+	}
+}
+
+func TestRunMulti_RequiredFails_FailFast(t *testing.T) {
+	cfg := &MultiConfig{
+		Checks: []CheckSpec{
+			{Type: "tcp", Host: "h", Port: 1},
+			{Type: "redis", Host: "h", Port: 2}, // required
+		},
+	}
+	err := runMulti(cfg, func(cc *model.CheckContext) error {
+		if cc.Config.CheckType == "redis" {
+			return fmt.Errorf("redis failed")
+		}
+		return nil
+	})
+	if err == nil {
+		t.Fatal("expected error")
+	}
+	if !contains(err.Error(), "redis") {
+		t.Errorf("error should mention redis: %v", err)
+	}
+}
+
+func TestRunMulti_RequiredFails_NoFailFast_Continues(t *testing.T) {
+	cfg := &MultiConfig{
+		FailFast: boolPtr(false),
+		Checks: []CheckSpec{
+			{Type: "tcp", Host: "h", Port: 1},     // will fail
+			{Type: "redis", Host: "h", Port: 2}, // required, should still run
+		},
+	}
+	ran := []string{}
+	err := runMulti(cfg, func(cc *model.CheckContext) error {
+		ran = append(ran, cc.Config.CheckType)
+		if cc.Config.CheckType == "tcp" {
+			return fmt.Errorf("tcp failed")
+		}
+		return nil
+	})
+	if err == nil {
+		t.Fatal("expected error from required fail")
+	}
+	if len(ran) != 2 {
+		t.Errorf("expected both to run, got %v", ran)
+	}
+}
+
+func TestRunMulti_Mixed(t *testing.T) {
+	cfg := &MultiConfig{
+		Checks: []CheckSpec{
+			{Name: "db", Type: "mysql", Host: "h", Port: 1},
+			{Type: "redis", Host: "h", Port: 2, Optional: true},
+			{Type: "kafka", Host: "h", Port: 3},
+		},
+	}
+	err := runMulti(cfg, func(cc *model.CheckContext) error {
+		if cc.Config.CheckType == "redis" {
+			return fmt.Errorf("redis optional fail")
+		}
+		return nil
+	})
+	if err != nil {
+		t.Errorf("expected overall success, got %v", err)
+	}
+}
+
+func boolPtr(b bool) *bool { return &b }
