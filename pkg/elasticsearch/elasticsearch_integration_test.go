@@ -24,7 +24,7 @@ func TestElasticSearchIntegration_Check(t *testing.T) {
 			"xpack.security.enabled": "false",
 			"ES_JAVA_OPTS":           "-Xms512m -Xmx512m",
 		},
-		WaitingFor: wait.ForListeningPort("9200/tcp").WithStartupTimeout(120*time.Second),
+		WaitingFor: wait.ForHTTP("/").WithPort("9200/tcp").WithStartupTimeout(120 * time.Second),
 	}
 
 	esContainer, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
@@ -35,11 +35,6 @@ func TestElasticSearchIntegration_Check(t *testing.T) {
 		t.Fatalf("failed to start Elasticsearch container: %v", err)
 	}
 	defer func() { _ = esContainer.Terminate(ctx) }()
-
-	host, err := esContainer.Host(ctx)
-	if err != nil {
-		t.Fatalf("failed to get container host: %v", err)
-	}
 
 	port, err := esContainer.MappedPort(ctx, "9200/tcp")
 	if err != nil {
@@ -59,7 +54,7 @@ func TestElasticSearchIntegration_Check(t *testing.T) {
 	}{
 		{
 			name:   "successful connection",
-			host:   "http://" + host,
+			host:   "http://127.0.0.1",
 			port:   portInt,
 			wantOk: true,
 		},
