@@ -6,6 +6,7 @@ A simple go application to test whether a port is ready to accept a connection o
 MySQL, PostgreSQL, MongoDB or Redis server is ready or not, Also you can do Http call and check 
 the response code and text in response.  
 It also supports **timeout** so it can wait for a particular time and then fail.  
+Multiple checks can be defined in a YAML file (see [Multi-Check docs](https://wait4it.dev/docs/multi-check/)).
 
 ## Supported Services
 * [TCP port](https://wait4it.dev/docs/tcp/)
@@ -22,6 +23,7 @@ It also supports **timeout** so it can wait for a particular time and then fail.
 * [Aerospike](https://wait4it.dev/docs/aerospike/)
 * [Kafka](https://wait4it.dev/docs/kafka/)
 * [DNS](https://wait4it.dev/docs/dns/)
+* [Multi-Check YAML](https://wait4it.dev/docs/multi-check/)
 
 ## Install
 You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
