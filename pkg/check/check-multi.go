@@ -1,6 +1,7 @@
 package check
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -189,6 +190,15 @@ func runMulti(cfg *MultiConfig, runner func(*model.CheckContext) error) error {
 		}
 		typ := spec.Type
 
+		display := name
+		if typ != "" {
+			display += fmt.Sprintf(" (%s)", typ)
+		}
+		if spec.Optional {
+			display += ", optional"
+		}
+		fmt.Printf("Waiting for %s...\n", display)
+
 		cc := SpecToCheckContext(spec, globalTimeout)
 
 		err := runner(cc)
@@ -221,4 +231,17 @@ func runMulti(cfg *MultiConfig, runner func(*model.CheckContext) error) error {
 		fmt.Println("Success!")
 	}
 	return nil
+}
+
+// RunMultiChecks executes the checks defined in the MultiConfig in order,
+// using the real check implementations (findCheckModule + ticker).
+// It reuses the decision logic from runMulti (for optional, fail_fast, warnings, etc.)
+// and the core wait machinery.
+func RunMultiChecks(ctx context.Context, cfg *MultiConfig) error {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return runMulti(cfg, func(cc *model.CheckContext) error {
+		return RunCheck(ctx, cc)
+	})
 }

@@ -77,8 +77,19 @@ func main() {
 	flag.Parse()
 
 	configYAML := defaultEnv("W4IT_CONFIG_YAML", "")
-	_ = configPath  // used in later batches for multi-check mode (Batch 1 only stores values)
-	_ = configYAML
+	if configPath != "" || configYAML != "" {
+		multiCfg, err := check.LoadConfig(configPath, configYAML)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if !noBanner {
+			banner.Banner()
+		}
+		if err := check.RunMultiChecks(context.Background(), multiCfg); err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
 
 	// We don't want to show password in help message
 	if cfg.PasswordValue == "" {

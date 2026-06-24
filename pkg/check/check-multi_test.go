@@ -1,6 +1,7 @@
 package check
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -426,3 +427,16 @@ func TestRunMulti_Mixed(t *testing.T) {
 }
 
 func boolPtr(b bool) *bool { return &b }
+
+// Light test for real RunMultiChecks path (fails fast at findCheckModule, no long wait).
+func TestRunMultiChecks_InvalidType(t *testing.T) {
+	cfg := &MultiConfig{
+		Checks: []CheckSpec{
+			{Type: "unknown", Host: "localhost", Port: 1234},
+		},
+	}
+	err := RunMultiChecks(context.Background(), cfg)
+	if err == nil {
+		t.Error("expected error for unknown type")
+	}
+}
