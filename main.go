@@ -48,6 +48,7 @@ func defaultEnvBool(env string, def bool) bool {
 func main() {
 	cfg := &model.CheckContext{}
 	var noBanner bool
+	var configPath string
 	flag.StringVar(&cfg.Config.CheckType, "type", defaultEnv("W4IT_TYPE", "tcp"), "define the type of check")
 	flag.IntVar(&cfg.Config.Timeout, "t", defaultEnvInt("W4IT_TIMEOUT", 30), "Timeout, amount of time wait4it waits for the port in seconds")
 	flag.StringVar(&cfg.Host, "h", defaultEnv("W4IT_HOST", "127.0.0.1"), "IP of the host you want to test against")
@@ -70,9 +71,15 @@ func main() {
 	flag.StringVar(&cfg.InfluxConf.Token, "token", defaultEnv("W4IT_INFLUX_TOKEN", ""), "InfluxDB API token")
 	flag.StringVar(&cfg.InfluxConf.Org, "org", defaultEnv("W4IT_INFLUX_ORG", ""), "InfluxDB organization name")
 	flag.StringVar(&cfg.InfluxConf.Bucket, "bucket", defaultEnv("W4IT_INFLUX_BUCKET", ""), "InfluxDB bucket name")
+	flag.StringVar(&configPath, "config", defaultEnv("W4IT_CONFIG", ""), "Path to YAML config file with multiple checks (see docs). When set, check-specific flags (-type, -h, -p, etc.) are ignored.")
 	flag.BoolVar(&noBanner, "no-banner", defaultEnvBool("W4IT_NO_BANNER", false), "Disable the startup banner")
 
 	flag.Parse()
+
+	configYAML := defaultEnv("W4IT_CONFIG_YAML", "")
+	_ = configPath  // used in later batches for multi-check mode (Batch 1 only stores values)
+	_ = configYAML
+
 	// We don't want to show password in help message
 	if cfg.PasswordValue == "" {
 		defaultEnv("W4IT_PASSWORD", "")
