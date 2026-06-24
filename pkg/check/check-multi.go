@@ -242,6 +242,9 @@ func RunMultiChecks(ctx context.Context, cfg *MultiConfig) error {
 		ctx = context.Background()
 	}
 	return runMulti(cfg, func(cc *model.CheckContext) error {
+		if err := cc.Validate(); err != nil {
+			return fmt.Errorf("password file validation failed: %w", err)
+		}
 		return RunCheck(ctx, cc)
 	})
 }

@@ -440,3 +440,54 @@ func TestRunMultiChecks_InvalidType(t *testing.T) {
 		t.Error("expected error for unknown type")
 	}
 }
+
+func TestRunMultiChecks_PasswordFileValidation(t *testing.T) {
+	dir := t.TempDir()
+	goodPF := filepath.Join(dir, "good.txt")
+	if err := os.WriteFile(goodPF, []byte("secret"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Good pw file -> validate passes (will fail later on actual check, but not on pw)
+	cfgGood := &MultiConfig{
+		Checks: []CheckSpec{
+			{Type: "tcp", Host: "h", Port: 1, PasswordFile: goodPF},
+		},
+	}
+	err := RunMultiChecks(context.Background(), cfgGood)
+	if err == nil {
+		t.Fatal("expected error (from tcp check)")
+	}
+	if contains(err.Error(), "password file validation") {
+		t.Errorf("unexpected pw validation error for good file: %v", err)
+	}
+
+	// Bad pw file -> should error with validation message (even for required)
+	cfgBad := &MultiConfig{
+		Checks: []CheckSpec{
+			{Type: "tcp", Host: "h", Port: 1, PasswordFile: "/nonexistent/pf.txt"},
+		},
+	}
+	err = RunMultiChecks(context.Background(), cfgBad)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+	if !contains(err.Error(), "password file validation failed") {
+		t.Errorf("expected pw validation error, got: %v", err)
+	}
+}
+
+func TestRunMultiChecks_PerCheckTimeoutFallback(t *testing.T) {
+	cfg := &MultiConfig{
+		Timeout: 5,
+		Checks: []CheckSpec{
+			{Type: "tcp", Host: "h", Port: 1, Timeout: 0}, // should fallback
+		},
+	}
+	// We can't easily assert the timeout value without mocking deeper,
+	// but at least it shouldn't panic and should use fallback.
+	err := RunMultiChecks(context.Background(), cfg)
+	if err == nil {
+		t.Fatal("expected failure")
+	}
+}
