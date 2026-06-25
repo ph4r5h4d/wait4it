@@ -1,4 +1,5 @@
-FROM golang:1.25-alpine as builder
+FROM --platform=$BUILDPLATFORM golang:1.25-alpine AS builder
+ARG TARGETOS TARGETARCH TARGETVARIANT
 RUN apk update && apk add --no-cache gcc git
 
 ENV USER=appuser
@@ -16,7 +17,7 @@ WORKDIR $GOPATH/src/github.com/ph4r5h4d/wait4it
 COPY . .
 RUN go mod download
 RUN go mod verify
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/wait4it
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH GOARM=${TARGETVARIANT#v} go build -ldflags="-w -s" -o /go/bin/wait4it
 RUN chown appuser:appuser /go/bin/wait4it
 
 FROM scratch
