@@ -11,78 +11,79 @@ permissions:
   packages: write
 
 jobs:
-  build-scratch:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - variant: scratch
+            dockerfile: ./Dockerfile
+            suffix: -scratch
+            tag_latest: false
+          - variant: alpine
+            dockerfile: ./Dockerfile.alpine
+            suffix: -alpine
+            tag_latest: true
     steps:
     - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-    - name: Build docker image
-      run: |
-        # Strip git ref prefix from version
-        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-        docker build . --file Dockerfile --label "org.opencontainers.image.revision=$VERSION" --tag wait4it
-    - name: Logging into docker hub
-      run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
-    - name: Log in to GHCR
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io --username ${{ github.actor }} --password-stdin
-    - name: Tag and push
-      run: |
-        IMAGE=ph4r5h4d/wait4it
-        GHCR_IMAGE=ghcr.io/ph4r5h4d/wait4it
 
+    - name: Extract version
+      id: version
+      run: |
         # Strip git ref prefix from version
         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
         # Strip "v" prefix from tag name
-        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo "$VERSION" | sed -e 's/^v//')
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-        echo $IMAGE
-        echo $VERSION
-
-        docker tag wait4it $IMAGE:$VERSION-scratch
-        docker tag wait4it $IMAGE:scratch
-        docker tag wait4it $GHCR_IMAGE:$VERSION-scratch
-        docker tag wait4it $GHCR_IMAGE:scratch
-
-        docker push $IMAGE:$VERSION-scratch
-        docker push $IMAGE:scratch
-        docker push $GHCR_IMAGE:$VERSION-scratch
-        docker push $GHCR_IMAGE:scratch
-
-  build-alpine:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-    - name: Build docker image
+    - name: Prepare tags
+      id: meta
       run: |
-        # Strip git ref prefix from version
-        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-        docker build . --file Dockerfile.alpine --label "org.opencontainers.image.revision=$VERSION" --tag wait4it
-    - name: Logging into docker hub
-      run: echo "${{ secrets.DOCKERHUBPWD }}" | docker login --username ph4r5h4d --password-stdin
+        VERSION="${{ steps.version.outputs.version }}"
+        SUFFIX="${{ matrix.suffix }}"
+        IMAGE="ph4r5h4d/wait4it"
+        GHCR_IMAGE="ghcr.io/ph4r5h4d/wait4it"
+
+        TAGS="${IMAGE}:${VERSION}${SUFFIX}"
+        TAGS="${TAGS},${IMAGE}:${{ matrix.variant }}"
+        TAGS="${TAGS},${GHCR_IMAGE}:${VERSION}${SUFFIX}"
+        TAGS="${TAGS},${GHCR_IMAGE}:${{ matrix.variant }}"
+
+        if [ "${{ matrix.tag_latest }}" = "true" ]; then
+          TAGS="${TAGS},${IMAGE}:latest"
+          TAGS="${TAGS},${GHCR_IMAGE}:latest"
+        fi
+
+        echo "tags=$TAGS" >> "$GITHUB_OUTPUT"
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@06116385d9baf250c9f4dcb4858b16962ea869c3 # v4.1.0
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
+      with:
+        username: ph4r5h4d
+        password: ${{ secrets.DOCKERHUBPWD }}
+
     - name: Log in to GHCR
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io --username ${{ github.actor }} --password-stdin
-    - name: Tag and push
-      run: |
-        IMAGE=ph4r5h4d/wait4it
-        GHCR_IMAGE=ghcr.io/ph4r5h4d/wait4it
+      uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-        # Strip git ref prefix from version
-        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-        # Strip "v" prefix from tag name
-        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-
-        echo $IMAGE
-        echo $VERSION
-
-        docker tag wait4it $IMAGE:$VERSION-alpine
-        docker tag wait4it $IMAGE:alpine
-        docker tag wait4it $IMAGE:latest
-        docker tag wait4it $GHCR_IMAGE:$VERSION-alpine
-        docker tag wait4it $GHCR_IMAGE:alpine
-        docker tag wait4it $GHCR_IMAGE:latest
-
-        docker push $IMAGE:$VERSION-alpine
-        docker push $IMAGE:alpine
-        docker push $IMAGE:latest
-        docker push $GHCR_IMAGE:$VERSION-alpine
-        docker push $GHCR_IMAGE:alpine
-        docker push $GHCR_IMAGE:latest
+    - name: Build and push (${{ matrix.variant }})
+      uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+      with:
+        context: .
+        file: ${{ matrix.dockerfile }}
+        platforms: linux/amd64,linux/arm64,linux/arm/v7
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: org.opencontainers.image.revision=${{ steps.version.outputs.version }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
