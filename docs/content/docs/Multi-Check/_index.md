@@ -103,7 +103,7 @@ See the individual service documentation pages for the exact meaning and validat
 
 ## Execution Behavior
 
-- Checks run sequentially in the order defined.
+- Checks run **sequentially** (not concurrently) in the order defined.
 - Each check uses its own timeout (per-check > global > 30s default).
 - **Required checks** (`optional: false` or omitted): Failure causes non-zero exit.
 - **Optional checks** (`optional: true`): Failure prints a warning and continues. Overall exit is 0 if all required checks succeed.

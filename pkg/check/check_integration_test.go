@@ -34,7 +34,10 @@ func TestMultiCheckIntegration_RequiredBothSucceed(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to get mysql port: %v", err)
 	}
-	mysqlPortInt, _ := strconv.Atoi(mysqlPort.Port())
+	mysqlPortInt, err := strconv.Atoi(mysqlPort.Port())
+	if err != nil {
+		t.Fatalf("failed to parse mysql port: %v", err)
+	}
 
 	redisContainer, err := tcredis.Run(ctx, "redis:7-alpine")
 	if err != nil {
@@ -50,7 +53,10 @@ func TestMultiCheckIntegration_RequiredBothSucceed(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to get redis port: %v", err)
 	}
-	redisPortInt, _ := strconv.Atoi(redisPort.Port())
+	redisPortInt, err := strconv.Atoi(redisPort.Port())
+	if err != nil {
+		t.Fatalf("failed to parse redis port: %v", err)
+	}
 
 	yamlContent := fmt.Sprintf(`version: "1"
 timeout: 30
@@ -101,7 +107,10 @@ func TestMultiCheckIntegration_RequiredPlusOptionalBad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to get mysql port: %v", err)
 	}
-	mysqlPortInt, _ := strconv.Atoi(mysqlPort.Port())
+	mysqlPortInt, err := strconv.Atoi(mysqlPort.Port())
+	if err != nil {
+		t.Fatalf("failed to parse mysql port: %v", err)
+	}
 
 	// Bad redis: wrong port + short timeout per check
 	yamlContent := fmt.Sprintf(`version: "1"
@@ -152,7 +161,10 @@ func TestMultiCheckIntegration_FailFastTrueStops(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to get redis port: %v", err)
 	}
-	redisPortInt, _ := strconv.Atoi(redisPort.Port())
+	redisPortInt, err := strconv.Atoi(redisPort.Port())
+	if err != nil {
+		t.Fatalf("failed to parse redis port: %v", err)
+	}
 
 	yamlContent := fmt.Sprintf(`version: "1"
 timeout: 5
@@ -200,7 +212,10 @@ func TestMultiCheckIntegration_FailFastFalseContinues(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to get redis port: %v", err)
 	}
-	redisPortInt, _ := strconv.Atoi(redisPort.Port())
+	redisPortInt, err := strconv.Atoi(redisPort.Port())
+	if err != nil {
+		t.Fatalf("failed to parse redis port: %v", err)
+	}
 
 	yamlContent := fmt.Sprintf(`version: "1"
 timeout: 5

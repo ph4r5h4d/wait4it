@@ -120,6 +120,12 @@ checks:
 		{"empty checks", "", `version: "1"
 checks: []
 `, "no checks defined"},
+		{"missing type", "", `version: "1"
+checks:
+- name: foo
+  host: localhost
+  port: 1234
+`, "missing required field \"type\""},
 	}
 
 	for _, tt := range tests {

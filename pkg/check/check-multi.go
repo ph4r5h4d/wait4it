@@ -92,6 +92,15 @@ func validateMultiConfig(cfg *MultiConfig) error {
 	if len(cfg.Checks) == 0 {
 		return fmt.Errorf("no checks defined in config")
 	}
+	for i, spec := range cfg.Checks {
+		if spec.Type == "" {
+			name := spec.Name
+			if name == "" {
+				name = fmt.Sprintf("check-%d", i+1)
+			}
+			return fmt.Errorf("check at index %d (name %q): missing required field \"type\"", i, name)
+		}
+	}
 	return nil
 }
 
@@ -162,6 +171,7 @@ func SpecToCheckContext(spec CheckSpec, globalTimeout int) *model.CheckContext {
 }
 
 // runMulti is the pure orchestration skeleton for multi-check mode.
+// Checks are executed sequentially in the order defined (not concurrently).
 // It uses the injected runner (instead of real check modules) so all
 // decision logic (names, timeouts, optional, fail_fast, warnings) can be
 // unit tested without Docker or real services.
@@ -233,8 +243,9 @@ func runMulti(cfg *MultiConfig, runner func(*model.CheckContext) error) error {
 	return nil
 }
 
-// RunMultiChecks executes the checks defined in the MultiConfig in order,
-// using the real check implementations (findCheckModule + ticker).
+// RunMultiChecks executes the checks defined in the MultiConfig sequentially
+// (in definition order, not concurrently), using the real check implementations
+// (findCheckModule + ticker).
 // It reuses the decision logic from runMulti (for optional, fail_fast, warnings, etc.)
 // and the core wait machinery.
 func RunMultiChecks(ctx context.Context, cfg *MultiConfig) error {
