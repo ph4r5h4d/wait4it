@@ -5,6 +5,9 @@
 *.so
 *.dylib
 
+# wait4it build binary (from `make build`)
+wait4it
+
 # Test binary, built with `go test -c`
 *.test
 

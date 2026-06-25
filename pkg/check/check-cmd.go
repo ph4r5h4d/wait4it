@@ -2,6 +2,7 @@ package check
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/pkg/errors"
@@ -10,6 +11,14 @@ import (
 )
 
 func RunCheck(ctx context.Context, c *model.CheckContext) error {
+	return runWithProgress(ctx, c, "Wait4it...")
+}
+
+// runWithProgress is a tiny internal helper that runs the check wait loop
+// after printing the given initial progress string. This allows multi-check
+// mode to drive the loop with a custom "Waiting for NAME...\nWait4it..." prefix
+// while keeping the exact single-check behavior and output unchanged.
+func runWithProgress(ctx context.Context, c *model.CheckContext, initial string) error {
 	cx, err := findCheckModule(c)
 	if err != nil {
 		return errors.Wrap(err, "can not find the module")
@@ -20,10 +29,12 @@ func RunCheck(ctx context.Context, c *model.CheckContext) error {
 
 	progress := c.Progress
 	if progress == nil {
-		progress = func(s string) {}
+		progress = func(s string) { fmt.Print(s) }
 	}
 
-	progress("Wait4it...")
+	if initial != "" {
+		progress(initial)
+	}
 
 	if err := ticker(newCtx, cx, progress); err != nil {
 		return errors.Wrap(err, "check failed")
