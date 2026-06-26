@@ -16,7 +16,7 @@ COVERAGE_OUT    := $(COVERAGE_DIR)/coverage.out
 # Docker parameters
 DOCKER_IMAGE := wait4it
 
-.PHONY: all build run clean test test-unit test-integration test-all lint coverage docker-build docker-build-alpine help
+.PHONY: all build run clean test test-unit test-integration test-all lint coverage docker-build docker-build-alpine docker-build-multiarch docker-build-multiarch-alpine help
 
 ## all: Build the binary (default target)
 all: build
@@ -60,13 +60,21 @@ coverage:
 	$(GO) tool cover -html=$(COVERAGE_OUT) -o $(COVERAGE_DIR)/coverage.html
 	@echo "Coverage report: $(COVERAGE_DIR)/coverage.html"
 
-## docker-build: Build Docker image
+## docker-build: Build Docker image (native arch, load locally)
 docker-build:
-	docker build -t $(DOCKER_IMAGE) .
+	docker buildx build --load -t $(DOCKER_IMAGE) .
 
-## docker-build-alpine: Build Alpine Docker image
+## docker-build-alpine: Build Alpine Docker image (native arch, load locally)
 docker-build-alpine:
-	docker build -f Dockerfile.alpine -t $(DOCKER_IMAGE):alpine .
+	docker buildx build --load -f Dockerfile.alpine -t $(DOCKER_IMAGE):alpine .
+
+## docker-build-multiarch: Build multi-arch Docker images (requires --push to a registry)
+docker-build-multiarch:
+	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t $(DOCKER_IMAGE) .
+
+## docker-build-multiarch-alpine: Build multi-arch Alpine Docker images (requires --push to a registry)
+docker-build-multiarch-alpine:
+	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -f Dockerfile.alpine -t $(DOCKER_IMAGE):alpine .
 
 ## help: Show this help message
 help:

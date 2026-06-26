@@ -99,8 +99,10 @@ Common targets:
 | `make test` | Alias for `test-unit` |
 | `make lint` | Run `golangci-lint` |
 | `make coverage` | Generate HTML coverage report in `coverage/` |
-| `make docker-build` | Build the default (scratch) Docker image |
-| `make docker-build-alpine` | Build the Alpine Docker image |
+| `make docker-build` | Build the default (scratch) Docker image (native arch, load locally) |
+| `make docker-build-alpine` | Build the Alpine Docker image (native arch, load locally) |
+| `make docker-build-multiarch` | Build multi-arch (amd64, arm64, arm/v7) scratch image (requires `--push`) |
+| `make docker-build-multiarch-alpine` | Build multi-arch Alpine image (requires `--push`) |
 | `make clean` | Remove the binary and coverage artifacts |
 | `make help` | List all targets |
 
@@ -136,8 +138,15 @@ here, rather than working around it with one-off commands.
   `lint`, `unit-test`, and `integration-test` jobs. Local `make` targets must match
   these jobs.
 - **Docker Release** (`.github/workflows/main.yml`): triggered by `v*` tags; builds and
-  publishes scratch and alpine images to Docker Hub and GHCR.
-- Keep workflow action versions pinned (the repo uses SHA-pinned actions).
+  publishes **multi-arch** (linux/amd64, linux/arm64, linux/arm/v7) scratch and alpine
+  images to Docker Hub and GHCR. Uses `docker/setup-qemu-action`,
+  `docker/setup-buildx-action`, `docker/login-action`, and `docker/build-push-action`
+  with a matrix strategy. The Go builder stage runs natively on the runner
+  (`--platform=$BUILDPLATFORM`) and cross-compiles to the target arch via
+  `TARGETOS`/`TARGETARCH`/`TARGETVARIANT` build args (no QEMU emulation for the Go
+  compiler).
+- Keep workflow action versions pinned (the repo uses **full 40-character long SHA**
+  pinned actions with version comments, e.g. `actions/checkout@<sha> # v6`).
 
 ## Dependencies & tooling
 
