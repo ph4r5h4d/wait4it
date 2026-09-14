@@ -7,7 +7,7 @@ require (
 	github.com/bradfitz/gomemcache v0.0.0-20250403215159-8d39553ac7cf
 	github.com/elastic/go-elasticsearch/v8 v8.19.7
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/go-sql-driver/mysql v1.10.0
+	github.com/go-sql-driver/mysql v1.10.1
 	github.com/influxdata/influxdb-client-go/v2 v2.14.0
 	github.com/lib/pq v1.12.3
 	github.com/pkg/errors v0.9.1
