@@ -7,19 +7,19 @@ require (
 	github.com/bradfitz/gomemcache v0.0.0-20250403215159-8d39553ac7cf
 	github.com/elastic/go-elasticsearch/v8 v8.19.7
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/go-sql-driver/mysql v1.10.0
+	github.com/go-sql-driver/mysql v1.10.1
 	github.com/influxdata/influxdb-client-go/v2 v2.14.0
 	github.com/lib/pq v1.12.3
 	github.com/pkg/errors v0.9.1
-	github.com/rabbitmq/amqp091-go v1.13.0
+	github.com/rabbitmq/amqp091-go v1.15.0
 	github.com/segmentio/kafka-go v0.4.51
 	github.com/sijms/go-ora/v2 v2.9.0
 	github.com/testcontainers/testcontainers-go v0.44.0
 	github.com/testcontainers/testcontainers-go/modules/mongodb v0.44.0
-	github.com/testcontainers/testcontainers-go/modules/mysql v0.43.0
+	github.com/testcontainers/testcontainers-go/modules/mysql v0.44.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.44.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.44.0
-	go.mongodb.org/mongo-driver/v2 v2.8.0
+	go.mongodb.org/mongo-driver/v2 v2.9.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -49,7 +49,7 @@ require (
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/influxdata/line-protocol v0.0.0-20200327222509-2487e7298839 // indirect
-	github.com/klauspost/compress v1.18.7 // indirect
+	github.com/klauspost/compress v1.19.2 // indirect
 	github.com/lufia/plan9stats v0.0.0-20260330125221-c963978e514e // indirect
 	github.com/magiconair/properties v1.8.10 // indirect
 	github.com/mdelapenya/tlscert v0.2.0 // indirect
