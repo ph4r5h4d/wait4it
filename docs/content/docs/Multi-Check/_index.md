@@ -97,6 +97,9 @@ checks:                   # Required. At least one check.
     influx_token: "string"
     influx_org: "string"
     influx_bucket: "string"
+
+    # NATS-specific
+    nats_token: "string"
 ```
 
 See the individual service documentation pages for the exact meaning and validation rules of each field.

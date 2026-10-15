@@ -19,6 +19,7 @@ type CheckContext struct {
 	KafkaConf     KafkaConf
 	DNSConf       DNSConf
 	InfluxConf    InfluxConf
+	NatsConf      NatsConf
 
 	Progress func(string)
 }
@@ -72,4 +73,8 @@ type HttpSpecificConf struct {
 type KafkaConf struct {
 	ConnectionType              string
 	ConnectToLeaderViaNonLeader bool
+}
+
+type NatsConf struct {
+	Token string
 }

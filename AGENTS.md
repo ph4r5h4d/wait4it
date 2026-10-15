@@ -6,7 +6,7 @@ Guidance for AI agents (and human contributors) working on the **wait4it** codeb
 
 wait4it is a Go command-line tool that waits until a network port or a backend service
 (TCP, MySQL, PostgreSQL, MongoDB, Redis, HTTP, Oracle, InfluxDB, RabbitMQ, Memcached,
-Elasticsearch, Aerospike, Kafka, DNS) is ready to accept connections/responses, with an
+Elasticsearch, Aerospike, Kafka, NATS, DNS) is ready to accept connections/responses, with an
 optional timeout. See [README.md](./README.md) and the published docs at
 https://wait4it.dev.
 
@@ -22,7 +22,7 @@ main.go                      # CLI entry point (flags + env parsing)
 internal/banner/             # startup banner
 pkg/check/                   # check command orchestration + module registry
 pkg/model/                   # shared CheckContext struct and Check interface
-pkg/<service>/               # one package per supported check (tcp, mysql, postgresql, redis, mongodb, http, oracle, influxdb, rabbitmq, memcached, elasticsearch, aerospike, kafka, dns)
+pkg/<service>/               # one package per supported check (tcp, mysql, postgresql, redis, mongodb, http, oracle, influxdb, rabbitmq, memcached, elasticsearch, aerospike, kafka, nats, dns)
 docs/                        # Hugo-based documentation site
 Dockerfile / Dockerfile.alpine
 Makefile                     # all common operations are defined here

@@ -22,6 +22,7 @@ Multiple checks can be defined in a YAML file (see [Multi-Check docs](https://wa
 * [ElasticSearch](https://wait4it.dev/docs/elasticsearch/)
 * [Aerospike](https://wait4it.dev/docs/aerospike/)
 * [Kafka](https://wait4it.dev/docs/kafka/)
+* [NATS](https://wait4it.dev/docs/nats/)
 * [DNS](https://wait4it.dev/docs/dns/)
 * [Multi-Check YAML](https://wait4it.dev/docs/multi-check/)
 
