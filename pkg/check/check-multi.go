@@ -56,6 +56,9 @@ type CheckSpec struct {
 	InfluxToken  string `yaml:"influx_token"`
 	InfluxOrg    string `yaml:"influx_org"`
 	InfluxBucket string `yaml:"influx_bucket"`
+
+	// NATS specific
+	NatsToken string `yaml:"nats_token"`
 }
 
 // LoadConfig loads a MultiConfig.
@@ -149,6 +152,9 @@ func SpecToCheckContext(spec CheckSpec, globalTimeout int) *model.CheckContext {
 			Token:  spec.InfluxToken,
 			Org:    spec.InfluxOrg,
 			Bucket: spec.InfluxBucket,
+		},
+		NatsConf: model.NatsConf{
+			Token: spec.NatsToken,
 		},
 	}
 

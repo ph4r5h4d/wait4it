@@ -10,6 +10,7 @@ import (
 	"wait4it/pkg/memcached"
 	"wait4it/pkg/model"
 	"wait4it/pkg/mongodb"
+	"wait4it/pkg/nats"
 	"wait4it/pkg/mysql"
 	"wait4it/pkg/oracle"
 	"wait4it/pkg/postgresql"
@@ -32,5 +33,6 @@ var cm = map[string]func(c *model.CheckContext) (model.CheckInterface, error){
 	"elasticsearch": elasticsearch.NewChecker,
 	"aerospike":     aerospike.NewChecker,
 	"kafka":         kafka.NewChecker,
+	"nats":          nats.NewChecker,
 	"dns":           dns.NewChecker,
 }

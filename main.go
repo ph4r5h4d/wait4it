@@ -69,6 +69,7 @@ func main() {
 	flag.StringVar(&cfg.DNSConf.Server, "dns-server", defaultEnv("W4IT_DNS_SERVER", ""), "Custom DNS server to query (e.g., 8.8.8.8:53)")
 
 	flag.StringVar(&cfg.InfluxConf.Token, "token", defaultEnv("W4IT_INFLUX_TOKEN", ""), "InfluxDB API token")
+	flag.StringVar(&cfg.NatsConf.Token, "nats-token", defaultEnv("W4IT_NATS_TOKEN", ""), "NATS authentication token")
 	flag.StringVar(&cfg.InfluxConf.Org, "org", defaultEnv("W4IT_INFLUX_ORG", ""), "InfluxDB organization name")
 	flag.StringVar(&cfg.InfluxConf.Bucket, "bucket", defaultEnv("W4IT_INFLUX_BUCKET", ""), "InfluxDB bucket name")
 	flag.StringVar(&configPath, "config", defaultEnv("W4IT_CONFIG", ""), "Path to YAML config file with multiple checks (see docs). When set, check-specific flags (-type, -h, -p, etc.) are ignored.")

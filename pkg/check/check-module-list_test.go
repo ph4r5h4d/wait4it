@@ -21,6 +21,7 @@ func TestCheckModuleList_AllTypesRegistered(t *testing.T) {
 		"elasticsearch",
 		"aerospike",
 		"kafka",
+		"nats",
 		"dns",
 	}
 
@@ -39,7 +40,7 @@ func TestCheckModuleList_AllTypesRegistered(t *testing.T) {
 }
 
 func TestCheckModuleList_NoExtraTypes(t *testing.T) {
-	expectedCount := 14
+	expectedCount := 15
 	if len(cm) != expectedCount {
 		t.Errorf("cm has %d entries, want %d (new check type may need to be added to this test)", len(cm), expectedCount)
 	}

@@ -233,7 +233,7 @@ func TestSpecToCheckContext_AllTypesProduceUsableContext(t *testing.T) {
 	for _, checkType := range []string{
 		"tcp", "mysql", "postgres", "http", "mongo", "oracle",
 		"influxdb", "redis", "rabbitmq", "memcached",
-		"elasticsearch", "aerospike", "kafka", "dns",
+		"elasticsearch", "aerospike", "kafka", "nats", "dns",
 	} {
 		t.Run(checkType, func(t *testing.T) {
 			spec := CheckSpec{
