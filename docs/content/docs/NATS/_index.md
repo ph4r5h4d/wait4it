@@ -6,22 +6,32 @@ title = 'NATS'
 NATS Check validates connectivity to a NATS server by completing a client connection and NATS protocol handshake.
 
 ## Usage with Binary
+```bash
 ./wait4it -type=nats -h=127.0.0.1 -p=4222 -t=60
+```
 
 With username and password:
 
+```bash
 ./wait4it -type=nats -h=127.0.0.1 -p=4222 -t=60 -u=app -P=secret
+```
 
 With token authentication:
 
+```bash
 ./wait4it -type=nats -h=127.0.0.1 -p=4222 -t=60 -nats-token=MyToken
+```
 
 With TLS (default system trust; no custom CA in v1):
 
+```bash
 ./wait4it -type=nats -h=127.0.0.1 -p=4222 -t=60 -ssl=enable
+```
 
 ## Usage with Docker
+```bash
 docker run ph4r5h4d/wait4it -type=nats -h=127.0.0.1 -p=4222 -t=60
+```
 
 ## Environment Variables
 
