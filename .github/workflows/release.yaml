@@ -23,6 +23,8 @@ jobs:
             goos: darwin
           - goarch: "arm"
             goos: darwin
+          - goarch: "arm"
+            goos: windows
           - goarch: arm64
             goos: windows
     steps:
