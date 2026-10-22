@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM golang:1.25-alpine AS build-env
+FROM --platform=$BUILDPLATFORM golang:1.26-alpine AS build-env
 ARG TARGETOS TARGETARCH TARGETVARIANT
 RUN apk add git gcc
 RUN mkdir /app
@@ -7,7 +7,7 @@ COPY . .
 RUN go mod download
 RUN go mod verify
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH GOARM=${TARGETVARIANT#v} go build -ldflags="-w -s" -o wait4it
-FROM alpine:3.22
+FROM alpine:3.24
 LABEL org.opencontainers.image.source="https://github.com/ph4r5h4d/wait4it"
 COPY --from=build-env /app/wait4it .
 USER 1001
