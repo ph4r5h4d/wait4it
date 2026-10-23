@@ -12,7 +12,7 @@ require (
 	github.com/lib/pq v1.12.3
 	github.com/nats-io/nats.go v1.54.0
 	github.com/pkg/errors v0.9.1
-	github.com/rabbitmq/amqp091-go v1.15.0
+	github.com/rabbitmq/amqp091-go v1.16.0
 	github.com/segmentio/kafka-go v0.4.51
 	github.com/sijms/go-ora/v2 v2.9.0
 	github.com/testcontainers/testcontainers-go v0.44.0
